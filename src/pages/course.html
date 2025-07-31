@@ -1,0 +1,167 @@
+<ad-title><#? course.name ?#></ad-title>
+
+<style>
+    @import url("/courses.css");
+    @import url("/problems.css");
+
+    .root .main:has(> .activity)
+    {
+        grid-auto-flow: column;
+        grid-auto-columns: 400px auto;
+    }
+        .root .main > .activity
+        {
+            position: relative
+        }
+        .root .main > .activity:nth-child(1)
+        {
+            background: var(--overlay-7);
+            border-right: 1px solid var(--border-sidebar);
+        }
+            .root .main > #Activity_Topic > .header > .buttons > .back
+            {
+                visibility: hidden;
+            }
+    @media screen and (max-width: 800px) 
+    {
+        .root 
+        {
+            grid-auto-rows: auto 0;
+        }
+    }
+    @media screen and (max-width: 1140px)
+    {
+        .root .main:has(> .activity)
+        {
+            grid-auto-columns: auto 0;
+        }
+        .root .main:has(> #Activity_Topic)
+        {
+            grid-auto-columns: 0 auto;
+        }
+            .root .main > #Activity_Topic > .header > .buttons > .back
+            {
+                visibility: visible;
+            }
+    }
+    .background
+    {
+        position: absolute;
+        top: 0;
+        right: 0;
+        left: 0;
+        bottom: 0;
+        background: var(--overlay-7);
+        z-index: -1;
+        pointer-events: none;
+        border-right: 1px solid var(--border-sidebar);
+    }
+</style>
+
+<div class="header cascaded">
+    <div class="buttons dynamic" theme="dark">
+        <button class="back" onclick="Courses.Back()">Courses</button>
+        <button class="icon" id="Button_More" ad-tooltip="More">&#xf153;</button>
+    </div>
+    <div class="title hide"><#? course.alias ?#></div>
+</div>
+
+<div class="content">
+    <div id="Grid_CourseCard" theme="dark">
+        <h3><#? course.name ?#></h3>
+        <span id="Grid_CourseDescription"><#? course.description ?#></span>
+        <div class="details">
+            <div>
+                <span>Id</span>
+                <span ad-property="id"><#? course.id ?#></span>
+            </div>
+            <div>
+                <span>AKA</span>
+                <span ad-property="alias"><#? course.alias ?#></span>
+            </div>
+            <div>
+                <span>Semester</span>
+                <span ad-property="semester"><#? course.semester ?#></span>
+            </div>
+            <div>
+                <span>SKS</span>
+                <span ad-property="sks"><#? course.sks ?#></span>
+            </div>
+        </div>
+    </div>
+    <div id="Grid_CourseTopics"> 
+        <div class="progressring"></div>
+    </div>
+</div>
+
+<div class="popover" id="PopOver_PrintAll">
+    <div class="activity">
+        <div class="header cascaded">
+            <div class="buttons">
+                <button id="Button_CancelPrint">Cancel</button>
+                <button id="Button_SubmitPrint">
+                    <span>Print</span>
+                    <div class="progressring"></div>
+                </button>
+            </div>
+            <div class="title">Select Up to 5 Topics</div>
+        </div>
+        <div class="content">
+            <div id="Grid_PrintCourseTopics"></div>
+        </div>
+    </div>
+</div>
+
+<script>
+    {
+        Courses.Active = JSON.parse(`<#? course ?#>`);
+
+        Button_More.onclick = function(event)
+        {
+            Components.ContextMenu.Open("Course_More", this, event);
+        }
+
+        $.ajax({
+            type: "post",
+            url: "/topics/get",
+            data: { id: "<#? course.id ?#>", type: "course" },
+            success: function(topics)
+            {
+                Grid_CourseTopics.innerHTML = "";
+                Topics.Append(topics, Grid_CourseTopics);
+            }
+        });
+
+        Grid_CourseDescription.onclick = function()
+        {
+            this.classList.add("expanded");
+        }
+
+        Button_CancelPrint.onclick = function()
+        {
+            PopOver_PrintAll.Close();
+        }
+        Button_SubmitPrint.onclick = async function()
+        {
+            Button_CancelPrint.disabled = true;
+            Button_SubmitPrint.disabled = true;
+            PopOver_PrintAll.IsLoading = true;
+            PopOver_PrintAll.IsCloseable = false;
+
+            await Courses.Print();
+            PopOver_PrintAll.Close();
+            window.print();
+
+            Button_CancelPrint.disabled = false;
+            Button_SubmitPrint.disabled = false;
+            PopOver_PrintAll.IsLoading = false;
+            PopOver_PrintAll.IsCloseable = true ;
+        }
+
+        window.addEventListener("DOMContentLoaded", async function()
+        {
+            const url = await Courses.FetchBanner("<#? course.id ?#>");
+            Grid_CourseCard.style.setProperty("--image", "url(" + url + ")");
+        });
+    }
+</script>

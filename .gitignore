@@ -1,0 +1,11 @@
+.vscode
+node_modules
+package-lock.json
+.htaccess
+.env
+
+src/banners/*
+!src/banners/.gitkeep
+
+src/avatars/*
+!src/avatars/.gitkeep

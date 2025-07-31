@@ -1,0 +1,46 @@
+<ad-title>Pins</ad-title>
+
+<style>@import url("/courses.css");</style>
+
+<div class="header">
+    <div class="title">Pins</div>
+</div>
+
+<div class="content">
+    <div id="Grid_Courses" class="pins">
+        <div class="course"></div>
+        <div class="course"></div>
+        <div class="course"></div>
+        <div class="course"></div>
+    </div>
+</div>
+
+<script>
+
+    $.ajax({
+        type: "post",
+        url: "/courses/get",
+        success: function(data)
+        {
+            Grid_Courses.innerHTML = "";
+            Courses.Append(Courses.Pins.Get(), Grid_Courses);
+            
+            for (const item of [...Grid_Courses.children])
+            {
+                const course = data.find(o => o.id == item.data.id);
+                if (course == null)
+                {
+                    item.remove();
+                    continue;
+                }
+                
+                item.data.name = course.name;
+                item.find("name").innerText = course.name;
+                item.find("description").innerText = course.description;
+            }
+            
+            localStorage.setItem("courses_pins", JSON.stringify([...Grid_Courses.children].map(o => o.data)));
+            Courses.Pins.AppendSidebar();
+        }
+    });
+</script>

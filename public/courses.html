@@ -1,0 +1,29 @@
+<ad-title>Courses</ad-title>
+
+<style>@import url("/courses.css");</style>
+
+<div class="header">
+    <div class="title">Courses</div>
+</div>
+
+<div class="content">
+    <div id="Grid_Courses">
+        <div class="course"></div>
+        <div class="course"></div>
+        <div class="course"></div>
+        <div class="course"></div>
+    </div>
+</div>
+
+<script>
+    $.ajax({
+        type: "post",
+        url: "/courses/get",
+        data: null,
+        success: function(courses)
+        {
+            Grid_Courses.innerHTML = "";
+            Courses.Append(courses, Grid_Courses);
+        }
+    });
+</script>

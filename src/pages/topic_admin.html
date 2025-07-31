@@ -1,0 +1,354 @@
+<style>
+    @media screen and (max-width: 800px) 
+    {
+        .root 
+        {
+            grid-auto-rows: auto 0;
+        }
+    }
+</style>
+
+<div class="header cascaded">
+    <div class="buttons">
+        <button class="back" onclick="Topics.Back()">Back</button>
+        <button id="Button_NewProblem" class="icon" ad-tooltip="New Problem">&#xf8dd;</button>
+    </div>
+    <div class="title hide"></div>
+</div>
+
+<div class="content">
+    <h3><#? topic.name ?#></h3>
+    <div id="Grid_CourseProblems">
+        <div class="progressring"></div>
+    </div>
+</div>
+
+<div id="PopOver_Problem" class="popover" preventDefault>
+    <div class="activity">
+        <div class="header cascaded">
+            <div class="buttons">
+                <button id="Button_CancelNewProblem">Cancel</button>
+                <button id="Button_SubmitNewProblem">
+                    <span>Create</span>
+                    <div class="progressring"></div>
+                </button>
+            </div>
+            <div class="title">New Problem</div>
+        </div>
+        <div class="content">
+            <div class="list" ad-header="Source">
+                <div class="stack">
+                    <span>Type</span>
+                    <select class="plain" id="Select_ProblemSource"></select>
+                </div>
+                <div class="stack">
+                    <span>Academic Year</span>
+                    <input type="number" class="plain" min="2010" id="Input_ProblemYear" placeholder="e.g: 2025"/>
+                </div>
+            </div>
+            <div class="pivot" id="Pivot_Problem">
+                <div class="pivotcontent">
+                    <div class="section">
+                        <div class="pivottitle">Markdown</div>
+                        <textarea id="Input_ProblemText" placeholder="Type the problem here..."></textarea>
+                    </div>
+                    <div class="section">
+                        <div class="pivottitle">Preview</div>
+                        <div class="preview" id="Grid_ProblemPreview"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="PopOver_EditProblem" class="popover" preventDefault>
+    <div class="activity">
+        <div class="header cascaded">
+            <div class="buttons">
+                <button id="Button_CancelEditProblem">Cancel</button>
+                <button id="Button_DoneEditProblem">
+                    <span>Save</span>
+                    <div class="progressring"></div>
+                </button>
+            </div>
+            <div class="title">Edit Problem</div>
+        </div>
+        <div class="content">
+            <div class="list" ad-header="Source">
+                <div class="stack">
+                    <span>Type</span>
+                    <select class="plain" id="Select_ProblemSourceEdit"></select>
+                </div>
+                <div class="stack">
+                    <span>Academic Year</span>
+                    <input type="number" class="plain" min="2010" id="Input_ProblemYearEdit" placeholder="e.g: 2025"/>
+                </div>
+            </div>
+            <div class="pivot" id="Pivot_ProblemEdit">
+                <div class="pivotcontent">
+                    <div class="section">
+                        <div class="pivottitle">Markdown</div>
+                        <textarea id="Input_ProblemTextEdit" placeholder="Type the problem here..."></textarea>
+                    </div>
+                    <div class="section">
+                        <div class="pivottitle">Preview</div>
+                        <div class="preview" id="Grid_ProblemPreviewEdit"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    {
+        const a = Problems.Render;
+        Problems.Render = async function(problem)
+        {
+            const box = await a(problem);
+            box.oncontextmenu = function(event)
+            {
+                Components.ContextMenu.Open("Problem_Admin", box, event);
+            }
+            return box;
+        }
+
+        let typeTimeout;
+        Input_ProblemText.oninput = function()
+        {
+            clearTimeout(typeTimeout);
+            typeTimeout = setTimeout(async function()
+            {
+                Grid_ProblemPreview.innerHTML = await Problems.ParseMarkdownLatex(Input_ProblemText.value);
+            }, 400);
+        }
+        Input_ProblemTextEdit.oninput = function()
+        {
+            clearTimeout(typeTimeout);
+            typeTimeout = setTimeout(async function()
+            {
+                Grid_ProblemPreviewEdit.innerHTML = await Problems.ParseMarkdownLatex(Input_ProblemTextEdit.value);
+            }, 400);
+        }
+        Input_ProblemText.onpaste = function()
+        {
+            const textarea = this;
+            const items = event.clipboardData.items;
+
+            for (let item of items) 
+            {
+                if (item.type.indexOf("image") !== -1) 
+                {
+                    const file = item.getAsFile();
+                    const reader = new FileReader();
+
+                    reader.onload = function (e) 
+                    {
+                        const base64 = e.target.result;
+                        const markdownImage = `![pasted image](${base64})`;
+
+                        const start = textarea.selectionStart;
+                        const end = textarea.selectionEnd;
+
+                        textarea.setRangeText(markdownImage, start, end, "end");
+                        textarea.focus();
+                        textarea.oninput();
+                    };
+
+                    reader.readAsDataURL(file);
+                    event.preventDefault();
+                }
+            }
+        }
+        Input_ProblemTextEdit.onpaste = Input_ProblemText.onpaste;
+        PopOver_Problem.OnClosing = function()
+        {
+            Components.ActionSheet.Open(
+            {
+                Title: "Discard Creating?",
+                Description: "New problem will be discarded and won't be posted.",
+                Actions: [
+                    { 
+                        Title: "Discard", Type: "Options.Critical", 
+                        Action: o => 
+                        {
+                            PopOver_Problem.Close(true);
+                        }
+                    },
+                    { 
+                        Title: "Keep Creating", Type: "Footer"
+                    }
+                ]
+            }); 
+        }
+        PopOver_EditProblem.OnClosing = function()
+        {
+            Components.ActionSheet.Open(
+            {
+                Title: "Discard Changes?",
+                Description: "Your changes won't be saved.",
+                Actions: [
+                    { 
+                        Title: "Discard", Type: "Options.Critical", 
+                        Action: o => 
+                        {
+                            PopOver_EditProblem.Close(true);
+                        }
+                    },
+                    { 
+                        Title: "Keep Edting", Type: "Footer"
+                    }
+                ]
+            }); 
+        }
+        Button_NewProblem.onclick = function()
+        {
+            Pivot_Problem.Tabs.Selected = 0;
+            Input_ProblemYear.value = "";
+            Input_ProblemText.value = "";
+            Grid_ProblemPreview.innerHTML = "";
+            PopOver_Problem.Open();
+            Select_Fetch();
+            Select_ProblemSource.value = Select_ProblemSource.options[0]?.value;
+        }
+        Button_SubmitNewProblem.onclick = function()
+        {
+            Button_SubmitNewProblem.disabled = true;
+            Button_CancelNewProblem.disabled = true;
+            PopOver_Problem.IsLoading = true;
+            $("#PopOver_Problem :where(input, textarea, select)").attr("disabled", true);
+
+            $.ajax(
+            {
+                type: "post",
+                url: "/admin/problems/create",
+                data: 
+                {
+                    question: Input_ProblemText.value,
+                    source: Select_ProblemSource.value,
+                    year: Input_ProblemYear.value,
+                    topic: Topics.Active.id,
+                    course: Topics.Active.course
+                },
+                success: async function(problem)
+                {
+                    const box = await Problems.Render(problem);
+                    Problems.AddToGroup(box, Grid_CourseProblems);
+
+                    Button_SubmitNewProblem.disabled = false;
+                    Button_CancelNewProblem.disabled = false;
+                    PopOver_Problem.IsLoading = false;
+                    PopOver_Problem.Close(true);
+                    $("#PopOver_Problem :where(input, textarea, select)").attr("disabled", false);
+                    Problems.Sort(Grid_CourseProblems);
+                },
+                error: function(error)
+                {
+                    Button_SubmitNewProblem.disabled = false;
+                    Button_CancelNewProblem.disabled = false;
+                    PopOver_Problem.IsLoading = false;
+                    $("#PopOver_Problem :where(input, textarea, select)").attr("disabled", false);
+                }
+            });
+        }
+        Button_CancelNewProblem.onclick = function()
+        {
+            PopOver_Problem.OnClosing();
+        }
+        Button_DoneEditProblem.onclick = function()
+        {
+            Button_DoneEditProblem.disabled = true;
+            Button_CancelEditProblem.disabled = true;
+            PopOver_EditProblem.IsLoading = true;
+            $("#PopOver_EditProblem :where(input, textarea, select)").attr("disabled", true);
+
+            const editedProblem =
+            {
+                id: PopOver_EditProblem.element.data.id,
+                question: Input_ProblemTextEdit.value,
+                source: {
+                    id: Select_ProblemSourceEdit.value,
+                    name: [...Select_ProblemSourceEdit.options].find(o => o.value == Select_ProblemSourceEdit.value)?.name
+                },
+                year: parseInt(Input_ProblemYearEdit.value),
+                topic: Topics.Active.id,
+                course: Topics.Active.course
+            };
+
+            $.ajax(
+            {
+                type: "patch",
+                url: "/admin/problems/update",
+                data: editedProblem,
+                success: async function()
+                {
+                    Button_DoneEditProblem.disabled = false;
+                    Button_CancelEditProblem.disabled = false;
+                    PopOver_EditProblem.IsLoading = false;
+                    PopOver_EditProblem.Close(true);
+                    $("#PopOver_EditProblem :where(input, textarea, select)").attr("disabled", false);
+                    PopOver_EditProblem.element.data = editedProblem;
+                    
+                    const box = await Problems.Render(editedProblem);
+                    const group = Problems.AddToGroup(PopOver_EditProblem.element, Grid_CourseProblems);
+                    group.replaceChild(box, PopOver_EditProblem.element);
+
+                    Problems.Sort(Grid_CourseProblems);
+                },
+                error: function(error)
+                {
+                    Button_DoneEditProblem.disabled = false;
+                    Button_CancelEditProblem.disabled = false;
+                    PopOver_EditProblem.IsLoading = false;
+                    $("#PopOver_EditProblem :where(input, textarea, select)").attr("disabled", false);
+                }
+            });
+        }
+        Button_CancelEditProblem.onclick = function()
+        {
+            PopOver_EditProblem.OnClosing();
+        }
+
+        function Select_Fetch()
+        {
+            if (Select_ProblemSource.children.length == 0)
+            {
+                $.ajax({
+                    type: "get",
+                    url: "/sources/get",
+                    success: function(sources)
+                    {
+                        for (const source of sources)
+                        {
+                            const option1 = document.createElement("option");
+                            option1.append(source.name);
+                            option1.value = source.id;
+                            option1.name = source.name;
+
+                            const option2 = document.createElement("option");
+                            option2.append(source.name);
+                            option2.value = source.id;
+                            option2.name = source.name;
+
+                            Select_ProblemSource.append(option1);
+                            Select_ProblemSourceEdit.append(option2);
+                        }
+                    }
+                });
+            }
+        }
+
+        $.ajax(
+        {
+            type: "post",
+            url: "/problems/get",
+            data: { id: "<#? topic.id ?#>", type: "topic" },
+            success: function(problems)
+            {
+                Grid_CourseProblems.innerHTML = "";
+                Problems.Append(problems, Grid_CourseProblems);
+            }
+        });
+    }
+</script>

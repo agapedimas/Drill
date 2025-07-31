@@ -1,0 +1,139 @@
+#Input_File
+{
+    display: none;
+}
+#PopOver_NewCourse, #PopOver_EditCourse
+{
+    width: 450px;
+}
+    :where(#PopOver_NewCourse, #PopOver_EditCourse) .list .banner
+    {
+        position: relative;
+        transition: 0.05s background;
+        padding: 0;
+    }
+    :where(#PopOver_NewCourse, #PopOver_EditCourse) .list .banner:hover
+    {
+        background: var(--background-list-hover);
+    }
+    :where(#PopOver_NewCourse, #PopOver_EditCourse) .list .banner:active
+    {
+        background: var(--background-list-active);
+    }
+        :where(#PopOver_NewCourse, #PopOver_EditCourse) .list .banner::before
+        {
+            content: "\eb9f";
+            display: block;
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            font-family: var(--font-icon);
+            font-size: 3em;
+            opacity: 0;
+            transition: 0.05s opacity;
+            z-index: -1;
+            pointer-events: none;
+        }
+        :where(#PopOver_NewCourse, #PopOver_EditCourse) .list .banner::before
+        {
+            opacity: 0.25;
+        }
+        :where(#PopOver_NewCourse, #PopOver_EditCourse) .list .banner:hover::before,
+        :where(#PopOver_NewCourse, #PopOver_EditCourse) .list .banner:active::before
+        {
+            opacity: 1;
+            z-index: 1;
+        }
+        :where(#PopOver_NewCourse, #PopOver_EditCourse) .list .banner #Image_Banner
+        {
+            display: block;
+            width: 100%;
+            height: auto;
+            aspect-ratio: 2 / 1;
+            transition: 0.05s opacity;
+        }
+        :where(#PopOver_NewCourse, #PopOver_EditCourse) .list .banner:hover #Image_Banner
+        {
+            opacity: 0.5;
+        }
+        :where(#PopOver_NewCourse, #PopOver_EditCourse) .list .banner:active #Image_Banner
+        {
+            opacity: 0.3;
+        }
+    :where(#PopOver_NewCourse, #PopOver_EditCourse) .list > .stack 
+    {
+        grid-auto-columns: 95px auto;
+    }
+        :where(#PopOver_NewCourse, #PopOver_EditCourse) .list > .stack > span:first-child 
+        {
+            font-family: var(--font-semibold);
+        }
+        :where(#PopOver_NewCourse, #PopOver_EditCourse) .list > .stack > textarea
+        {
+            field-sizing: content;
+        }
+    :where(#PopOver_NewCourse, #PopOver_EditCourse) .error
+    {
+        display: grid;
+        grid-auto-flow: column;
+        grid-auto-columns: max-content auto;
+        gap: 0.5em;
+        color: var(--critical);
+        font-size: 0.9em;
+        margin: calc(-2em + var(--padding)) 0 0;
+    }
+    :where(#PopOver_EditCourse) .error
+    {
+        margin: calc(-2em + var(--padding)) 0 var(--padding);
+    }
+        :where(#PopOver_NewCourse, #PopOver_EditCourse) .error::before
+        {
+            content: "\f1aa";
+            font-family: var(--font-icon);
+        }
+
+    :where(#PopOver_NewCourse, #PopOver_EditCourse) #Button_DeleteCourse
+    {
+        width: 100%;
+        height: 40px;
+        border-radius: 10px;
+    }
+
+#PopOver_Problem, #PopOver_EditProblem
+{
+    width: 800px;
+    max-width: calc(100vw - var(--padding) * 2);
+}
+    :where(#PopOver_Problem, #PopOver_EditProblem) .activity > .content
+    {
+        display: grid;
+        grid-auto-rows: max-content auto;
+        min-height: 600px;
+    }
+    :where(#PopOver_Problem, #PopOver_EditProblem) .pivot
+    {
+        margin-bottom: calc(var(--padding) * -1);
+    }
+        :where(#PopOver_Problem, #PopOver_EditProblem) .pivot .pivotcontent .section:has(textarea)
+        {
+            display: grid;
+        }
+    :where(#PopOver_Problem, #PopOver_EditProblem) .stack :where(input, select)
+    {
+        text-align: right;
+    }
+    :where(#PopOver_Problem, #PopOver_EditProblem) textarea
+    {
+        font-family: "Cascadia Mono", monospace;
+        border: 0;
+        padding: 1em;
+        line-height: 1.35em;
+    }
+    :where(#PopOver_Problem, #PopOver_EditProblem) textarea
+    {
+        font-family: "Cascadia Mono", monospace;
+        border: 1px solid transparent;
+        padding: 1em;
+        line-height: 1.35em;
+    }

@@ -1,0 +1,369 @@
+#Grid_Courses
+{
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(235px, 1fr));
+    gap: 16px;
+}
+#Grid_Courses:empty
+{    
+    all: unset;
+    display: grid;
+    grid-auto-rows: max-content;
+    justify-content: center;
+    align-items: center;
+    align-content: center;
+    gap: 0.25em;
+    text-align: center;
+    height: calc(100% - 80px);
+}
+    #Grid_Courses:empty::before
+    {
+        content: "No Courses";
+        font-family: var(--font-bold);
+        font-size: 1.5em;
+    }
+    #Grid_Courses:empty::after
+    {
+        content: "They'll will show up here once it added.";
+        font-size: 1.12em;
+        color: var(--foreground-description);
+    }
+    #Grid_Courses.pins:empty::before
+    {
+        content: "No Pins";
+    }
+    #Grid_Courses.pins:empty::after
+    {
+        content: "Pin some courses and it'll show up here.";
+    }
+    #Grid_Courses .course
+    {
+        position: relative;
+        display: grid;
+        grid-auto-columns: 100%;
+        grid-auto-rows: 150px max-content max-content auto;
+        height: 350px;
+        background: rgba(0, 0, 0, 0.045);
+        border-radius: 10px;
+        overflow: hidden;
+    }
+    [theme=dark] #Grid_Courses .course 
+    {
+        background: var(--overlay-7);
+    }
+        #Grid_Courses .course .banner
+        {
+            display: block;
+            width: 100%;
+            height: 100%;
+            background: var(--background-input-disabled);
+            object-fit: cover;
+        }
+        #Grid_Courses .course .id
+        {
+            font-size: 0.8em;
+            font-family: var(--font-semibold);
+            letter-spacing: 0.05em;
+            color: var(--foreground-description);
+            margin: calc(1.85rem - 10px) calc(1.85rem - 10px) 0;
+        }
+        #Grid_Courses .course .name
+        {
+            font-size: 1.2em;
+            font-family: var(--font-bold);
+            margin: 0 calc(1.85rem - 10px);
+        }
+        #Grid_Courses .course .description
+        {
+            line-height: 1.35em;
+            overflow: hidden;
+            margin: 10px calc(1.85rem - 10px) calc(1.85rem - 10px);
+            white-space: pre-line;
+        }
+        #Grid_Courses .course .hover
+        {    
+            position: absolute;
+            display: block;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            z-index: 1;
+            pointer-events: none;
+        }
+        #Grid_Courses .course:hover .hover
+        {
+            background: var(--overlay-6);
+        }
+        #Grid_Courses .course:active .hover
+        {
+            background: var(--overlay-5);
+        }
+        [theme=dark] #Grid_Courses .course:hover .hover
+        {
+            background: var(--overlay-8);
+        }
+        [theme=dark] #Grid_Courses .course:active .hover
+        {
+            background: var(--overlay-7);
+        }
+
+#Grid_CourseCard
+{
+    position: relative;
+    display: grid;
+    grid-template-areas: 
+        "x"
+        "name"
+        "description"
+        "details";
+    grid-auto-rows: auto max-content max-content max-content;
+    background: #232323;
+    margin: -100px calc(var(--padding) * -1) var(--padding);
+    padding: 100px var(--padding) var(--padding);
+    min-height: 400px;
+    z-index: 11;
+    overflow: hidden;
+}
+    #Grid_CourseCard::before,
+    #Grid_CourseCard::after
+    {
+        content: "";
+        display: block;
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        z-index: -1;
+    }
+    #Grid_CourseCard::before
+    {   
+        background-image: var(--image);
+        background-size: cover;
+        background-position: center;
+        filter: brightness(0.7);
+        animation: 1s var(--key-animation) BackgroundIn;
+    }
+    #Grid_CourseCard::after
+    {   
+        background-image: linear-gradient(transparent, rgba(0, 0, 0, 0.6));
+    }
+    @keyframes BackgroundIn
+    {
+        0% 
+        { 
+            opacity: 0;
+            transform: scale(1.1);
+        }
+    }
+    #Grid_CourseCard > h3
+    {
+        grid-area: name;
+        user-select: text;
+    }
+    #Grid_CourseCard > span
+    {
+        grid-area: description;
+        font-size: 1.15em;
+        max-height: calc(1.2em * 2 + 0.3em);
+        overflow: hidden;
+        text-overflow: ellipsis;
+        cursor: pointer;
+        display: none;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 2;
+        margin: -0.2em -0.5em;
+        padding: 0.2em 0.5em;
+        border-radius: 10px;
+    }
+    #Grid_CourseCard > span:hover
+    {
+        background: var(--background-input-hover);
+    }
+    #Grid_CourseCard > span:active
+    {
+        background: var(--background-input-active);
+    }
+    #Grid_CourseCard > span:not(:empty)
+    { 
+        display: inline-block;
+        display: -webkit-inline-box;
+        margin-top: 0.5em;
+    }
+    #Grid_CourseCard > span.expanded
+    {
+        background: transparent;;
+        max-height: unset;
+        user-select: text;
+        cursor: text;
+        display: inline-block;
+        -webkit-box-orient: unset;
+        -webkit-line-clamp: unset;
+    }
+    #Grid_CourseCard > .details
+    {
+        grid-area: details;
+        display: grid;
+        grid-auto-flow: column;
+        grid-auto-columns: max-content;
+        font-size: 0.85em;
+        margin-top: 1.5em;
+        gap: 1em;
+        justify-content: space-between;    
+        max-width: 400px;
+    }
+        #Grid_CourseCard > .details > div
+        {
+            display: grid;
+            gap: 0.2em;
+            letter-spacing: 0.05em;
+            font-family: var(--font-semibold);
+        }
+            #Grid_CourseCard > .details > div span:nth-child(1)
+            {
+                opacity: 0.5;
+                text-transform: uppercase;
+            }
+            #Grid_CourseCard > .details > div span:nth-child(2)
+            {
+                user-select: text;
+            }
+
+@media screen and (max-width: 425px) 
+{
+    #Grid_CourseCard 
+    {
+        min-height: 350px;
+    }
+}
+#Grid_CourseTopics, #Grid_PrintCourseTopics
+{
+    display: grid;
+    gap: 10px;
+    margin: -0.5em 0 0;
+}
+#Grid_CourseTopics:empty
+{
+    all: unset;
+    display: grid;
+    grid-auto-rows: max-content;
+    justify-content: center;
+    align-items: center;
+    align-content: center;
+    gap: 0.25em;
+    text-align: center;
+    margin: 70px 0 0;   
+}
+    #Grid_CourseTopics:empty::before
+    {
+        content: "No Topics";
+        font-family: var(--font-bold);
+        font-size: 1.5em;
+    }
+    #Grid_CourseTopics:empty::after
+    {
+        content: "They'll will show up here once it added.";
+        font-size: 1.12em;
+        color: var(--foreground-description);
+    }
+    :where(#Grid_CourseTopics, #Grid_PrintCourseTopics) .progressring
+    {
+        place-self: center;
+        width: 20px;
+    }
+    :where(#Grid_CourseTopics, #Grid_PrintCourseTopics) .topic
+    {
+        position: relative;
+        display: grid;
+        gap: 0.15em;
+        padding: 0.5em 0.75em 0.5em 0.75em;
+        margin: 0 -0.75em;
+        border-radius: 10px;
+    }
+    #Grid_CourseTopics .topic.dragging
+    {
+        opacity: 0.3;
+    }
+    #Grid_CourseTopics:has(.topic.dragging) .topic
+    {
+        background: transparent !important;
+    }
+    #Grid_PrintCourseTopics .topic
+    {
+        padding-left: calc(1.5em + 18px);
+    }
+        #Grid_PrintCourseTopics .InputContainer_Checkbox
+        {
+            position: absolute;
+            top: 50%;
+            left: 0.75em;
+            transform: translateY(-50%);
+            pointer-events: none;
+        }
+            #Grid_PrintCourseTopics .InputContainer_Checkbox .checkmark
+            {
+                border-radius: 100%;
+            }
+        :where(#Grid_CourseTopics, #Grid_PrintCourseTopics) .topic:not(:last-child)::before
+        {
+            content: "";
+            display: block;
+            position: absolute;
+            bottom: -5px;
+            left: 0.75em;
+            right: 0.75em;
+            height: 1px;
+            background: var(--overlay-6);
+        }
+        #Grid_PrintCourseTopics .topic:not(:last-child)::before
+        {
+            left: calc(1.5em + 18px);
+        }
+    #Grid_CourseTopics .topic.active
+    {
+        background-image: linear-gradient(var(--background-input-hover));
+    }
+    :where(#Grid_CourseTopics, #Grid_PrintCourseTopics) .topic:hover
+    {
+        background-color: var(--background-input-hover);
+    }
+    :where(#Grid_CourseTopics, #Grid_PrintCourseTopics) .topic:active
+    {
+        background-color: var(--background-input-active);
+    }
+        :where(#Grid_CourseTopics, #Grid_PrintCourseTopics) .topic .name
+        {
+        }
+        :where(#Grid_CourseTopics, #Grid_PrintCourseTopics) .topic .details
+        {
+            display: grid;
+            grid-auto-flow: column;
+            grid-auto-columns: auto max-content max-content;
+            color: var(--foreground-description);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            font-family: var(--font-semibold);
+            font-size: 0.75em;
+            gap: 0.15em;
+        }
+            #Grid_CourseTopics .topic .details:has(div:nth-child(2) > .lastedited:not(:empty))::after
+            {
+                content: "\ef59";
+                font-size: 0.95em;
+                color: var(--foreground-description);
+                font-family: var(--font-icon);
+                transform: translateX(20%);
+            }
+            :where(#Grid_CourseTopics, #Grid_PrintCourseTopics) .topic .details > div
+            {
+                display: grid;
+                grid-auto-flow: column;
+                grid-auto-columns: max-content;
+                gap: 0.5ch;
+            }
+            :where(#Grid_CourseTopics, #Grid_PrintCourseTopics) .topic .details > div:has(span:empty)
+            {
+                display: none;
+            }
+    

@@ -1,0 +1,164 @@
+<ad-title>Courses</ad-title>
+
+<style>@import url("/courses.css");</style>
+
+<div class="header">
+    <div class="buttons">
+        <span></span>
+        <button id="Button_New" class="icon" ad-tooltip="New Course">&#xf8dd;</button>
+    </div>
+    <div class="title">Courses</div>
+</div>
+
+<div class="content">
+    <div id="Grid_Courses">
+        <div class="course"></div>
+        <div class="course"></div>
+        <div class="course"></div>
+        <div class="course"></div>
+    </div>
+</div>
+
+<div id="PopOver_NewCourse" class="popover" preventDefault>
+    <div class="activity">
+        <div class="header cascaded">
+            <div class="buttons">
+                <button id="Button_CancelNew">Cancel</button>
+                <button id="Button_SubmitNew">
+                    <span>Create</span>
+                    <div class="progressring"></div>
+                </button>
+            </div>
+            <div class="title">New Course</div>
+        </div>
+        <div class="content">
+            <div class="list" ad-header="Basic Info">
+                <div class="stack">
+                    <span>Name</span>
+                    <input type="text" class="plain" maxlength="128" id="Input_CourseName" placeholder="e.g: Basic Programming"/>
+                </div>
+                <div class="stack">
+                    <span>AKA</span>
+                    <input type="text" class="plain" maxlength="16" id="Input_CourseAlias" placeholder="e.g: DasPro"/>
+                </div>
+                <div class="stack">
+                    <span>Description</span>
+                    <textarea class="plain" maxlength="1000" id="Input_CourseDescription" placeholder="e.g: A course that gains your coding skills."></textarea>
+                </div>
+            </div>
+            <div class="list" ad-header="Additional Info">
+                <div class="stack">
+                    <span>Id</span>
+                    <input type="text" class="plain" maxlength="16" id="Input_CourseId" placeholder="e.g: AIF2301062">
+                </div>
+                <div class="stack">
+                    <span>Semester</span>
+                    <input type="number" class="plain" min="1" max="8" id="Input_CourseSemester" placeholder="e.g: 1"/>
+                </div>
+                <div class="stack">
+                    <span>SKS</span>
+                    <input type="number" class="plain" min="1" max="16" id="Input_CourseSKS" placeholder="e.g: 3"/>
+                </div>
+            </div>
+            <span class="error hidden" id="Text_Error"></span>
+        </div>
+    </div>
+</div>
+<script>
+    {
+        const a = Courses.Render;
+        Courses.Render = function(course)
+        {
+            const box = a(course);
+            box.oncontextmenu = function(event)
+            {
+                Components.ContextMenu.Open("Course_Admin", this, event);
+            }
+            return box;
+        }
+    }
+    $.ajax({
+        type: "post",
+        url: "/courses/get",
+        data: null,
+        success: function(courses)
+        {
+            Grid_Courses.innerHTML = "";
+            Courses.Append(courses, Grid_Courses);
+        }
+    });
+
+    PopOver_NewCourse.OnClosing = function()
+    {
+        Components.ActionSheet.Open(
+        {
+            Title: "Discard Creating?",
+            Description: "All inputs will be discarded and won't be submitted.",
+            Actions: [
+                { 
+                    Title: "Discard", Type: "Options.Critical", 
+                    Action: o => 
+                    {
+                        PopOver_NewCourse.Close(true);
+                    }
+                },
+                { 
+                    Title: "Keep Creating", Type: "Footer"
+                }
+            ]
+        }); 
+    }
+    Button_New.onclick = function()
+    {
+        $("#PopOver_NewCourse :where(input, textarea)").val("");
+        Text_Error.classList.add("hidden");
+        Components.PopOver.Open(PopOver_NewCourse, this);
+    }
+    Button_SubmitNew.onclick = function()
+    {
+        Button_CancelNew.disabled = true;
+        Button_SubmitNew.disabled = true;
+        PopOver_NewCourse.IsLoading = true;
+        Text_Error.classList.add("hidden");
+        $("#PopOver_NewCourse :where(input, textarea)").attr("disabled", true);
+        
+        const course = 
+        {
+            id: Input_CourseId.value,
+            name: Input_CourseName.value,
+            alias: Input_CourseAlias.value,
+            description: Input_CourseDescription.value,
+            semester: Input_CourseSemester.value,
+            sks: Input_CourseSKS.value,
+        };
+
+        $.ajax(
+        {
+            type: "post",
+            url: "/admin/courses/create",
+            data: course,
+            success: function()
+            {
+                window.location.href = "/admin/courses/" + course.id; 
+                Button_CancelNew.disabled = false;
+                Button_SubmitNew.disabled = false;
+                PopOver_NewCourse.IsLoading = false;
+                PopOver_NewCourse.Close(true);
+                $("#PopOver_NewCourse :where(input, textarea)").removeAttr("disabled");
+            },
+            error: function(error)
+            {
+                Text_Error.innerText = error.responseText;
+                Text_Error.classList.remove("hidden");
+                Button_CancelNew.disabled = false;
+                Button_SubmitNew.disabled = false;
+                PopOver_NewCourse.IsLoading = false;
+                $("#PopOver_NewCourse :where(input, textarea)").removeAttr("disabled");
+            }
+        })
+    }
+    Button_CancelNew.onclick = function()
+    {
+        PopOver_NewCourse.Close();
+    }
+</script>

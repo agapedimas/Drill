@@ -1,0 +1,273 @@
+@media print 
+{   
+    @page
+    { 
+        size: auto;
+        margin: 70px;
+    } 
+    @page:first
+    {
+        margin: 0;
+    }
+    html, body
+    {
+        background: unset !important;
+        overflow: auto;
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+    header, nav, .root
+    {
+        display: none !important;
+    }
+    #Grid_Print
+    {
+        display: grid;
+    }
+}
+@media screen
+{
+   #Grid_Print
+    {
+        display: none;
+    }
+}
+
+#Grid_Print
+{
+    .cover
+    {
+        display: grid;
+        position: relative;
+        width: 100%;
+        height: 100vh;
+        background: #015850;
+        padding: 70px;
+        color: white;
+        gap: 50px;
+        grid-auto-rows: max-content auto max-content;
+    
+        .logo
+        {
+            height: 60px;
+        }
+    
+        .title
+        {
+            display: grid;
+            grid-auto-rows: max-content;
+    
+            .type
+            {
+                font-size: 2em;
+                font-family: var(--font-bold);
+                text-transform: uppercase;
+                color: #b2ccca;
+                letter-spacing: 0.025em;
+                line-height: 1;
+            }
+            .name
+            {
+                font-size: 6em;
+                font-family: var(--font-bold);
+                line-height: 1em;
+                margin-top: 0.2em;
+            }
+            .topics
+            {
+                display: grid;
+                grid-auto-rows: max-content;
+                gap: 0.25em;
+                margin-top: 50px;
+                font-size: 3em;
+                font-family: var(--font-semibold);
+                color: #ccffcc;
+            }
+            .topics:has(span)
+            {
+                counter-reset: topic;
+
+                span
+                {
+                    display: grid;
+                    grid-auto-flow: column;
+                    grid-auto-columns: 1.25em auto;
+                }
+                
+                span::before
+                {
+                    counter-increment: topic;
+                    content: counter(topic) ".";
+                }
+            }
+        }
+    
+        .time
+        {
+            font-size: 1.8em;
+            font-family: var(--font-semibold);
+        }
+    }
+    .content
+    {
+        width: calc(100% - 140px);
+        text-align: justify;
+        
+        section
+        {
+            page-break-before: always;
+        }  
+        h3
+        {
+            font-size: 1.4em;
+        }
+    }
+    .backcover
+    {
+        page-break-before: always;
+        display: grid;
+        grid-auto-rows: max-content auto max-content;
+        width: calc(100% - 140px);
+        height: calc(100vh - 150px);
+
+        .logo
+        {
+            height: 60px;
+        }
+
+        .footer
+        {
+            display: grid;
+            grid-auto-rows: max-content;
+
+            .copyright
+            {
+                font-family: var(--font-bold);
+            }
+        }
+    }
+}
+#Activity_Topic > .content
+{
+    display: grid;
+    grid-auto-rows: max-content auto;
+}
+#Grid_CourseProblems, #Grid_PrintContent
+{
+    display: grid;
+    grid-auto-rows: max-content;
+    gap: 10px;
+    margin: var(--padding) 0 0;
+    counter-reset: problem;
+}
+#Grid_CourseProblems:has(.progressring) 
+{
+    grid-auto-rows: 100%;
+    margin: 0;
+}
+    #Grid_CourseProblems .progressring 
+    {
+        place-self: center;
+        width: 30px;
+    }
+#Grid_CourseProblems:empty
+{    
+    justify-content: center;
+    align-items: center;
+    align-content: center;
+    gap: 0.25em;
+    text-align: center;
+    margin: 0;
+}
+    #Grid_CourseProblems:empty::before
+    {
+        content: "No Problems";
+        font-family: var(--font-bold);
+        font-size: 1.5em;
+    }
+    #Grid_CourseProblems:empty::after
+    {
+        content: "They'll will show up here once it added.";
+        font-size: 1.12em;
+        color: var(--foreground-description);
+    }
+    #Grid_PrintContent section
+    {
+        counter-reset: problem;
+    }
+    :where(#Grid_CourseProblems, #Grid_PrintContent) .group
+    {
+        display: grid;
+        gap: 1em;
+    }
+    :where(#Grid_CourseProblems, #Grid_PrintContent) .group:not(:has(.problem)) {
+        display: none;
+    }
+        :where(#Grid_CourseProblems, #Grid_PrintContent) .group .details
+        {
+            display: grid;
+            grid-auto-flow: column;
+            grid-auto-columns: max-content;
+            gap: 0.5ch;
+            text-transform: uppercase;
+            font-size: 0.9em;
+            font-family: var(--font-bold);
+            color: var(--foreground-description);
+            letter-spacing: 0.025em;
+        }
+        :where(#Grid_CourseProblems, #Grid_PrintContent) .group:not(:nth-child(1)) .details
+        {
+            margin-top: 1.5em;
+        }
+        :where(#Grid_CourseProblems, #Grid_PrintContent) .group .problem
+        {
+            display: grid;
+            grid-auto-flow: column;
+            grid-auto-columns: max-content auto;
+            gap: 0.5em;
+            font-size: 1.15em;
+            line-height: 1.35em;
+        }
+            :where(#Grid_CourseProblems, #Grid_PrintContent) .group .problem::before
+            {
+                counter-increment: problem;
+                content: counter(problem) ".";
+            }
+            .pivot:has(.section > textarea) .section .preview,
+            :where(#Grid_CourseProblems, #Grid_PrintContent) .group .problem .text
+            {
+                *
+                {
+                    user-select: text;
+                }
+
+                > *:first-child
+                {
+                    margin-top: 0;
+                }
+                ul
+                {
+                    padding-inline-start: 1em;
+
+                    li
+                    {
+                        margin: 0.25em 0 0;
+                    }
+                }
+                table, th, td 
+                {
+                    border: 1px solid var(--foreground-page);
+                    border-collapse: collapse;
+                    padding: 0.15em 0.5em;
+                }
+                th
+                {
+                    background: var(--gray-5);
+                }
+            }
+            .pivot:has(.section > textarea) .section .preview
+            {
+                padding: 1em;
+                font-size: 1.15em;
+                line-height: 1.35em;
+            }

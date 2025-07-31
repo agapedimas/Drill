@@ -1,0 +1,45 @@
+<style>
+    @media screen and (max-width: 800px) 
+    {
+        .root 
+        {
+            grid-auto-rows: auto 0;
+        }
+    }
+</style>
+
+<div class="header cascaded">
+    <div class="buttons">
+        <button class="back" onclick="Topics.Back()">Back</button>
+        <button id="Button_Print" class="icon" ad-tooltip="Print">&#xf948;</button>
+    </div>
+    <div class="title hide"></div>
+</div>
+
+<div class="content">
+    <h3><#? topic.name ?#></h3>
+    <div id="Grid_CourseProblems">
+        <div class="progressring"></div>
+    </div>
+</div>
+
+<script>
+    {
+        Button_Print.onclick = function()
+        {
+            window.print();
+        }
+
+        $.ajax(
+        {
+            type: "post",
+            url: "/problems/get",
+            data: { id: "<#? topic.id ?#>", type: "topic" },
+            success: function(problems)
+            {
+                Grid_CourseProblems.innerHTML = "";
+                Problems.Append(problems, Grid_CourseProblems);
+            }
+        });
+    }
+</script>
