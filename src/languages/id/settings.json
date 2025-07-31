@@ -1,0 +1,23 @@
+{
+    "title": "Pengaturan",
+
+    "signout": "Keluar",
+    "appearance": "Tampilan",
+    "theme": "Tema",
+    "theme_system": "Default Sistem",
+    "theme_light": "Terang",
+    "theme_dark": "Gelap",
+    "accent_color": "Warna Aksen",
+    "language": "Bahasa",
+    "accounts": "Akun",
+    "about_app": "Tentang Aplikasi",
+    "git_repository": "Repositori Git",
+    "version": "Versi",
+    "copyright": "Hak Cipta",
+    "copyright_text": "Seluruh naskah soal adalah hak cipta dari Universitas Katolik Parahyangan.",
+    
+    "signout_confirm_title": "Kamu yakin mau keluar?",
+    "signout_confirm_message": "Kamu bisa masuk lagi kapan saja.",
+
+    "error_generic": "Ada yang salah."
+}

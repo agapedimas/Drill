@@ -1,0 +1,50 @@
+{
+    "title": "Problems",
+    
+    "new_title": "New Problem",
+    "edit_title": "Edit Problem",
+    "move_title": "Move to...",
+    "move_error_title": "Failed to Move",
+
+    "delete_confirm_title": "Are you sure you want to delete this problem?",
+    "delete_confirm_message": "The solution will also be deleted. This action cannot be undone.",
+    "delete_error_title": "Failed to Delete",
+    
+    "source_label": "Problem Source",
+    "type_label": "Type",
+    "academic_year_label": "Academic Year",
+    "academic_year_placeholder": "e.g.: 2025",
+    
+    "markdown_tab": "Markdown",
+    "preview_tab": "Preview",
+    "problem_text_placeholder": "Type the problem here...",
+    
+    "discard_create_title": "Discard Draft?",
+    "discard_create_message": "The new problem will be discarded and won't be posted.",
+    "keep_creating": "Keep Creating",
+    
+    "discard_edit_title": "Discard Changes?",
+    "discard_edit_message": "Your changes won't be saved.",
+    "keep_editing": "Keep Editing",
+
+    "create_success_title": "Created Successfully",
+    "create_success_message": "The problem was created successfully.",
+    "create_failed_title": "Failed to Create",
+    
+    "edit_success_title": "Saved Successfully",
+    "edit_success_message": "The problem was successfully updated and saved.",
+    "edit_failed_title": "Failed to Save",
+    
+    "empty_title": "No Problems Yet",
+    "empty_message": "Added problems will appear here.",
+    "offline_title": "You're Offline",
+    "offline_message": "Please connect to internet.",
+    "unknownerror_title": "Something Went Wrong",
+    "unknownerror_message": "We're currently experiencing an issue with our server.",
+    
+    "error_generic": "Something went wrong.",
+    "error_parameter_missing": "{0} must be specified.",
+    "error_parameter_isnan": "{0} must be a number.",
+
+    "sources": "[ \"\", \"Quiz\", \"Mid Semester Exam\", \"Final Semester Exam\" ]"
+}

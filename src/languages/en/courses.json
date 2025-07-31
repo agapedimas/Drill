@@ -1,0 +1,61 @@
+{
+    "title": "Courses",
+    
+    "newtab": "Open in new tab",
+    "pin_template": "Pin “{0}”",
+    "unpin_template": "Unpin “{0}”",
+    "pin": "Pin",
+    "unpin": "Unpin",
+    "link_copy": "Copy link",
+
+    "new_title": "New Course",
+    "edit_title": "Edit Course",
+    "delete_title": "Delete Course",
+    
+    "filter_title": "Filter",
+    "filter_all": "All",
+    "filter_sortby": "Sort by",
+    "filter_semester": "Semester {0}",
+    "filter_default": "Default",
+
+    "print_title": "Select Up to 5 Topics",
+    
+    "pinned": "Pinned Courses",
+
+    "information_basic": "Basic Info",
+    "information_additional": "Additional Info",
+
+    "keep_creating": "Keep Creating",
+    "keep_editing": "Keep Editing",
+    
+    "discard_create_confirm_title": "Discard Draft?",
+    "discard_create_confirm_message": "Everything you've entered will be lost and won't be saved.",
+    "discard_edit_confirm_title": "Discard Changes?",
+    "discard_edit_confirm_message": "The changes you've made won't be saved.",
+
+    "delete_confirm_title": "Are you sure you want to delete\\n“{0}”?",
+    "delete_confirm_message": "All related problems and their solutions will also be deleted. This action cannot be undone.",
+    "delete_error_title": "Deletion Failed",
+
+    "banner_upload_error_title": "Failed to Upload Banner",
+    "banner_upload_error_message": "Maximum file size is 2 MB.",
+    "banner_upload_success_title": "Banner Changed",
+    "banner_upload_success_message": "The banner has been set successfully.",
+    "banner_clear_error_title": "Failed to Clear Banner",
+    "banner_clear_success_title": "Cleared",
+    "banner_clear_success_message": "Banner was successfully cleared.",
+
+    "empty_title": "No Courses Yet",
+    "empty_message": "Added courses will appear here.",
+    "notfound_title": "Course Not Found",
+    "notfound_message": "It may have been moved or deleted.",
+    "empty_pins_title": "No Pins Yet",
+    "empty_pins_message": "Pin courses and they will appear here.",
+    
+    "error_generic": "Something went wrong.",
+    "error_parameter_missing": "{0} must be specified.",
+    "error_parameter_isnan": "{0} must be a number.",
+    "error_parameter_idexists": "Course “{0}” is already exists.",
+    "error_parameter_idnotfound": "Course “{0}” is not found.",
+    "error_delete_nopermission": "You don't have permission to delete a course."
+}

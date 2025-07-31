@@ -1,0 +1,23 @@
+{
+    "title": "설정",
+
+    "signout": "로그아웃",
+    "appearance": "모양",
+    "theme": "테마",
+    "theme_system": "시스템 기본값",
+    "theme_light": "밝게",
+    "theme_dark": "어둡게",
+    "accent_color": "포인트 색상",
+    "language": "언어",
+    "accounts": "계정",
+    "about_app": "앱 정보",
+    "git_repository": "Git 저장소",
+    "version": "버전",
+    "copyright": "저작권",
+    "copyright_text": "모든 시험 콘텐츠는 Universitas Katolik Parahyangan에 의해 저작권 보호됩니다.",
+    
+    "signout_confirm_title": "정말로 로그아웃하시겠습니까?",
+    "signout_confirm_message": "언제든지 다시 로그인할 수 있습니다.",
+
+    "error_generic": "문제가 발생했습니다."
+}

@@ -1,0 +1,10 @@
+{
+    "title": "Masuk",
+    "description": "Dapetin privilege access buat nge-post latihan soal mahasiswa.",
+    
+    "error_generic": "Something went wrong nih.",
+    "error_incorrect": "Username atau password lo salah, cuy.",
+    "error_nointernet": "Connect ke internet dulu dong.",
+    "error_server": "Bentar, servernya lagi ngambek. Try again later ya.",
+    "error_signin": "Sign in dulu kali, baru lanjut."
+}

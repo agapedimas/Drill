@@ -1,0 +1,18 @@
+{
+    "avatar_change": "Ganti avatar",
+    "avatar_upload_error_title": "Gagal Mengupload Avatar",
+    "avatar_upload_error_message": "Ukuran file maksimal 2 MB.",
+    "avatar_upload_success_title": "Avatar Diganti",
+    "avatar_upload_success_message": "Avatar berhasil disetel.",
+
+    "create_account_title": "Buat Akun",
+    "create_account_error_title": "Gagal Membuat Akun",
+    "delete_account_confirm_title": "Kamu yakin mau menghapus akun ini?",
+    "delete_account_confirm_message": "Ini akan menghapus akses mereka, tapi mata kuliah, topik, dan soal yang dia buat tidak akan dihapus.",
+    "delete_error_title": "Gagal Menghapus",
+
+    "error_generic": "Ada yang salah.",
+    "error_parameter_missing": "{0} tidak boleh kosong.",
+    "error_create_nopermission": "Kamu tidak punya akses untuk membuat akun.",
+    "error_delete_nopermission": "Kamu tidak punya akses untuk menghapus akun."
+}

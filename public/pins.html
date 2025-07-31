@@ -1,0 +1,57 @@
+<ad-title><$ courses pinned /></ad-title>
+
+<style>@import url("/<#? applang ?#>/courses.css");</style>
+
+<div class="header">
+    <div class="buttons">
+        <button class="back" id="Button_Back"><$ home title /></button>
+    </div>
+    <div class="title"><$ courses pinned /></div>
+</div>
+
+<div class="content">
+    <div id="Grid_Courses" class="pins">
+        <div class="course"></div>
+        <div class="course"></div>
+        <div class="course"></div>
+        <div class="course"></div>
+    </div>
+</div>
+
+<script>
+    const a = Courses.Pins.AppendSidebar;
+    Courses.Pins.AppendSidebar = function()
+    {
+        a();
+        const ids = Courses.Pins.Get().map(o => o.id).slice(0, 10);
+
+        if (ids.length == 0)
+        {
+            Grid_Courses.innerHTML = null;
+            return;
+        }
+    
+        $.post("/courses/get", { id: ids }, function(courses)
+        {
+            Grid_Courses.innerHTML = null;
+            Courses.Append(courses, Grid_Courses);
+        });
+    }
+    Courses.Pins.AppendSidebar();
+
+    Button_Back.onclick = function()
+    {
+        if (document.referrer)
+        {
+            const urlPrev = new URL(document.referrer);
+            const urlNow = new URL(location.href);
+
+            if (urlPrev.origin == urlNow.origin && urlPrev.pathname == "/home")
+            {
+                return window.history.back();
+            }
+        }
+
+        window.location.href = "/home/";
+    }
+</script>

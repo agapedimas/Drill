@@ -1,0 +1,23 @@
+{
+    "title": "Setingan",
+
+    "signout": "Keluar",
+    "appearance": "Tampilan",
+    "theme": "Tema",
+    "theme_system": "Ngikut Sistem",
+    "theme_light": "Terang",
+    "theme_dark": "Gelap",
+    "accent_color": "Warna Aksen",
+    "language": "Bahasa",
+    "accounts": "Akun",
+    "about_app": "Tentang Aplikasi",
+    "git_repository": "Repositori Git",
+    "version": "Versi",
+    "copyright": "Hak Cipta",
+    "copyright_text": "Seluruh naskah soal adalah hak cipta dari Universitas Katolik Parahyangan.",
+    
+    "signout_confirm_title": "Seriusan mo sign out?",
+    "signout_confirm_message": "Don't worry, lu bisa login lagi kapan aja kok.",
+
+    "error_generic": "Something went wrong nih."
+}

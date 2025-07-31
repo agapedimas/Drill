@@ -1,0 +1,260 @@
+<ad-title><#? topic.name ?#> - <#? course.name ?#> - <$ mentor title /></ad-title>
+<ad-name><#? topic.name ?#> - <#? course.name ?#> | <$ mentor title /> | <#? apptitle ?#></ad-name>
+<ad-desc>&#32;</ad-desc>
+
+<style>
+    @import url("/<#? applang ?#>/quiz.css");
+    #Activity_Main
+    {
+        background: inherit;
+    }
+</style>
+
+<section>
+    <div class="header cascaded"></div>
+
+    <div class="content" id="Content_Ready">
+        <div class="about">
+            <div class="name">
+                <span><#? topic.name ?#></span>
+                <span><#? course.name ?#></span>
+            </div>
+            <button class="plain" id="Button_ChangeTopic"><$ topics change_title/></button>
+        </div>
+        <div class="metadata hidden" id="Grid_Metadata">
+            <div>
+                <span class="icon">&#xefb9;</span>
+                <span id="Text_MetadataUpdated"></span>
+            </div>
+            <div>
+                <span class="icon">&#xef13;</span>
+                <span id="Text_MetadataProblems"></span>
+            </div>
+            <div>
+                <span class="icon">&#xfb41;</span>
+                <span><$ mentor metadata_aigenerated /></span>
+            </div>
+            <div class="hidden">
+                <span class="icon">&#xef11;</span>
+                <span id="Text_MetadataScore"></span>
+            </div>
+        </div>
+        <span></span>
+        <div id="Grid_Status" class="status">
+            <span id="Text_Status"></span>
+            <div class="progressbar"></div>
+        </div>
+        <div id="Grid_Buttons" class="hidden">
+            <button id="Button_Start" class="accent"><$ generic start /></button>
+            <button id="Button_Review" class="accent hidden"><$ mentor results_view /></button>
+
+        </div>
+    </div>
+</section>
+
+<section>
+    <div class="header cascaded">
+        <div class="title"><#? topic.name ?#></div>
+    </div>
+
+    <div class="content" id="Content_Quiz">
+        <div id="Grid_QuizContainer">
+            <div id="Text_Question" class="markdown"></div>
+            <div id="Grid_Choices"></div>
+        </div>
+        <div id="Grid_Navigation">
+            <button id="Button_Prev" class="plain accent">
+                <span class="icon">&#xef38;</span>
+                <span><$ generic prev/></span>
+            </button>
+            <div></div>
+            <button id="Button_Next" class="plain accent">
+                <span><$ generic next/></span>
+                <span class="icon">&#xef4a;</span>
+            </button>
+            <button id="Button_Submit" class="accent">
+                <span><$ generic submit/></span>
+            </button>
+            <button id="Button_Done" class="plain accent hidden">
+                <span><$ generic done/></span>
+            </button>
+        </div>
+    </div>
+</section>
+
+<div class="popover" id="PopOver_Introduction">
+    <h4><$ mentor welcome_title /></h4>
+    <span><$ mentor welcome_description /></span>
+    
+    <div class="features">
+        <div class="feature">
+            <div class="icon">&#xed7e;</div>
+            <div class="description">
+                <b><$ mentor features_topic_title /></b>
+                <span><$ mentor features_topic_description /></span>
+            </div>
+        </div>
+        <div class="feature">
+            <div class="icon">&#xfcd0;</div>
+            <div class="description">
+                <b><$ mentor features_problem_title /></b>
+                <span><$ mentor features_problem_description /></span>
+            </div>
+        </div>
+        <div class="feature">
+            <div class="icon">&#xefc8;</div>
+            <div class="description">
+                <b><$ mentor features_update_title /></b>
+                <span><$ mentor features_update_description /></span>
+            </div>
+        </div>
+    </div>
+    
+    <div></div>
+    
+    <button class="accent" id="Button_Continue"><$ generic continue/></button>
+</div>
+
+<div class="popover" id="PopOver_SelectTopics">
+    <div class="activity" id="Activity_SelectTopics">
+        <section>
+            <div class="header cascaded">
+                <div class="buttons">
+                    <button id="Button_Cancel"><$ generic cancel /></button>
+                    <button class="icon" id="Button_Filter" ad-tooltip="<$ courses filter_title />">&#xf5bf;</button>
+                </div>
+                <div class="title"><$ topics change_title /></div>
+            </div>
+            <div class="content">
+                <div id="Grid_Courses"></div>
+            </div>
+        </section>
+        <section>
+            <div class="header">
+                <div class="title"></div>
+            </div>
+            <div class="content">
+                <div id="Grid_CourseTopics"></div>
+            </div>
+        </section>
+    </div>
+</div>
+
+<script src="/<#? applang ?#>/quiz.js"></script>
+<script>
+    if (localStorage.getItem("assistant_introduction") != "true")
+    {
+        window.onload = o => PopOver_Introduction.open();
+        Button_Continue.onclick = o => PopOver_Introduction.close();
+        localStorage.setItem("assistant_introduction", "true");
+    }
+
+    Button_Start.onclick = function()
+    {
+        Quiz.Open(0);
+        Activity_Main.navigateTo(1);
+    }
+    Button_Review.onclick = Button_Start.onclick;
+    Button_ChangeTopic.onclick = function()
+    {
+        PopOver_SelectTopics.open();
+    }
+
+    function Status_Check()
+    {
+        $.ajax(
+        {
+            type: "get",
+            url: "/topics/quiz/get/<#? topic.id ?#>",
+            success: function(data)
+            {
+                Quiz.Status = data.status;
+                Quiz.Problems = data.problems;
+                Quiz.Created = data.created;
+
+                if (data.status == "available")
+                {
+                    const t1 = parseInt(Quiz.Created);
+                    const t2 = new Date(Date.now() - Quiz.Created);
+                    const time = t1 == 0 ? 0 : t2 > 1000 * 3600 * 24 * 6 ? moment(t1).format("ll") : moment(t1).fromNow();
+                
+                    Text_MetadataUpdated.innerText = "<$ mentor metadata_updated />".format(time);
+                    Text_MetadataProblems.innerText = "<$ mentor metadata_problems />".format(Quiz.Problems.length);
+
+                    Grid_Buttons.classList.remove("hidden"); 
+                    Grid_Metadata.classList.remove("hidden");
+                    Grid_Status.classList.add("hidden"); 
+                    
+                    const lastSession = Data.Get("<#? topic.id ?#>");
+                    if (lastSession?.value?.created == data.created && lastSession?.value?.result)
+                    {
+                        Button_Start.classList.add("hidden");
+                        Button_Review.classList.remove("hidden");
+                        Button_Submit.classList.add("hidden");
+                        Button_Done.classList.remove("hidden");
+
+                        const correct = lastSession.value.result.filter(o => o.isCorrect == true).length;
+                        const total = lastSession.value.result.length;
+                        Text_MetadataScore.innerText = "<$ mentor metadata_score />".format(Math.round(correct / total * 100));
+                        Text_MetadataScore.parentNode.classList.remove("hidden");
+                        Quiz.Done = true;
+
+                        for (let i = 0; i < Quiz.Problems.length; i++)
+                        {
+                            const problem = Quiz.Problems[i];
+                            problem.chosen = lastSession.value.result[i].chosen * 1;
+                            problem.answer = lastSession.value.result[i].answer * 1;
+                            problem.isCorrect = lastSession.value.result[i].isCorrect;
+                            problem.reason = lastSession.value.result[i].reason;
+                        }
+                    }
+                    else
+                    {
+                        Data.Set("<#? topic.id ?#>", 
+                        { 
+                            created: Quiz.Created,
+                            result: null
+                        });
+                    }
+                }
+                else if (data.status == "generating")
+                {
+                    Data.Set("<#? topic.id ?#>", 
+                    { 
+                        created: Quiz.Created,
+                        result: null
+                    });
+
+                    Text_Status.innerText = "<$ mentor generating_message />";
+                    setTimeout(Status_Check, 15000);
+                }
+            }
+        });
+    }
+    Status_Check();
+
+    Button_Prev.onclick = function()
+    {
+        Quiz.Open(Quiz.Active.Number - 1);
+    }
+    Button_Next.onclick = function()
+    {
+        Quiz.Open(Quiz.Active.Number + 1);
+    }
+    Button_Submit.onclick = async function()
+    {
+        const result = await $.post("/topics/quiz/submit/<#? topic.id ?#>", { answers: Quiz.Problems.map(o => o.chosen) });
+        Data.Set("<#? topic.id ?#>", 
+        { 
+            created: Quiz.Created,
+            result: result
+        });
+
+        Status_Check();
+        Activity_Main.navigateTo(0);
+    }
+    Button_Done.onclick = function()
+    {
+        Activity_Main.navigateTo(0);
+    }
+</script>

@@ -1,0 +1,18 @@
+{
+    "avatar_change": "アバターを変更",
+    "avatar_upload_error_title": "アバターのアップロードに失敗しました",
+    "avatar_upload_error_message": "最大ファイルサイズは2MBです。",
+    "avatar_upload_success_title": "アバターを変更しました",
+    "avatar_upload_success_message": "アバターは正常に設定されました。",
+
+    "create_account_title": "アカウントを作成",
+    "create_account_error_title": "アカウントの作成に失敗しました",
+    "delete_account_confirm_title": "本当にこのアカウントを削除しますか？",
+    "delete_account_confirm_message": "これにより、アクセス権は削除されますが、作成したコース、トピック、**Soal**は引き続き利用できます。",
+    "delete_error_title": "削除に失敗しました",
+
+    "error_generic": "問題が発生しました。",
+    "error_parameter_missing": "{0}を指定する必要があります。",
+    "error_create_nopermission": "アカウントを作成する権限がありません。",
+    "error_delete_nopermission": "アカウントを削除する権限がありません。"
+}

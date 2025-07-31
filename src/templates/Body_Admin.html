@@ -1,0 +1,21 @@
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-mml-chtml.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/marked@16.1.1/lib/marked.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/marked-more-lists/lib/index.umd.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.17.1/moment-with-locales.min.js"></script>
+<script src="/<#? applang ?#>/script.js"></script>
+<header class="titlebar">
+	<img class="icon" src="<#? appassets ?#>/icon_logo.ico"/>
+	<span class="name"><#? apptitleadmin ?#></span>
+</header>
+<div class="root">
+	<nav class="sidebar">
+		<#? navigation ?#>
+	</nav>
+	<section class="main">
+		<div class="activity" id="Activity_Main">
+			<#? content ?#>
+		</div>
+	</section>
+	<script>const ActiveUser = JSON.parse(`<#? activeuser ?#>`);</script>
+	<script src="/<#? applang ?#>/admin.js" id="admin_js"></script>
+</div>

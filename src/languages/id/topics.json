@@ -1,0 +1,33 @@
+{
+    "title": "Topik",
+
+    "new_title": "Topik Baru",
+    "rename_title": "Ganti Nama Topik",
+    "name_placeholder": "cth.: Input dan Output",
+
+    "problems_label": "{0} Soal",
+    "updated_label": "Di-update {0}",
+
+    "questionbank": "Kumpulan Soal",
+    "questionbank_disclaimer": "Mohon untuk tidak mendistribusikan naskah soal di luar lingkup Universitas Katolik Parahyangan.\nPergunakan naskah soal sebagaimana mestinya.",
+
+    "practice_label": "Latihan bareng Mentor",
+    "recently_updated_title": "Baru Di-update",
+
+    "select_title": "Pilih Topik",
+    "change_title": "Ganti Topik",
+
+    "delete_confirm_title": "Kamu yakin mau menghapus\\n“{0}”?",
+    "delete_confirm_message": "Semua soal dan jawabannya akan ikut terhapus. Semua yang terhapus tidak dapat dipulihkan.",
+    "delete_error_title": "Gagal Menghapus",
+
+    "empty_title": "Belum Ada Topik",
+    "empty_message": "Topik-topik nantinya akan muncul di sini.",
+    "notfound_title": "Topik Tidak Ditemukan",
+    "notfound_message": "Mungkin sudah dipindah atau dihapus.",
+
+    "error_generic": "Ada yang salah.",
+    "error_parameter_missing": "{0} tidak boleh kosong.",
+    "error_parameter_topiknamemissing": "Nama topik tidak boleh kosong.",
+    "error_parameter_courseidmissing": "Id mata kuliah tidak boleh kosong."
+}

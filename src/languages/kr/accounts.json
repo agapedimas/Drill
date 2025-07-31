@@ -1,0 +1,18 @@
+{
+    "avatar_change": "아바타 변경",
+    "avatar_upload_error_title": "아바타 업로드 실패",
+    "avatar_upload_error_message": "최대 파일 크기는 2MB입니다.",
+    "avatar_upload_success_title": "아바타 변경 완료",
+    "avatar_upload_success_message": "아바타가 성공적으로 설정되었습니다.",
+
+    "create_account_title": "계정 생성",
+    "create_account_error_title": "계정 생성 실패",
+    "delete_account_confirm_title": "정말로 이 계정을 삭제하시겠습니까?",
+    "delete_account_confirm_message": "이렇게 하면 접근 권한이 제거되지만, 생성한 강좌, 주제, **Soal**은 계속 이용할 수 있습니다.",
+    "delete_error_title": "삭제 실패",
+
+    "error_generic": "문제가 발생했습니다.",
+    "error_parameter_missing": "{0}을(를) 지정해야 합니다.",
+    "error_create_nopermission": "계정을 생성할 권한이 없습니다.",
+    "error_delete_nopermission": "계정을 삭제할 권한이 없습니다."
+}

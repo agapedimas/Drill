@@ -1,0 +1,10 @@
+{
+    "title": "로그인",
+    "description": "관리자로 접속하여 학생들을 위한 훈련 문제를 게시합니다.",
+    
+    "error_generic": "문제가 발생했습니다",
+    "error_incorrect": "사용자 이름 또는 비밀번호가 올바르지 않습니다",
+    "error_nointernet": "인터넷에 연결하세요",
+    "error_server": "현재 문제가 발생했습니다. 나중에 다시 시도해 주세요.",
+    "error_signin": "계속하려면 로그인하세요"
+}

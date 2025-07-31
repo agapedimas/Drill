@@ -1,0 +1,37 @@
+<section class="desktop">
+	<input type="search" placeholder="<$ search title />" id="Input_SearchGlobal" origin="/admin" autocomplete="off"/>
+	<div class="navigation">
+		<a goto="/admin/courses">
+			<span class='icon'>&#xed8a;</span>
+			<span><$ courses title /></span>
+		</a>
+	</div> 
+	<div class="footer">
+		<a goto="/admin/settings">
+			<span class='icon'>&#xf337;</span>
+			<span><$ settings title /></span>
+		</a>
+		<a goto="/admin/settings/">
+			<img class="icon" src="/avatar/<#? activeuser.id ?#>?v=<#? activeuser.avatarversion ?#>"/>
+			<span><#? activeuser.nickname ?#></span>
+		</a>
+	</div>
+</section>
+
+<section class="mobile">
+	<span class="navigation">	
+		<a goto="/admin/courses">
+			<span class='icon'>&#xed89;</span>
+			<span><$ courses title /></span>
+		</a>
+		<a goto="/admin/search">
+			<span class='icon'>&#xf664;</span>
+			<span><$ search title /></span>
+		</a>
+		<a goto="/admin/settings">
+			<span class='icon'>&#xf337;</span>
+			<span><$ settings title /></span>
+		</a>
+	</span> 
+</section>
+<script src="/sidebar.js"></script>

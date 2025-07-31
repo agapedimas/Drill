@@ -1,0 +1,323 @@
+<ad-title><$ courses title /></ad-title>
+
+<style>
+    @import url("/<#? applang ?#>/courses.css");
+    label:has(#Select_Semesters), #Select_Semesters { display: none; }    
+</style>
+
+<div class="header">
+    <div class="buttons">
+        <button id="Button_New"><$ generic create /></button>
+        <button class="icon" id="Button_Filter" ad-tooltip="<$ courses filter_title />">&#xf5bf;</button>
+    </div>
+    <div class="title"><$ courses title /></div>
+</div>
+
+<div class="content">
+    <div id="Grid_Courses">
+        <div class="course"></div>
+        <div class="course"></div>
+        <div class="course"></div>
+        <div class="course"></div>
+    </div>
+</div>
+
+<div id="PopOver_NewCourse" class="popover" preventDefault>
+    <div class="activity">
+        <div class="header cascaded">
+            <div class="buttons">
+                <button id="Button_CancelNew"><$ generic cancel /></button>
+                <button id="Button_SubmitNew">
+                    <span><$ generic create /></span>
+                    <div class="progressring"></div>
+                </button>
+            </div>
+            <div class="title"><$ courses new_title /></div>
+        </div>
+        <div class="content">
+            <div class="list" ad-header="<$ courses information_basic />">
+                <div class="stack">
+                    <span><$ generic name /></span>
+                    <input type="text" class="plain" maxlength="128" id="Input_CourseName" placeholder="<$ generic name_placeholder />"/>
+                </div>
+                <div class="stack">
+                    <span><$ generic alias /></span>
+                    <input type="text" class="plain" maxlength="16" id="Input_CourseAlias" placeholder="<$ generic alias_placeholder />"/>
+                </div>
+                <div class="stack">
+                    <span><$ generic description /></span>
+                    <textarea class="plain" maxlength="1000" id="Input_CourseDescription" placeholder="<$ generic description_placeholder />"></textarea>
+                </div>
+            </div>
+            <div class="list" ad-header="<$ courses information_additional />">
+                <div class="stack">
+                    <span><$ generic code /></span>
+                    <input type="text" class="plain" maxlength="16" id="Input_CourseId" placeholder="<$ generic id_placeholder />">
+                </div>
+                <div class="stack">
+                    <span><$ generic semester /></span>
+                    <input type="number" class="plain" min="1" max="8" id="Input_CourseSemester" placeholder="<$ generic semester_placeholder />"/>
+                </div>
+                <div class="stack">
+                    <span><$ generic sks /></span>
+                    <input type="number" class="plain" min="1" max="16" id="Input_CourseSKS" placeholder="<$ generic sks_placeholder />"/>
+                </div>
+            </div>
+            <span class="error hidden" id="Text_Error"></span>
+        </div>
+    </div>
+</div>
+
+<script>
+    {
+        const a = Courses.Render;
+        Courses.Render = function(course)
+        {
+            const box = a(course);
+            box.oncontextmenu = function(event)
+            {
+                Components.ContextMenu.Open("Course_Admin", this, event);
+            }
+            return box;
+        }
+
+        $.ajax({
+            type: "get",
+            url: "/courses/get",
+            data: null,
+            success: function(courses)
+            {
+                Courses.Sort = ["default", "asc"];
+                Courses.List = courses;
+                Grid_Courses.innerHTML = "";
+                Courses.Append(courses, Grid_Courses);
+
+                const semesters = [...["<$ courses filter_all />"],...new Set(courses.map(o => o.semester))];
+                const context = Components.ContextMenu.List.find(o => o.id == "Courses");
+
+                for (const semester of semesters.reverse())
+                {
+                    context.commands.unshift(
+                        {
+                            value: semester,
+                            Checked: false,
+                            Title: semester == "<$ courses filter_all />" ? semester : "<$ courses filter_semester />".format(semester),
+                            Action: o => Filter_Change(semester)
+                        }
+                    );
+                }
+
+                Filter_Change("<$ courses filter_all />");
+            }
+        });
+                
+        function Filter_Change(value)
+        {
+            const context = Components.ContextMenu.List.find(o => o.id == "Courses");
+            for (const item of context.commands)
+            {
+                if (item.value == value)
+                    item.Checked = true;
+                else
+                    item.Checked = false;
+            }
+            
+            for (const child of [...Grid_Courses.children])
+            {
+                if (child.data.semester != value && value != "<$ courses filter_all />")
+                    child.style.display = "none";
+                else
+                    child.style.display = "";
+            }
+            Activity_Main.scrollTop = 0;
+        }
+
+        function Sort_Change(value)
+        {
+            if (Courses.Sort[0] == value)
+            {
+                if (Courses.Sort[1] == "asc")
+                    Courses.Sort[1] = "desc";
+                else
+                    Courses.Sort[1] = "asc";
+            }
+            else
+            {
+                Courses.Sort[0] = value;
+                Courses.Sort[1] = "asc";
+            }
+
+            const context = Components.ContextMenu.List.find(o => o.id == "Courses");
+            for (const item of context.commands[context.commands.length - 1].Submenu)
+            {
+                if (item.value == value)
+                {
+                    item.Checked = true;
+                    item.Icon = value == "default" ? null : Courses.Sort[1] == "asc" ? "ebd7" : "eb26";
+                }
+                else
+                {
+                    item.Checked = false;
+                    item.Icon = null;
+                }
+            }
+
+            let children = [...Grid_Courses.children];
+            
+            if (value == "default")
+            {
+                const orderMap = new Map();
+                Courses.List.forEach((course, index) => 
+                {
+                    orderMap.set(course.name, index);
+                });
+
+                children.sort((a, b) => 
+                {
+                    const aIndex = orderMap.get(a.data.name) ?? Infinity;
+                    const bIndex = orderMap.get(b.data.name) ?? Infinity;
+
+                    return aIndex - bIndex;
+                });
+            }
+            else
+            {
+                children = children.sort(function(a,b)
+                {
+                    const aVal = a.data[value];
+                    const bVal = b.data[value];
+
+                    if (typeof aVal === "string" && typeof bVal === "string")
+                    {
+                        if (Courses.Sort[1] == "asc")
+                            return aVal.localeCompare(bVal);
+                        else
+                            return bVal.localeCompare(aVal);
+                    }
+
+                    if (Courses.Sort[1] == "asc")
+                        return aVal - bVal;
+                    else
+                        return bVal - aVal;
+                });
+            }
+
+            children.forEach(o => Grid_Courses.append(o));
+            Activity_Main.scrollTop = 0;
+        }
+
+        Button_Filter.onclick = function(event)
+        {
+            Components.ContextMenu.Open("Courses", this, event);
+        };
+
+        Input_CourseName.oninput = 
+        Input_CourseAlias.oninput =
+        Input_CourseDescription.oninput =
+        Input_CourseId.oninput = 
+        Input_CourseSKS.oninput = 
+        Input_CourseSemester.oninput = function()
+        {
+            Inputs_Check();
+        }
+
+        PopOver_NewCourse.onbeforeclose = function()
+        {
+            if (PopOver_NewCourse.isunsaved == false)
+                return PopOver_NewCourse.close(true);
+
+            Components.ActionSheet.Open(
+            {
+                Title: "<$ courses discard_create_confirm_title />",
+                Description: "<$ courses discard_create_confirm_message />",
+                Actions: [
+                    { 
+                        Title: "<$ generic discard />", Type: "Options.Critical", 
+                        Action: o => 
+                        {
+                            PopOver_NewCourse.close(true);
+                        }
+                    },
+                    { 
+                        Title: "<$ courses keep_creating />", Type: "Footer"
+                    }
+                ]
+            }); 
+        }
+        Button_New.onclick = function()
+        {
+            $("#PopOver_NewCourse :where(input, textarea)").val("");
+            Text_Error.classList.add("hidden");
+            PopOver_NewCourse.open(this);
+            Inputs_Check();
+        }
+        Button_SubmitNew.onclick = function()
+        {
+            Button_CancelNew.disabled = true;
+            Button_SubmitNew.disabled = true;
+            PopOver_NewCourse.isloading = true;
+            Text_Error.classList.add("hidden");
+            $("#PopOver_NewCourse :where(input, textarea)").attr("disabled", true);
+            
+            const course = 
+            {
+                id: Input_CourseId.value,
+                name: Input_CourseName.value,
+                alias: Input_CourseAlias.value,
+                description: Input_CourseDescription.value,
+                semester: Input_CourseSemester.value,
+                sks: Input_CourseSKS.value,
+            };
+
+            $.ajax(
+            {
+                type: "post",
+                url: "/admin/courses/create",
+                data: course,
+                success: function()
+                {
+                    window.location.href = "/admin/courses/" + course.id; 
+                    Inputs_Check();
+                    Button_CancelNew.disabled = false;
+                    PopOver_NewCourse.isloading = false;
+                    PopOver_NewCourse.close(true);
+                    $("#PopOver_NewCourse :where(input, textarea)").removeAttr("disabled");
+                },
+                error: function(error)
+                {
+                    Text_Error.innerText = error.responseText;
+                    Text_Error.classList.remove("hidden");
+                    Inputs_Check();
+                    Button_CancelNew.disabled = false;
+                    PopOver_NewCourse.isloading = false;
+                    $("#PopOver_NewCourse :where(input, textarea)").removeAttr("disabled");
+                }
+            })
+        }
+        Button_CancelNew.onclick = function()
+        {
+            PopOver_NewCourse.close();
+        }
+
+        const Inputs_Check = function()
+        {
+            if (
+                (
+                    Input_CourseName.value.trim() == "" &&
+                    Input_CourseId.value.trim() == "" &&
+                    Input_CourseSemester.value.trim() == "" &&
+                    Input_CourseSKS.value.trim() == ""
+                )
+            )
+            {
+                Button_SubmitNew.disabled = true;
+                PopOver_NewCourse.isunsaved = false;
+            }
+            else
+            {
+                Button_SubmitNew.disabled = false;
+                PopOver_NewCourse.isunsaved = true;
+            }
+        }
+    }
+</script>

@@ -1,0 +1,50 @@
+{
+    "title": "問題",
+
+    "new_title": "新しい問題",
+    "edit_title": "問題を編集",
+    "move_title": "移動...",
+    "move_error_title": "移動に失敗しました",
+
+    "delete_confirm_title": "本当にこの問題を削除しますか？",
+    "delete_confirm_message": "解答も削除されます。この操作は元に戻せません。",
+    "delete_error_title": "削除に失敗しました",
+    
+    "source_label": "問題のソース",
+    "type_label": "タイプ",
+    "academic_year_label": "学年",
+    "academic_year_placeholder": "例：2025",
+    
+    "markdown_tab": "Markdown",
+    "preview_tab": "プレビュー",
+    "problem_text_placeholder": "ここに問題を入力してください...",
+    
+    "discard_create_title": "下書きを破棄しますか？",
+    "discard_create_message": "新しい問題は破棄され、投稿されません。",
+    "keep_creating": "作成を続ける",
+    
+    "discard_edit_title": "変更を破棄しますか？",
+    "discard_edit_message": "変更は保存されません。",
+    "keep_editing": "編集を続ける",
+
+    "create_success_title": "作成に成功しました",
+    "create_success_message": "問題は正常に作成されました。",
+    "create_failed_title": "作成に失敗しました",
+    
+    "edit_success_title": "保存に成功しました",
+    "edit_success_message": "問題は正常に更新および保存されました。",
+    "edit_failed_title": "保存に失敗しました",
+    
+    "empty_title": "まだ問題はありません",
+    "empty_message": "追加された問題はここに表示されます。",
+    "offline_title": "オフラインです",
+    "offline_message": "インターネットに接続してください。",
+    "unknownerror_title": "問題が発生しました",
+    "unknownerror_message": "現在、サーバーで問題が発生しています。",
+    
+    "error_generic": "問題が発生しました。",
+    "error_parameter_missing": "{0}を指定する必要があります。",
+    "error_parameter_isnan": "{0}は数字である必要があります。",
+
+    "sources": "[\"\", \"クイズ\", \"中間試験\", \"期末試験\"]"
+}

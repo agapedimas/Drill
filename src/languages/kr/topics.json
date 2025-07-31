@@ -1,0 +1,33 @@
+{
+    "title": "주제",
+
+    "new_title": "새 주제",
+    "rename_title": "주제 이름 변경",
+    "name_placeholder": "예: 입력 및 출력",
+
+    "problems_label": "{0} 문제",
+    "updated_label": "{0} 업데이트됨",
+
+    "questionbank": "훈련 문제",
+    "questionbank_disclaimer": "이 문서를 Universitas Katolik Parahyangan 범위를 벗어나 배포하지 마십시오.\n이 문서를 적절하게 사용하십시오.",
+
+    "practice_label": "멘토와 함께 연습",
+    "recently_updated_title": "최근 업데이트",
+
+    "select_title": "주제 선택",
+    "change_title": "주제 변경",
+
+    "delete_confirm_title": "정말로 “{0}”을(를) 삭제하시겠습니까?",
+    "delete_confirm_message": "모든 문제와 그 해답도 삭제됩니다. 이 작업은 실행 취소할 수 없습니다.",
+    "delete_error_title": "삭제 실패",
+
+    "empty_title": "아직 주제가 없습니다",
+    "empty_message": "추가된 주제는 여기에 표시됩니다.",
+    "notfound_title": "주제를 찾을 수 없습니다",
+    "notfound_message": "이동되었거나 삭제되었을 수 있습니다.",
+
+    "error_generic": "문제가 발생했습니다.",
+    "error_parameter_missing": "{0}을(를) 지정해야 합니다.",
+    "error_parameter_topicnamemissing": "주제 이름을 지정해야 합니다.",
+    "error_parameter_courseidmissing": "강좌 ID를 지정해야 합니다."
+}

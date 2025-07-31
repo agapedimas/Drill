@@ -1,0 +1,399 @@
+<ad-title><$ search title /></ad-title>
+
+<style>
+    @import url("/<#? applang ?#>/courses.css");
+    @import url("/<#? applang ?#>/problems.css");
+    @import url("/<#? applang ?#>/collections.css");
+    
+    .start,
+    .notfound
+    {
+        position: relative;
+        display: grid;
+        top: var(--searchtransform);
+        height: 100%;
+        grid-auto-rows: max-content;
+        justify-content: center;
+        align-items: center;
+        align-content: center;
+        gap: 0.25em;
+        text-align: center;
+    }
+    .start
+    {
+        height: calc(100% + var(--searchtransform));
+    }
+    :where(.activity.searching) .start
+    {
+        opacity: 0;
+    }
+        .start span:first-child,
+        .notfound span:first-child
+        {
+            font-family: var(--font-bold);
+            font-size: 1.5em;
+        }
+        .start span:last-child,
+        .notfound span:last-child
+        {
+            font-size: 1.12em;
+            color: var(--foreground-description);
+        }
+
+    #Text_Query
+    {
+        position: sticky;
+        opacity: 0;
+        margin: 0 calc(var(--padding) * -1) var(--padding);
+        padding: var(--padding);
+        top: var(--searchtransform);
+        z-index: 50;
+        text-align: center;
+    }
+        #Text_Query::before
+        {
+            content: "";
+            display: block;
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: var(--background-activity-header);
+            backdrop-filter: var(--filter-blur);
+            z-index: -1;
+        }
+
+    #Grid_CourseTopics
+    {    
+        grid-template-rows: repeat(3, max-content);
+    }
+        #Grid_CourseTopics .topic::before
+        {
+            height: 1px !important;
+        }
+        #Grid_CourseTopics .topic:nth-child(3n):before
+        {
+            height: 0 !important;
+        }
+
+    #Activity_Main:has(.start),
+    #Activity_Main:has(.notfound),
+    #Activity_Main:has(#Grid_Courses:empty):has(#Grid_CourseTopics:empty):has(#Grid_CourseProblems:empty)
+    {
+        grid-auto-rows: auto;
+        overflow: hidden;
+    }
+        #Activity_Main > .header
+        {
+            display: none;
+        }   
+
+    #Activity_Main :where(.start, .notfound, section)
+    {
+        transition: 0.15s opacity;
+    }
+    #Activity_Main.loading :where(.start, .notfound, section)
+    {
+        opacity: 0.5;
+        pointer-events: none;
+    }
+
+    @media screen and (max-width: 800px) 
+    {
+        .start,
+        .notfound
+        {
+            top: 0;
+        }
+        .start
+        {
+            display: none;
+        }
+        #Activity_Main:has(.start),
+        #Activity_Main:has(.notfound),
+        #Activity_Main:has(#Grid_Courses:empty):has(#Grid_CourseTopics:empty):has(#Grid_CourseProblems:empty)
+        {
+            grid-auto-rows: max-content auto;
+        }
+            #Activity_Main > .header
+            {
+                display: grid;
+            }     
+              
+        #Text_Query
+        {
+            display: none;
+        }
+    }
+</style>
+
+<div class="header">
+    <div class="buttons"></div>
+    <div class="title"><$ search title /></div>
+    <input type="search" id="Input_Search" placeholder="<$ search searchbar_placeholder />" autocomplete="off" ad-cancellabel="<$ generic cancel />"/>
+</div>
+
+<div class="content">
+    <div id="Text_Query">...</div>
+    <section ad-header="<$ courses title />">
+        <div class="arrow prev hidden" id="Arrow_PrevCourses">&#xef3d;</div>
+        <div class="arrow next hidden" id="Arrow_NextCourses">&#xef3e;</div>
+        <div id="Grid_Courses"></div>
+    </section>
+
+    <section ad-header="<$ topics title />">
+        <div class="arrow prev hidden" id="Arrow_PrevTopics">&#xef3d;</div>
+        <div class="arrow next hidden" id="Arrow_NextTopics">&#xef3e;</div>
+        <div id="Grid_CourseTopics"></div>
+    </section>
+
+    <section ad-header="<$ problems title />">
+        <div id="Grid_CourseProblems"></div>
+    </section>
+</div>
+
+<script>
+    const origin = Input_SearchGlobal.getAttribute("origin") || "";
+
+    const a = Courses.Render;
+    Courses.Render = function(course)
+    {
+        const box = a(course);
+
+        if (origin)
+        {
+            box.oncontextmenu = function(event)
+            {
+                Components.ContextMenu.Open("Course_" + origin, box, event);
+            }
+        }
+
+        return box;
+    }
+
+    const b = Topics.Render;
+    Topics.Render = function(topic)
+    {
+        const box = b(topic);
+
+        if (origin)
+        {
+            box.oncontextmenu = function(event)
+            {
+                Components.ContextMenu.Open("Topic_" + origin, box, event);
+            }
+        }
+
+        return box;
+    }
+
+    Grid_Courses.onscroll = o => Arrow.Check(Grid_Courses);
+    Grid_CourseTopics.onscroll = o => Arrow.Check(Grid_CourseTopics);
+    Grid_CourseProblems.onscroll = o => Arrow.Check(Grid_CourseProblems);
+
+    Arrow_PrevCourses.onclick = o => Arrow.Click(Grid_Courses, "backward");
+    Arrow_NextCourses.onclick = o => Arrow.Click(Grid_Courses, "forward");
+    Arrow_PrevTopics.onclick = o => Arrow.Click(Grid_CourseTopics, "backward");
+    Arrow_NextTopics.onclick = o => Arrow.Click(Grid_CourseTopics, "forward");
+
+    window.addEventListener("resize", function()
+    {
+        Arrow.Check(Grid_Courses);
+        Arrow.Check(Grid_CourseTopics);
+    });
+
+    const apptitle = document.title;
+    {    
+        let url = new URL(window.location.href);
+        let query = url.searchParams.get("q");
+
+        if (query && query.trim() != "")
+        {
+            query = query.trim();
+            Input_SearchGlobal.value = query;
+            Input_Search.value = query;
+            Text_Query.innerHTML = "<$ search showing_results />".format("<b>" + query + "</b>");
+            Text_Query.style.opacity = "1";
+            document.title = query + " - " + apptitle;
+        }   
+        
+        const resize = function()
+        {
+            if (window.innerWidth > 800)
+            {
+                Activity_Main.classList.remove("searching");
+            }
+            else
+            {
+                if (Input_SearchGlobal.value.trim() != "")
+                    Activity_Main.classList.add("searching");
+            }
+        }
+
+        resize();
+        window.addEventListener("resize", resize);
+        window.addEventListener("DOMContentLoaded", async function()
+        {
+            Input_SearchGlobal.oninput = function()
+            {
+                Input_Search.value = this.value;
+                Input_Check();
+            }
+            if (Input_Search.value.trim() != "")
+                Input_Search.focus();
+
+            Input_Check(true);
+        });
+    }
+
+    let Search_LastQuery = "";
+    Search_Timeout = null;
+    Input_SearchGlobal.focus();
+
+    Input_Search.oninput = function()
+    {
+        Input_SearchGlobal.value = this.value;
+        Input_Check();
+    }
+    
+    function Input_Check(notimeout)
+    {
+        let timeout = notimeout ? 0 : 400;
+        clearTimeout(Search_Timeout);
+        Activity_Main.classList.add("loading");
+
+        if (Input_SearchGlobal.value.trim() == "")
+        {
+            Activity_Main.classList.remove("loading");
+            Activity_Main.scrollTop = 0;
+            Text_Query.style.opacity = "0";
+            window.history.replaceState(null, null,  origin + "/search");
+            document.title = "<$ search title /> - " + apptitle;
+            Grid_Courses.innerHTML = null;
+            Grid_CourseTopics.innerHTML = null;
+            Grid_CourseProblems.innerHTML = null;
+
+            if (window['Grid_NotFound'])
+                Grid_NotFound.remove();
+
+            if (window['Grid_Start'])
+                Grid_Start.remove();
+
+            const title = document.createElement("span");
+            title.innerHTML = "<$ search start_title/>";
+
+            const desc = document.createElement("span");
+            desc.innerHTML = "<$ search start_message/>";
+
+            const start = document.createElement("div");
+            start.setAttribute("id", "Grid_Start");
+            start.classList.add("start");
+            start.append(title);
+            start.append(desc);
+
+            Text_Query.parentNode.append(start);
+
+            Search_LastQuery = "";
+            return;
+        }
+
+        Search_Timeout = setTimeout(async function()
+        { 
+            let query = Input_SearchGlobal.value.trim();
+            
+            if (Search_LastQuery == query)
+                return;
+            
+            let url = new URL(window.location.href);
+            url.searchParams.set("q", query);
+            window.history.replaceState(null, null, url.href);
+            document.title = query + " - " + apptitle;
+            
+            const result = await $.post(url.href);
+
+            Grid_Courses.innerHTML = null;
+            Grid_CourseTopics.innerHTML = null;
+            Grid_CourseProblems.innerHTML = null;
+
+            if (window['Grid_NotFound'])
+                Grid_NotFound.remove();
+
+            if (window['Grid_Start'])
+                Grid_Start.remove();
+
+            for (const course of result.courses)
+            {
+                const box = Courses.Render(course);
+                box.setAttribute("goto", origin + "/courses/" + course.id);
+                Grid_Courses.append(box); 
+            }
+
+            for (const topic of result.topics)
+            {
+                const box = Topics.Render(topic);
+        
+                const course = document.createElement("span");
+                course.classList.add("course");
+                course.append(topic.coursename);
+                
+                box.find("details").prepend(course);
+                box.find("problemcount").remove();
+                box.find("lastedited").remove();
+                box.onclick = function()
+                {
+                    const url = new URL("http://aga.pe/");
+                    url.searchParams.set("name", topic.name);
+                    const name = url.search.replace("?name=", "").replaceAll("+", "-").replaceAll("---", "-").toLowerCase();
+                    window.location.href = origin + "/courses/" + box.data.course + "/" + name;
+                }
+
+                Grid_CourseTopics.append(box); 
+            }
+
+            for (const problem of result.problems)
+            {
+                const box = await Problems.Render(problem);
+                box.onclick = function()
+                {
+                    const url = new URL("http://aga.pe/");
+                    url.searchParams.set("name", problem.topic);
+                    const name = url.search.replace("?name=", "").replaceAll("+", "-").replaceAll("---", "-").toLowerCase();
+                    window.location.href = origin + "/courses/" + box.data.course + "/" + name;
+                }
+                Grid_CourseProblems.append(box); 
+            }
+
+            Arrow.Check(Grid_Courses);
+            Arrow.Check(Grid_CourseTopics);
+            
+            Grid_Courses.scrollLeft = 0;
+            Grid_CourseTopics.scrollLeft = 0;
+
+            if (result.courses.length == 0 && result.problems.length == 0 && result.topics.length == 0)
+            {
+                const title = document.createElement("span");
+                title.innerHTML = "<$ search noresults_title/>";
+
+                const desc = document.createElement("span");
+                desc.innerHTML = "<$ search noresults_message/>";
+
+                const notfound = document.createElement("div");
+                notfound.setAttribute("id", "Grid_NotFound");
+                notfound.classList.add("notfound");
+                notfound.append(title);
+                notfound.append(desc);
+
+                Text_Query.parentNode.append(notfound);
+            }
+        
+            Text_Query.style.opacity = "1";
+            Text_Query.innerHTML = "<$ search showing_results />".format("<b>" + query + "</b>");
+            
+            Search_LastQuery = query;
+            Activity_Main.classList.remove("loading");
+            Activity_Main.scrollTop = 0;
+        }, timeout);
+    }
+
+</script>

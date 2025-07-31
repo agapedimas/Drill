@@ -1,0 +1,75 @@
+<ad-title><$ courses notfound_title /></ad-title>
+<ad-name><$ courses notfound_title /> | <#? apptitle ?#></ad-name>
+<ad-desc><$ courses notfound_message /></ad-desc>
+<ad-thumbnail>/banner/</ad-thumbnail>
+
+<style>
+    @import url("/<#? applang ?#>/courses.css");
+    @import url("/<#? applang ?#>/problems.css");
+
+    .root .main:has(> .activity)
+    {
+        grid-auto-flow: column;
+        grid-auto-columns: 400px auto;
+    }
+        .root .main > .activity
+        {
+            position: relative
+        }
+        .root .main > .activity:nth-child(1)
+        {
+            background: var(--gray-7);
+			box-shadow: inset -10px 0 5px -10px var(--border-sidebar);
+        }
+            .root .main > #Activity_Topic > .header > .buttons > .back
+            {
+                visibility: hidden;
+            }
+    @media screen and (max-width: 800px) 
+    {
+        .root 
+        {
+            grid-auto-rows: auto 0;
+        }
+        .root .main > .activity:nth-child(1)
+        {
+            background: var(--background-page);
+			box-shadow: none;
+        }
+        .root .main > .activity
+        {
+            padding-bottom: env(safe-area-inset-bottom);
+        }
+    }
+    @media screen and (max-width: 1140px)
+    {
+        .root .main:has(> .activity)
+        {
+            grid-auto-columns: auto 0;
+        }
+        .root .main:has(> #Activity_Topic)
+        {
+            grid-auto-columns: 0 auto;
+        }
+            .root .main > #Activity_Topic > .header > .buttons > .back
+            {
+                visibility: visible;
+            }
+    }
+</style>
+
+<div class="header cascaded">
+    <div class="buttons dynamic" theme="dark">
+        <button class="back" onclick="Courses.Back()" id="Button_BackCourses"></button>
+    </div>
+    <div class="title hide"></div>
+</div>
+
+<div class="content">
+    <div id="Grid_CourseCard" theme="dark"></div>
+    <div id="Grid_CourseTopics" class="notfound"></div>
+</div>
+
+<script>
+    Courses.Label(Button_BackCourses);
+</script>

@@ -1,0 +1,386 @@
+#Grid_Courses
+{
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(235px, 1fr));
+    gap: 16px;
+}
+#Grid_Courses:empty
+{   
+    all: unset;
+    display: grid;
+    grid-auto-rows: max-content;
+    justify-content: center;
+    align-items: center;
+    align-content: center;
+    gap: 0.25em;
+    text-align: center;
+    height: calc(100% - 80px);
+}
+    #Grid_Courses:empty::before
+    {
+        content: "<$ courses empty_title />";
+        font-family: var(--font-bold);
+        font-size: 1.5em;
+    }
+    #Grid_Courses:empty::after
+    {
+        content: "<$ courses empty_message />";
+        font-size: 1.12em;
+        color: var(--foreground-description);
+    }
+    #Grid_Courses.pins:empty::before
+    {
+        content: "<$ courses empty_pins_title />";
+    }
+    #Grid_Courses.pins:empty::after
+    {
+        content: "<$ courses empty_pins_message />";
+    }
+    #Grid_Courses .course
+    {
+        position: relative;
+        display: grid;
+        grid-auto-columns: 100%;
+        grid-auto-rows: 150px max-content max-content auto;
+        height: calc(150px + 11.4rem);
+        background: #f3f3f3;
+        border-radius: 10px;
+        overflow: hidden;
+        box-shadow: 0 0 10px -7px;
+    }
+    [theme=dark] #Grid_Courses .course 
+    {
+        background: var(--overlay-7);
+    }
+        #Grid_Courses .course .banner
+        {
+            display: block;
+            width: 100%;
+            height: 100%;
+            background: var(--background-input-disabled);
+            object-fit: cover;
+        }
+        #Grid_Courses .course .id
+        {
+            font-size: 0.8em;
+            font-family: var(--font-semibold);
+            letter-spacing: 0.05em;
+            color: var(--foreground-description);
+            margin: calc(1.85rem - 10px) calc(1.85rem - 10px) 0;
+        }
+        #Grid_Courses .course .name
+        {
+            font-size: 1.2em;
+            font-family: var(--font-bold);
+            margin: 0 calc(1.85rem - 10px);
+        }
+        #Grid_Courses .course .description
+        {
+            display: inline-block;
+            display: -webkit-inline-box;
+            overflow: hidden;
+            margin: 10px calc(1.85rem - 10px) calc(1.85rem - 0.85em);
+            white-space: pre-line;
+            text-overflow: ellipsis;
+            line-clamp: 5;
+            -webkit-line-clamp: 5;
+            -webkit-box-orient: vertical;
+        }
+        #Grid_Courses .course .hover
+        {   
+            position: absolute;
+            display: block;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            z-index: 1;
+            pointer-events: none;
+            transition: 0.05s background;
+        }
+        #Grid_Courses .course:hover .hover
+        {
+            background: var(--overlay-6);
+        }
+        #Grid_Courses .course:active .hover
+        {
+            background: var(--overlay-5);
+        }
+        [theme=dark] #Grid_Courses .course:hover .hover
+        {
+            background: var(--overlay-8);
+        }
+        [theme=dark] #Grid_Courses .course:active .hover
+        {
+            background: var(--overlay-7);
+        }
+
+#Grid_CourseCard
+{
+    position: relative;
+    display: grid;
+    grid-template-areas: 
+        "x"
+        "name"
+        "description"
+        "details";
+    grid-auto-rows: auto max-content max-content max-content;
+    background: #232323;
+    margin: -100px calc(var(--padding) * -1) var(--padding);
+    padding: 100px var(--padding) var(--padding);
+    min-height: 400px;
+    z-index: 0;
+    overflow: hidden;
+}
+    #Grid_CourseCard::before,
+    #Grid_CourseCard::after
+    {
+        content: "";
+        display: block;
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        z-index: -1;
+        background-size: cover;
+        background-position: center;
+    }
+    #Grid_CourseCard::before
+    {   
+        background-image: var(--blur);    
+        transform: scale(1.3);
+        filter: brightness(0.5);
+    }
+    #Grid_CourseCard::after
+    {   
+        background-image: var(--image);
+        filter: brightness(0.7);
+        mask-image: linear-gradient(0, transparent 0%, black 45%);
+        -webkit-mask-image: linear-gradient(0, transparent 0%, black 45%);
+        bottom: 7em;
+    }
+    #Grid_CourseCard:has(> span:not(:empty))::after
+    {       
+        bottom: 10em;
+    }
+    #Grid_CourseCard:has(> span.expanded)::after
+    {   
+        visibility: hidden;
+    }
+    #Grid_CourseCard.hasBanner::after
+    {   
+        animation: 0.8s var(--key-animation) BackgroundIn;
+    }
+    #Grid_CourseCard > h3
+    {
+        grid-area: name;
+        user-select: text;
+    }
+    #Grid_CourseCard > span
+    {
+        grid-area: description;
+        font-size: 1.15em;
+        max-height: calc(1.2em * 2 + 0.3em);
+        overflow: hidden;
+        text-overflow: ellipsis;
+        cursor: pointer;
+        display: none;
+        -webkit-box-orient: vertical;
+        line-clamp: 2;
+        -webkit-line-clamp: 2;
+        margin: -0.2em -0.5em;
+        padding: 0.2em 0.5em;
+        border-radius: 10px;
+        transition: 0.05s background;
+    }
+    #Grid_CourseCard > span:hover
+    {
+        background: var(--background-input-hover);
+    }
+    #Grid_CourseCard > span:active
+    {
+        background: var(--background-input-active);
+    }
+    #Grid_CourseCard > span:not(:empty)
+    { 
+        display: inline-block;
+        display: -webkit-inline-box;
+        margin-top: 0.5em;
+    }
+    #Grid_CourseCard > span.expanded
+    {
+        background: transparent;;
+        max-height: unset;
+        user-select: text;
+        cursor: text;
+        display: inline-block;
+        -webkit-box-orient: unset;
+        line-clamp: unset;
+        -webkit-line-clamp: unset;
+    }
+    #Grid_CourseCard > .details
+    {
+        grid-area: details;
+        display: grid;
+        grid-auto-flow: column;
+        grid-auto-columns: max-content;
+        font-size: 0.85em;
+        margin-top: 1.5em;
+        gap: 1em;
+        justify-content: space-between;    
+        max-width: 400px;
+    }
+        #Grid_CourseCard > .details > div
+        {
+            display: grid;
+            gap: 0.2em;
+            letter-spacing: 0.05em;
+            font-family: var(--font-semibold);
+        }
+            #Grid_CourseCard > .details > div span:nth-child(1)
+            {
+                opacity: 0.5;
+                text-transform: uppercase;
+            }
+            #Grid_CourseCard > .details > div span:nth-child(2)
+            {
+                user-select: text;
+            }
+
+@media screen and (max-width: 425px) 
+{
+    #Grid_CourseCard 
+    {
+        min-height: 350px;
+    }
+}
+#Grid_CourseTopics, #Grid_PrintCourseTopics, #Grid_MoveCourseTopics
+{
+    display: grid;
+    gap: 10px;
+    margin: -0.75em 0;
+}
+#Grid_CourseTopics:empty
+{
+    all: unset;
+    display: grid;
+    grid-auto-rows: max-content;
+    justify-content: center;
+    align-items: center;
+    align-content: center;
+    gap: 0.25em;
+    text-align: center;
+    margin: 70px 0 0;  
+}
+    #Grid_CourseTopics:empty::before
+    {
+        content: "<$ topics empty_title />";
+        font-family: var(--font-bold);
+        font-size: 1.5em;
+    }
+    #Grid_CourseTopics:empty::after
+    {
+        content: "<$ topics empty_message />";
+        font-size: 1.12em;
+        color: var(--foreground-description);
+    }
+    #Grid_CourseTopics.notfound:empty::before
+    {
+        content: "<$ courses notfound_title />";
+    }
+    #Grid_CourseTopics.notfound:empty::after
+    {
+        content: "<$ courses notfound_message />";
+    }
+    :where(#Grid_CourseTopics, #Grid_PrintCourseTopics, #Grid_MoveCourseTopics) .progressring
+    {
+        margin: var(--padding) 0 0;
+        place-self: center;
+        width: 20px;
+    }
+    :where(#Grid_CourseTopics, #Grid_PrintCourseTopics, #Grid_MoveCourseTopics) .topic
+    {
+        position: relative;
+        display: grid;
+        gap: 0.25em;
+        padding: 0.75em 1em;
+        margin: 0 -1em;
+        border-radius: 10px;
+        transition: 0.05s background-color;
+    }
+    #Grid_CourseTopics .topic.dragging
+    {
+        opacity: 0.3;
+    }
+    #Grid_CourseTopics:has(.topic.dragging) .topic
+    {
+        background: transparent !important;
+    }
+    :where(#Grid_CourseTopics, #Grid_PrintCourseTopics, #Grid_MoveCourseTopics):has(.InputContainer_Checkbox) .topic
+    {
+        padding-left: calc(var(--padding) * 2 + 18px);
+    }
+        #Grid_PrintCourseTopics .InputContainer_Checkbox
+        {
+            position: absolute;
+            top: 50%;
+            left: var(--padding);
+            transform: translateY(-50%);
+            pointer-events: none;
+        }
+            #Grid_PrintCourseTopics .InputContainer_Checkbox .checkmark
+            {
+                border-radius: 100%;
+            }
+        :where(#Grid_CourseTopics, #Grid_PrintCourseTopics, #Grid_MoveCourseTopics) .topic:not(:last-child)::before
+        {
+            content: "";
+            display: block;
+            position: absolute;
+            bottom: -5px;
+            left: 0.75em;
+            right: 0.75em;
+            height: 1px;
+            background: var(--overlay-6);
+        }
+        :where(#Grid_CourseTopics, #Grid_PrintCourseTopics, #Grid_MoveCourseTopics):has(.InputContainer_Checkbox) .topic:not(:last-child)::before
+        {
+            left: calc(var(--padding) * 2 + 18px);
+        }
+    #Grid_CourseTopics .topic.active
+    {
+        background-image: linear-gradient(var(--background-input-hover));
+    }
+    :where(#Grid_CourseTopics, #Grid_PrintCourseTopics, #Grid_MoveCourseTopics) .topic:hover
+    {
+        background-color: var(--background-input-hover);
+    }
+    :where(#Grid_CourseTopics, #Grid_PrintCourseTopics, #Grid_MoveCourseTopics) .topic:active
+    {
+        background-color: var(--background-input-active);
+    }
+        :where(#Grid_CourseTopics, #Grid_PrintCourseTopics, #Grid_MoveCourseTopics) .topic .name
+        {
+            display: block;
+        }
+        :where(#Grid_CourseTopics, #Grid_PrintCourseTopics, #Grid_MoveCourseTopics) .topic .details
+        {
+            display: grid;
+            grid-auto-flow: column;
+            grid-auto-columns: auto max-content max-content;
+            color: var(--foreground-description);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            font-family: var(--font-semibold);
+            font-size: 0.75em;
+            gap: 0.15em;
+        }
+            #Grid_CourseTopics .topic .details:has(.lastedited:not(:empty))::after
+            {
+                content: "\ef59";
+                font-size: 0.95em;
+                color: var(--foreground-description);
+                font-family: var(--font-icon);
+                transform: translateX(20%);
+            }

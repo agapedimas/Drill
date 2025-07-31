@@ -1,0 +1,15 @@
+<script>
+    let title = "<#? page_title ?#>";
+
+    if (window.location.pathname != "/")
+    {
+        if (window.matchMedia("(display-mode: standalone)").matches == false)
+            title += " - " + $("[ad-app-title]").attr("ad-app-title");
+    }
+    else
+    {
+        title = $("[ad-app-title]").attr("ad-app-title");
+    }
+
+    document.title = title;
+</script>

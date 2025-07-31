@@ -1,0 +1,61 @@
+{
+    "title": "강좌",
+
+    "newtab": "새 탭에서 열기",
+    "pin_template": "“{0}” 고정",
+    "unpin_template": "“{0}” 고정 해제",
+    "pin": "고정",
+    "unpin": "고정 해제",
+    "link_copy": "링크 복사",
+
+    "new_title": "새 강좌",
+    "edit_title": "강좌 편집",
+    "delete_title": "강좌 삭제",
+
+    "filter_title": "필터",
+    "filter_all": "전체",
+    "filter_sortby": "정렬",
+    "filter_semester": "학기 {0}",
+    "filter_default": "기본",
+
+    "print_title": "최대 5개의 주제 선택",
+
+    "pinned": "고정된 강좌",
+
+    "information_basic": "기본 정보",
+    "information_additional": "추가 정보",
+
+    "keep_creating": "계속 만들기",
+    "keep_editing": "계속 편집",
+
+    "discard_create_confirm_title": "초안을 삭제하시겠습니까?",
+    "discard_create_confirm_message": "입력하신 모든 내용은 손실되며 저장되지 않습니다.",
+    "discard_edit_confirm_title": "변경 사항을 삭제하시겠습니까?",
+    "discard_edit_confirm_message": "수정하신 사항은 저장되지 않습니다.",
+
+    "delete_confirm_title": "정말로 “{0}”을(를) 삭제하시겠습니까?",
+    "delete_confirm_message": "관련된 모든 **문제**와 그 해답도 삭제됩니다. 이 작업은 실행 취소할 수 없습니다.",
+    "delete_error_title": "삭제 실패",
+
+    "banner_upload_error_title": "배너 업로드 실패",
+    "banner_upload_error_message": "최대 파일 크기는 2MB입니다.",
+    "banner_upload_success_title": "배너 변경 완료",
+    "banner_upload_success_message": "배너가 성공적으로 설정되었습니다.",
+    "banner_clear_error_title": "배너 지우기 실패",
+    "banner_clear_success_title": "지우기 완료",
+    "banner_clear_success_message": "배너가 성공적으로 지워졌습니다.",
+
+    "empty_title": "아직 강좌가 없습니다",
+    "empty_message": "추가된 강좌는 여기에 표시됩니다.",
+    "notfound_title": "강좌를 찾을 수 없습니다",
+    "notfound_message": "이동되었거나 삭제되었을 수 있습니다.",
+    "empty_pins_title": "고정된 강좌가 없습니다",
+    "empty_pins_message": "강좌를 고정하면 여기에 표시됩니다.",
+    
+    "error_generic": "문제가 발생했습니다.",
+    "error_parameter_missing": "{0}을(를) 지정해야 합니다.",
+    "error_parameter_isnan": "{0}은(는) 숫자여야 합니다.",
+    "error_parameter_idexists": "강좌 “{0}”이(가) 이미 존재합니다.",
+    "error_parameter_idnotfound": "강좌 “{0}”을(를) 찾을 수 없습니다.",
+    "error_delete_nopermission": "강좌를 삭제할 권한이 없습니다."
+}

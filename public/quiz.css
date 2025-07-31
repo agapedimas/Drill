@@ -1,0 +1,407 @@
+.root .main
+{
+    background: inherit;
+}
+#Activity_Main
+{
+    position: relative;
+    overflow: hidden;
+}
+    #Activity_Main > section
+    {
+        grid-auto-rows: max-content auto;
+    }
+    #Activity_Main > .content
+    {
+        display: grid;
+    }
+
+#PopOver_Introduction .content
+{
+    display: grid;
+    grid-auto-rows: max-content max-content max-content auto max-content;
+    justify-content: center;
+    align-content: center;
+    padding: 50px 30px;
+    text-align: center;
+    gap: 1em;
+    max-width: unset;
+}
+    #PopOver_Introduction .content .features
+    {
+        display: grid;
+        grid-auto-rows: max-content;
+        gap: 1.5em;
+        margin: 1.5em 0;
+    }
+        #PopOver_Introduction .content .features .feature
+        {
+            display: grid;
+            grid-auto-flow: column;
+            gap: 1.5em;
+            text-align: left;    
+            align-items: center;
+        }
+            #PopOver_Introduction .content .features .icon
+            {
+                color: var(--accent);
+                font-size: 2em;
+            }
+            #PopOver_Introduction .content .features .description
+            {
+                display: grid;
+                grid-auto-rows: max-content;
+            }
+    #PopOver_Introduction .content button
+    {
+        padding: 10px;
+    }
+
+@media screen and (max-width: 425px) 
+{
+    #PopOver_Introduction .content
+    {
+        grid-auto-rows: max-content max-content max-content 150px max-content;
+    }   
+}
+
+#Grid_Courses,
+#Grid_CourseTopics
+{
+    display: grid;
+    gap: 10px;
+}
+    #Grid_Courses .course,
+    #Grid_CourseTopics .topic
+    {
+        position: relative;
+        display: grid;
+        padding: 0.75em 1em;
+        margin: 0 -1em;
+        border-radius: 10px;
+    }
+    #Grid_Courses .course:hover,
+    #Grid_CourseTopics .topic:hover
+    {
+        background-color: var(--background-input-hover);
+    }
+    #Grid_Courses .course:active,
+    #Grid_CourseTopics .topic:active
+    {
+        background-color: var(--background-input-active);
+    }
+        #Grid_Courses .course:not(:last-child)::before,
+        #Grid_CourseTopics .topic:not(:last-child)::before
+        {
+            content: "";
+            display: block;
+            position: absolute;
+            bottom: -5px;
+            left: 0.75em;
+            right: 0.75em;
+            height: 1px;
+            background: var(--overlay-6);
+        }
+        #Grid_Courses .course .id
+        {
+            font-size: 0.8em;
+            font-family: var(--font-semibold);
+            letter-spacing: 0.05em;
+            color: var(--foreground-description);
+        }
+        #Grid_Courses .course::after
+        {
+            content: "\ef59";
+            position: absolute;
+            font-size: 0.95em;
+            color: var(--foreground-description);
+            font-family: var(--font-icon);
+            top: 50%;
+            right: 0.75em;
+            transform: translateY(-50%);
+        }
+    #Grid_CourseTopics .progressring
+    {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 25px;
+        transform: translate(-50%, -50%);
+    }    
+#Grid_CourseTopics:empty
+{
+    all: unset;
+    display: grid;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 100%;
+    grid-auto-rows: max-content;
+    gap: 0.25em;
+    text-align: center;
+    transform: translate(-50%, -50%);
+}
+    #Grid_CourseTopics:empty::before
+    {
+        content: "<$ topics empty_title />";
+        font-family: var(--font-bold);
+        font-size: 1.5em;
+    }
+    #Grid_CourseTopics:empty::after
+    {
+        content: "<$ topics empty_message />";
+        font-size: 1.12em;
+        color: var(--foreground-description);
+    }
+
+#Content_Ready
+{
+    display: grid;
+    grid-auto-rows: max-content max-content auto 100px;
+    justify-items: center;
+    align-content: space-evenly;
+    align-items: end;        
+    gap: 1.5em;
+}
+    #Content_Ready .about
+    {
+        display: grid;
+        justify-items: center;
+        gap: 1em;
+    }
+        #Content_Ready .about .name
+        {
+            display: grid;
+            font-size: 3em;
+            font-family: var(--font-bold);
+            text-align: center;
+            line-height: 1;
+        }
+            #Content_Ready .about .name span:last-child
+            {
+                opacity: 0.5;
+            }
+        #Content_Ready .about button
+        {
+            padding: 0;
+        }
+    #Content_Ready .metadata
+    {
+        display: grid;
+        gap: 1em;
+        font-size: 1.15em;
+        margin-top: var(--padding);
+    }
+        #Content_Ready .metadata > div
+        {
+            display: grid;
+            grid-auto-flow: column;
+            grid-auto-columns: max-content auto;
+            gap: 1em;
+        }
+    #Content_Ready #Grid_Status
+    {
+        display: grid;
+        grid-auto-rows: max-content;
+        gap: 1em;
+        align-self: end;
+        justify-items: center;
+        text-align: center;
+    }
+        #Content_Ready #Grid_Status .progressbar
+        {
+            width: 200px;
+            height: 5px;
+        }
+    #Content_Ready #Grid_Buttons
+    {
+        display: grid;
+    }
+        #Content_Ready #Grid_Buttons button
+        {
+            min-width: 200px;
+            font-size: 1.25em;
+            padding: 10px;
+        }
+
+@media screen and (max-width: 425px) 
+{
+    #Content_Ready
+    {
+        align-content: stretch;
+        justify-items: stretch;
+        margin-top: -55px;
+        padding: 30px;
+    }    
+        #Content_Ready .about
+        {
+            justify-items: left; 
+        }
+            #Content_Ready .about .name
+            {
+                text-align: left; 
+            }
+}
+
+#Content_Quiz
+{
+    display: grid;
+    grid-auto-rows: max-content auto max-content;
+}
+
+#Grid_QuizContainer
+{
+    display: grid;
+    grid-auto-rows: max-content;
+    gap: 1.5em;
+    padding-bottom: 1em;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+#Text_Question
+{
+    font-size: 1.1em;
+    line-height: 1.5em;
+    align-items: baseline;
+}
+    #Text_Question *
+    {
+        user-select: none;
+    }
+
+#Grid_Choices
+{
+    display: grid;
+    grid-auto-rows: max-content;
+    gap: 10px;
+    font-size: 1.1em;
+    counter-reset: choice;
+}
+    #Grid_Choices .choice
+    {
+        display: grid;
+        grid-template-areas: "number text";
+        grid-auto-columns: 30px auto;
+        background: var(--background-input);
+        border-radius: 10px;
+        overflow: hidden;
+        counter-increment: choice;
+        align-items: baseline;
+        padding: 13px 15px;
+        gap: 15px;
+        transition: 0.1s background, 0.1s background-image;
+    }
+    #Grid_Choices .choice:has(.reason)
+    {
+        grid-template-areas: 
+            "number text"
+            "reason reason";
+    }
+        #Grid_Choices .choice::before
+        {
+            grid-area: number;
+            content: counter(choice, upper-alpha);
+            display: grid;
+            font-family: var(--font-bold);
+            background: var(--overlay-6);
+            color: var(--foreground-description);
+            width: 30px;
+            height: 30px;
+            border-radius: 100%;
+            align-items: center;
+            justify-content: center;
+        }
+    #Grid_Choices .choice.active
+    {
+        background: var(--accent);
+        color: white;
+    }
+        #Grid_Choices .choice.active::before
+        {
+            background: white;
+            color: var(--accent);
+        }
+        #Grid_Choices .choice.wrong::before
+        {
+            background: white;
+            content: "\fe72";
+            font-family: var(--font-icon);
+            font-size: 0.6em;
+            font-weight: bold;
+            color: #cc0000;
+        }
+        #Grid_Choices .choice.correct::before
+        {
+            background: white;
+            content: "\ef32";
+            font-family: var(--font-icon);
+            font-size: 0.6em;
+            font-weight: bold;
+            color: #008800;
+        }
+    #Grid_Choices .choice.correct
+    {
+        background: #008800;
+        color: white;
+    }
+    #Grid_Choices .choice.wrong
+    {
+        background: #cc0000;
+        color: white;
+    }
+    #Grid_Choices .choice:hover
+    {
+        background-image: linear-gradient(var(--background-list-hover));
+    }
+    #Grid_Choices .choice:active
+    {
+        background-image: linear-gradient(var(--background-list-active));
+    }
+        #Grid_Choices .choice .text,
+        #Grid_Choices .choice .reason
+        {
+            grid-area: text;
+            display: grid;
+            grid-auto-rows: max-content;
+            gap: 0.5em;
+            justify-content: start;
+            align-items: baseline;
+            
+        }
+        #Grid_Choices .choice *,
+        #Grid_Choices .reason *
+        {
+            user-select: none;
+        }
+        #Grid_Choices .choice .reason
+        {
+            grid-area: reason;
+            background: rgba(0, 0, 0, 0.2);
+            border-top: 1px solid var(--border-context);
+            margin: 0 -100px -50px;
+            padding: 20px 100px 70px;
+            overflow: hidden;
+            overflow-x: auto;
+        }
+
+#Grid_Navigation
+{
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: max-content minmax(auto, 550px) max-content;
+    grid-auto-rows: max-content;
+    padding: 0.5em 0 var(--padding);
+    margin-bottom: calc(var(--padding) * -1);
+    gap: 15px;
+    align-self: end;
+    position: sticky;
+    bottom: 0;
+    background: var(--background-page);
+    justify-content: center;
+}
+    #Grid_Navigation button
+    {
+        font-size: 1em;
+        padding: 8px 25px;
+    }

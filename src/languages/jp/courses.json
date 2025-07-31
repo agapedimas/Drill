@@ -1,0 +1,61 @@
+{
+    "title": "コース",
+
+    "newtab": "新しいタブで開く",
+    "pin_template": "「{0}」をピン留め",
+    "unpin_template": "「{0}」のピン留めを解除",
+    "pin": "ピン留め",
+    "unpin": "ピン留め解除",
+    "link_copy": "リンクをコピー",
+
+    "new_title": "新しいコース",
+    "edit_title": "コースを編集",
+    "delete_title": "コースを削除",
+
+    "filter_title": "フィルター",
+    "filter_all": "すべて",
+    "filter_sortby": "並び替え",
+    "filter_semester": "セメスター{0}",
+    "filter_default": "デフォルト",
+
+    "print_title": "最大5つのトピックを選択",
+
+    "pinned": "ピン留めされたコース",
+
+    "information_basic": "基本情報",
+    "information_additional": "追加情報",
+
+    "keep_creating": "作成を続ける",
+    "keep_editing": "編集を続ける",
+
+    "discard_create_confirm_title": "下書きを破棄しますか？",
+    "discard_create_confirm_message": "入力した内容はすべて失われ、保存されません。",
+    "discard_edit_confirm_title": "変更を破棄しますか？",
+    "discard_edit_confirm_message": "行った変更は保存されません。",
+
+    "delete_confirm_title": "本当に「{0}」を削除しますか？",
+    "delete_confirm_message": "関連するすべての**問題**とその解答も削除されます。この操作は元に戻せません。",
+    "delete_error_title": "削除に失敗しました",
+
+    "banner_upload_error_title": "バナーのアップロードに失敗しました",
+    "banner_upload_error_message": "最大ファイルサイズは2MBです。",
+    "banner_upload_success_title": "バナーを変更しました",
+    "banner_upload_success_message": "バナーは正常に設定されました。",
+    "banner_clear_error_title": "バナーのクリアに失敗しました",
+    "banner_clear_success_title": "クリアしました",
+    "banner_clear_success_message": "バナーは正常にクリアされました。",
+
+    "empty_title": "まだコースはありません",
+    "empty_message": "追加されたコースはここに表示されます。",
+    "notfound_title": "コースが見つかりません",
+    "notfound_message": "移動または削除された可能性があります。",
+    "empty_pins_title": "まだピン留めはありません",
+    "empty_pins_message": "コースをピン留めすると、ここに表示されます。",
+    
+    "error_generic": "問題が発生しました。",
+    "error_parameter_missing": "{0}を指定する必要があります。",
+    "error_parameter_isnan": "{0}は数字である必要があります。",
+    "error_parameter_idexists": "コース「{0}」は既に存在します。",
+    "error_parameter_idnotfound": "コース「{0}」が見つかりません。",
+    "error_delete_nopermission": "コースを削除する権限がありません。"
+}

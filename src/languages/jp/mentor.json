@@ -1,0 +1,25 @@
+{
+    "title": "メンター",
+
+    "welcome_title": "メンターへようこそ",
+    "welcome_description": "最近、先生はすごく忙しいけど、もっと練習が必要なんだ。そんな時はメンターにお任せ。TAみたいに、君の学習をサポートしてくれるよ。",
+
+    "readyfor_title": "試験の準備はOK？",
+    "readyfor_description": "メンターと一緒に試験対策をしよう。",
+
+    "features_topic_title": "トピックを選んでね",
+    "features_topic_description": "希望するトピックに基づいて練習問題のリクエストができるよ。",
+    "features_problem_title": "色々な問題",
+    "features_problem_description": "練習問題はランダムに生成されるから、より多くの問題パターンに触れられるよ。",
+    "features_update_title": "毎日更新",
+    "features_update_description": "毎日新しい練習問題をリクエストして、スキルアップしよう。",
+
+    "generating_message": "問題を作成中です...\\nこれには5〜7分かかる場合があります。",
+    
+    "metadata_updated": "{0}に更新",
+    "metadata_problems": "選択問題{0}問",
+    "metadata_aigenerated": "AIが生成",
+    "metadata_score": "スコアは{0}点",
+
+    "results_view": "結果を見る"
+}

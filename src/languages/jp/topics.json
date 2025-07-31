@@ -1,0 +1,33 @@
+{
+    "title": "トピック",
+
+    "new_title": "新しいトピック",
+    "rename_title": "トピックの名前を変更",
+    "name_placeholder": "例：入出力",
+
+    "problems_label": "{0} 問題",
+    "updated_label": "更新 {0}",
+
+    "questionbank": "ドリル",
+    "questionbank_disclaimer": "このドキュメントをUniversitas Katolik Parahyanganの範囲外に配布しないでください。\nこのドキュメントを適切に使用してください。",
+
+    "practice_label": "メンターと練習",
+    "recently_updated_title": "最近更新",
+
+    "select_title": "トピックを選択",
+    "change_title": "トピックを変更",
+
+    "delete_confirm_title": "本当に「{0}」を削除しますか？",
+    "delete_confirm_message": "すべての問題とその解答も削除されます。この操作は元に戻せません。",
+    "delete_error_title": "削除に失敗しました",
+
+    "empty_title": "まだトピックはありません",
+    "empty_message": "追加されたトピックはここに表示されます。",
+    "notfound_title": "トピックが見つかりません",
+    "notfound_message": "移動または削除された可能性があります。",
+
+    "error_generic": "問題が発生しました。",
+    "error_parameter_missing": "{0}を指定する必要があります。",
+    "error_parameter_topicnamemissing": "トピックの名前を指定する必要があります。",
+    "error_parameter_courseidmissing": "コースのIDを指定する必要があります。"
+}

@@ -1,0 +1,43 @@
+<section class="desktop">
+	<input type="search" placeholder="<$ search title />" id="Input_SearchGlobal" autocomplete="off"/>
+	<div class="navigation">
+		<a goto="/home">
+			<span class='icon'>&#xfe8a;</span>
+			<span><$ home title /></span>
+		</a>
+		<a goto="/courses">
+			<span class='icon'>&#xed8a;</span>
+			<span><$ courses title /></span>
+		</a>
+		<div class="separator" id="Separator_PinnedCourses"><$ courses pinned /></div>
+		<div id="Grid_PinnedCourses"></div>
+	</div> 
+	<div class="footer">
+		<a goto="/settings">
+			<span class='icon'>&#xf337;</span>
+			<span><$ settings title /></span>
+		</a>
+	</div>
+</section>
+
+<section class="mobile">
+	<span class="navigation">
+		<a goto="/home">
+			<span class='icon'>&#xfe8b;</span>
+			<span><$ home title /></span>
+		</a>
+		<a goto="/courses">
+			<span class='icon'>&#xed89;</span>
+			<span><$ courses title /></span>
+		</a>
+		<a goto="/search">
+			<span class='icon'>&#xf664;</span>
+			<span><$ search title /></span>
+		</a>
+		<a goto="/settings">
+			<span class='icon'>&#xf337;</span>
+			<span><$ settings title /></span>
+		</a>
+	</span> 
+</section>
+<script src="/sidebar.js"></script>

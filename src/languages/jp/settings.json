@@ -1,0 +1,23 @@
+{
+    "title": "設定",
+
+    "signout": "サインアウト",
+    "appearance": "外観",
+    "theme": "テーマ",
+    "theme_system": "システムのデフォルト",
+    "theme_light": "ライト",
+    "theme_dark": "ダーク",
+    "accent_color": "アクセントカラー",
+    "language": "言語",
+    "accounts": "アカウント",
+    "about_app": "アプリについて",
+    "git_repository": "Gitリポジトリ",
+    "version": "バージョン",
+    "copyright": "著作権",
+    "copyright_text": "すべての試験コンテンツはUniversitas Katolik Parahyanganによって著作権保護されています。",
+    
+    "signout_confirm_title": "本当にサインアウトしますか？",
+    "signout_confirm_message": "いつでもサインインし直すことができます。",
+
+    "error_generic": "問題が発生しました。"
+}

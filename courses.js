@@ -1,0 +1,883 @@
+const SQL = require("./sql");
+const Gemini = require("./gemini");
+const FileIO = require("fs");
+
+const Courses = 
+{
+    /**
+     * Get courses details
+     * @param { string? | Array<string>? } id Id or list of id of course
+     * @returns { Promise<Array<{
+     *      id: string,
+     *      name: string,
+     *      alias: string,
+     *      description: string,
+     *      semester: number,
+     *      sks: number,
+     *      bannerversion: number
+     * }>>} List of courses
+     */
+    Get: async function(id)
+    {
+        let query = "SELECT * FROM courses";
+        let params = [];
+
+        if (id)
+        {
+            if (Array.isArray(id))
+            {
+                query += " WHERE ";
+
+                for (let i = 0; i < id.length; i++)
+                {
+                    query += "id=? ";
+                    params.push(id[i]);
+
+                    if (i < id.length - 1)
+                        query += "OR ";
+                }
+            }
+            else
+            {
+                query += " WHERE id=?";
+                params.push(id);
+            }
+        }
+
+        query += " ORDER BY semester ASC, name ASC"
+
+        const results = await SQL.Query(query, params);
+        return results.data || [];
+    },
+    /**
+     * Search courses by query
+     * @param { string } query 
+     * @returns { Promise<Array<{
+     *      id: string,
+     *      name: string,
+     *      alias: string,
+     *      description: string,
+     *      semester: number,
+     *      sks: number,
+     *      bannerversion: number
+     * }>>} List of courses
+     */
+    Search: async function(query)
+    {
+        const params = 
+        [
+            query,
+            "%" + query,
+            query + "%",
+            "%" + query + "%",
+            "%" + query.replaceAll(" ", "%"),
+            query.replaceAll(" ", "%") + "%",
+            "%" + query.replaceAll(" ", "%") + "%"
+        ];
+
+        const results = await SQL.Query
+        (
+            `
+                SELECT * FROM courses 
+                    WHERE
+                        LOWER(id) LIKE LOWER(?) OR
+                        --
+                        LOWER(name) LIKE LOWER(?) OR
+                        LOWER(name) LIKE LOWER(?) OR
+                        LOWER(name) LIKE LOWER(?) OR
+                        --
+                        LOWER(alias) LIKE LOWER(?) OR
+                        LOWER(alias) LIKE LOWER(?) OR
+                        LOWER(alias) LIKE LOWER(?)
+                    ORDER BY
+                        CASE
+                            WHEN LOWER(id) LIKE LOWER(?) THEN 0
+                            --
+                            WHEN LOWER(name) LIKE LOWER(?) THEN 0
+                            WHEN LOWER(name) LIKE LOWER(?) THEN 1
+                            WHEN LOWER(name) LIKE LOWER(?) THEN 1
+                            WHEN LOWER(name) LIKE LOWER(?) THEN 2
+                            WHEN LOWER(name) LIKE LOWER(?) THEN 3
+                            WHEN LOWER(name) LIKE LOWER(?) THEN 3
+                            WHEN LOWER(name) LIKE LOWER(?) THEN 4
+                            --
+                            WHEN LOWER(alias) LIKE LOWER(?) THEN 0
+                            WHEN LOWER(alias) LIKE LOWER(?) THEN 1
+                            WHEN LOWER(alias) LIKE LOWER(?) THEN 1
+                            WHEN LOWER(alias) LIKE LOWER(?) THEN 2
+                            WHEN LOWER(alias) LIKE LOWER(?) THEN 3
+                            WHEN LOWER(alias) LIKE LOWER(?) THEN 3
+                            WHEN LOWER(alias) LIKE LOWER(?) THEN 4
+                            ELSE 5
+                        END
+                    LIMIT 50
+            `,
+            [
+                params[0],
+                params[0], params[3], params[6],
+                params[0], params[3], params[6],
+                    params[0],
+                    params[0], params[1], params[2], params[3], params[4], params[5], params[6],
+                    params[0], params[1], params[2], params[3], params[4], params[5], params[6],
+
+            ]
+        );
+        return results.data || [];
+    },
+    /**
+     * Add new course along its details
+     * @param { string } id Id of course
+     * @param { string } name Name of course
+     * @param { string? } alias Alias of course
+     * @param { string? } description Description of course
+     * @param { number } semester Semester of course
+     * @param { number } sks SKS of course
+     * @returns { Promise<boolean> } @true if operation completed successfully, otherwise @false
+     */
+    Add: async function(id, name, alias, description, semester, sks)
+    {
+        id = id.replace(/([^A-Za-z0-9\-\_])/gi, "");
+
+        const result = await SQL.Query(
+            "INSERT INTO courses (id, name, alias, description, semester, sks) VALUES (?, ?, ?, ?, ?, ?)", 
+            [id, name, alias || null, description || null, semester, sks]
+        );
+        
+        return result.success;
+    },
+    /**
+     * Update existing course
+     * @param { string } id Original id of course
+     * @param { string? } newId Change id of course
+     * @param { string? } name Name of course
+     * @param { string? } alias Alias of course
+     * @param { string? } description Description of course
+     * @param { number? } semester Semester of course
+     * @param { number? } sks SKS of course
+     * @returns { Promise<boolean> } @true if operation completed successfully, otherwise @false
+     */
+    Update: async function(id, newid, name, alias, description, semester, sks)
+    {
+        const keys = [];
+        const values = [];
+
+        if (newid)
+        {
+            newid = newid.replace(/([^A-Za-z0-9\-\_])/gi, "");
+            keys.push("id");
+            values.push(newid);
+        }
+        if (name)
+        {
+            keys.push("name");
+            values.push(name);
+        }
+        if (alias)
+        {
+            keys.push("alias");
+            values.push(alias);
+        }
+        if (description)
+        {
+            keys.push("description");
+            values.push(description);
+        }
+        if (semester)
+        {
+            keys.push("semester");
+            values.push(parseInt(semester));
+        }
+        if (sks)
+        {
+            keys.push("sks");
+            values.push(parseInt(sks));
+        }
+
+        if (keys.length == 0)
+            return true;
+
+        for (let i = 0; i < values.length; i++)
+            if (values[i] == "@null")
+                values[i] = null;
+
+        const result = await SQL.Query(
+            "UPDATE courses SET " + keys.map(o => o + "=?").join(", ") + " WHERE id=?", 
+            [...values,id]
+        );
+
+        if (newid)
+            return result.success && await Courses.Banners.Rename(id, newid);
+        
+        return result.success;
+    },
+    /**
+     * Delete course
+     * @param { string } id Id of course
+     * @returns { Promise<boolean> } @true if operation completed successfully, otherwise @false
+     */
+    Remove: async function(id)
+    {
+        if (id == null)
+            return false;
+
+        const result1 = await Courses.Banners.Delete(id);
+        const result2 = await SQL.Query("DELETE FROM courses WHERE id=?", id);
+
+        return result1 && result2.success;
+    },
+    Topics:
+    {
+        /**
+         * Get topics details
+         * @param { {
+         *      topic: string?,
+         *      course: string?
+         * } } id Id of topic or course
+         * @returns { Promise<Array<{
+         *      id: string,
+         *      name: string,
+         *      course: string,
+         *      problemcount: number,
+         *      lastedited: number
+         * }>>} List of topics
+         */
+        Get: async function(id)
+        {
+            let query = "SELECT id, name, course, problemcount, lastedited FROM topics"
+            let params = [];
+
+            if (id.topic)
+            {
+                query += " WHERE id=?";    
+                params.push(id.topic);
+            }
+            else if (id.course)
+            {
+                query += " WHERE course=?";    
+                params.push(id.course);
+            }
+
+            query += " ORDER BY sort";
+
+            const results = await SQL.Query(query, params);
+            return results.data || [];
+        },
+        /**
+         * Search topic's id by name
+         * @param { string } course Id of course
+         * @param { string } query Query by name of topic
+         * @returns { Promise<string> } Id of topic
+         */
+        Find: async function(course, query)
+        {
+            const result = await SQL.Query("SELECT id FROM topics WHERE (LOWER(name) LIKE LOWER(?) OR id=? ) AND course=?", [query.replaceAll(" ", "%"), query, course]);
+            return result.data[0]?.id;
+        },
+        /** Search topics by query
+         * @param { string } query
+         * @returns { Promise<Array<{
+         *      id: string,
+         *      name: string,
+         *      course: string,
+         *      problemcount: number,
+         *      lastedited: number
+         * }>>} List of topics
+         */
+        Search: async function(query)
+        {
+            const params = 
+            [
+                query,
+                "%" + query,
+                query + "%",
+                "%" + query + "%",
+                "%" + query.replaceAll(" ", "%"),
+                query.replaceAll(" ", "%") + "%",
+                "%" + query.replaceAll(" ", "%") + "%"
+            ];
+        
+            const results = await SQL.Query
+            (
+                `
+                    SELECT 
+                        t.id, t.name, t.course, 
+                        c.name AS coursename, 
+                        t.problemcount, 
+                        t.lastedited 
+                    FROM topics t  JOIN courses c ON c.id = t.course
+                        WHERE
+                            LOWER(t.name) LIKE LOWER(?) OR
+                            LOWER(t.name) LIKE LOWER(?) OR
+                            LOWER(t.name) LIKE LOWER(?)
+                        ORDER BY
+                            CASE
+                                WHEN LOWER(t.name) LIKE LOWER(?) THEN 0
+                                WHEN LOWER(t.name) LIKE LOWER(?) THEN 1
+                                WHEN LOWER(t.name) LIKE LOWER(?) THEN 1
+                                WHEN LOWER(t.name) LIKE LOWER(?) THEN 2
+                                WHEN LOWER(t.name) LIKE LOWER(?) THEN 3
+                                WHEN LOWER(t.name) LIKE LOWER(?) THEN 3
+                                WHEN LOWER(t.name) LIKE LOWER(?) THEN 4
+                                ELSE 5
+                            END
+                        LIMIT 60
+                `,
+                [
+                    params[0], params[3], params[6],
+                    params[0], params[1], params[2], params[3], params[4], params[5], params[6]
+        
+                ]
+            );
+            return results.data || [];
+        },
+        /**
+         * Get recently updated topics
+         * @returns { Promise<Array<{
+         *      id: string,
+         *      name: string,
+         *      course: string,
+         *      problemcount: number,
+         *      lastedited: number
+         * }>>} List of topics
+         */
+        Recent: async function()
+        {
+            const result = await SQL.Query("SELECT t.id, t.name, t.course, c.name AS coursename, t.problemcount, t.lastedited FROM topics t JOIN courses c ON c.id = t.course ORDER BY t.lastedited DESC LIMIT 10");
+            return result.data || [];
+        },
+        /**
+         * Add new topic along its details
+         * @param { string } name Name of topic
+         * @param { string } course Id of course
+         * @returns { Promise<string> } Id of topic
+         */
+        Add: async function(name, course)
+        {
+            const result = await SQL.Query(
+                `INSERT INTO topics 
+                    (name, course, sort) 
+                    SELECT ?, ?,  COALESCE(MAX(sort), 0) + 1 
+                FROM topics WHERE course = ?
+                `, 
+                [name, course, course]
+            );
+
+            return result.data?.insertId;
+        },
+        /**
+         * Update existing topic
+         * @param { string } id Id of topic
+         * @param { string } name Name of topic
+         * @returns { Promise<boolean> } @true if operation completed successfully, otherwise @false
+         */
+        Update: async function(id, name)
+        {
+            if (id == null || name == null)
+                return false;
+
+            const result = await SQL.Query(
+                "UPDATE topics SET name=? WHERE id=?", 
+                [name, id]
+            );
+            
+            return result.success;
+        },
+        /**
+         * Reorder existing topic
+         * @param { string } id Id of topic
+         * @param { number } sort Index of topic
+         * @returns { Promise<boolean> } @true if operation completed successfully, otherwise @false
+         */
+        Reorder: async function(id, sort)
+        {
+            const query = `
+                SET @id = ?;
+                SET @new_sort = ?;
+
+                SELECT sort, course INTO @old_sort, @course FROM topics WHERE id = @id;
+
+                UPDATE topics
+                SET sort = 0
+                WHERE id = @id;
+
+                UPDATE topics
+                SET sort = CASE
+                    WHEN @old_sort > @new_sort THEN sort + 1
+                    WHEN @old_sort < @new_sort THEN sort - 1
+                    ELSE sort
+                END
+                WHERE course = @course
+                AND sort BETWEEN LEAST(@old_sort, @new_sort) AND GREATEST(@old_sort, @new_sort)
+                AND id != @id;
+
+                UPDATE topics
+                SET sort = @new_sort
+                WHERE id = @id;
+                `;
+            const result = await SQL.Query(query, [id, sort]);
+            return result.success;
+        },
+        /**
+         * Delete topic
+         * @param { string } id Id of topic
+         * @returns { Promise<boolean> } @true if operation completed successfully, otherwise @false
+         */
+        Remove: async function(id)
+        {
+            if (id == null)
+                return false;
+
+            const result = await SQL.Query("DELETE FROM topics WHERE id=?", id);
+            return result.success;
+        },
+        Quiz: 
+        {
+            /**
+             * Get quiz drill from Gemini API
+             * @param { string } id Id of topic
+             * @returns { Promise<{
+             *      created: number?,
+             *      status: "available" | "generating" | "error",
+             *      problems: Array<{
+             *          question: string,
+             *          choices: Array<string>,
+             *          answer: number,
+             *          reason: string
+             *      }>
+             * }>} 
+             */
+            Get: function(id)
+            {
+                return new Promise(async function(resolve)
+                {
+                    const result = await SQL.Query("SELECT IFNULL(topics.quiz, JSON_OBJECT('status', 'notavailable')) AS quiz FROM topics WHERE id=?", [id]);
+                    
+                    if (result.data == null)
+                        return resolve({ created: 0, status: "error", problems: [] });
+                    
+                    const quiz = result.data[0].quiz;
+                    resolve(quiz);
+                });
+            },
+            /**
+             * Generate quiz drill from Gemini API
+             * @param { string } id Id of topic 
+             * @param { string } language Code of language 
+             * @returns { Promise<boolean> } @true if successfully to begin creating, otherwise @false
+             */
+            Create: function(id, language = "id")
+            {
+                return new Promise(async function(resolve)
+                {
+                    const result = await SQL.Query("SELECT topics.id, topics.name, courses.name AS course FROM topics JOIN courses ON topics.course = courses.id WHERE topics.id=?", [id]);
+                    
+                    if (result.data == null)
+                        return resolve(false);
+
+                    const problems = await SQL.Query("SELECT question FROM problems WHERE topic=?", [id]);
+    
+                    if (problems.success == false || problems.data == null)
+                        return resolve(false);
+
+                    const returned = {
+                        created: Date.now(),
+                        status: "generating",
+                        problems: []
+                    }
+
+                    await SQL.Query("UPDATE topics SET quiz=? WHERE id=?", [JSON.stringify(returned), id]);
+                   
+                    resolve(true);
+
+                    const gemini = await Gemini.Send(language, result.data[0].course, result.data[0].name, problems.data.map(o => o.question) || []);
+                    
+                    if (gemini.status != 200)
+                    {
+                        returned.status = "error";
+                        returned.error = gemini.status;
+                        await SQL.Query("UPDATE topics SET quiz=? WHERE id=?", [JSON.stringify(returned), id]);
+                        return;
+                    }
+                    
+                    const success = await Courses.Topics.Quiz.Save(id, gemini.data);
+
+                    if (success == false)
+                    {
+                        returned.status = "error";
+                        returned.error = 400;
+                        await SQL.Query("UPDATE topics SET quiz=? WHERE id=?", [JSON.stringify(returned), id]);
+                    }
+                });
+            },
+            /**
+             * Save quiz to database
+             * @param { string } id Id of topic
+             * @param { Array<> } quiz List of problems of quiz 
+             * @returns { Promise<boolean> } @true if operation completed successfully, otherwise @false
+             */
+            Save: async function(id, quiz)
+            {
+                try
+                {
+                    quiz = {
+                        created: Date.now(),
+                        status: "available",
+                        problems: JSON.parse(quiz).problems
+                    }
+                    const result = await SQL.Query("UPDATE topics SET quiz=? WHERE id=?", [JSON.stringify(quiz), id]);
+    
+                    return result.success;
+                }
+                catch(error)
+                {
+                    console.log(quiz);
+                    console.error(error);
+                    return false;
+                }
+            }
+        }
+    },
+    Problems: 
+    {
+        /**
+         * Get problems details
+         * @param { {
+         *      problem: string?,
+         *      course: string?,
+         *      topic: string?
+         * } } id Id of problem, course, or topic
+         * @returns { Promise<Array<{
+         *      id: string,
+         *      question: string,
+         *      solution?: string,
+         *      source: {
+         *          id: number,
+         *          name: string
+         *      },
+         *      year: number,
+         *      course: string,
+         *      topic: string,
+         *      timeadded: string,
+         *      lastedited: string,
+         * }>>} List of problems
+         */
+        Get: async function(id)
+        {
+            let query = `
+                SELECT 
+                    p.id, 
+                    p.question, 
+                    p.solution, 
+                    JSON_OBJECT('id', s.id, 'name', s.name) AS source, 
+                    p.year, 
+                    p.course, 
+                    p.topic, 
+                    p.timeadded, 
+                    p.lastedited
+                FROM problems p
+                LEFT JOIN problem_sources s ON p.source = s.id
+            `;
+            let params = [];
+
+            if (id.problem)
+            {
+                query += " WHERE p.id=?";    
+                params.push(id.problem);
+            }
+            else if (id.course)
+            {
+                query += " WHERE p.course=?";    
+                params.push(id.course);
+            }
+            else if (id.topic)
+            {
+                query += " WHERE p.topic=?";    
+                params.push(id.topic);
+            }
+            else
+                return [];
+
+            query += " ORDER BY p.year DESC, s.id DESC";
+
+            const results = await SQL.Query(query, params);
+            return results.data || [];
+        },
+        /**
+         * Search problems by query
+         * @param { string } query 
+         * @returns { Promise<Array<{
+         *      id: string,
+         *      question: string,
+         *      solution?: string,
+         *      source: {
+         *          id: number,
+         *          name: string
+         *      },
+         *      year: number,
+         *      course: string,
+         *      topic: string,
+         *      timeadded: string,
+         *      lastedited: string,
+         * }>>} List of problems
+         */
+        Search: async function(query)
+        {
+            const params = 
+            [
+                query,
+                "%" + query,
+                query + "%",
+                "%" + query + "%",
+                "%" + query.replaceAll(" ", "%"),
+                query.replaceAll(" ", "%") + "%",
+                "%" + query.replaceAll(" ", "%") + "%"
+            ];
+        
+            const results = await SQL.Query
+            (
+                `
+                    SELECT 
+                        p.id, 
+                        p.question, 
+                        p.solution, 
+                        JSON_OBJECT('id', s.id, 'name', s.name) AS source, 
+                        p.year, 
+                        p.course, 
+                        p.topic, 
+                        p.timeadded, 
+                        p.lastedited
+                    FROM problems p
+                    LEFT JOIN problem_sources s ON p.source = s.id
+                        WHERE
+                            LOWER(p.question) LIKE LOWER(?) OR
+                            LOWER(p.question) LIKE LOWER(?) OR
+                            LOWER(p.question) LIKE LOWER(?)
+                        ORDER BY
+                            CASE
+                                WHEN LOWER(p.question) LIKE LOWER(?) THEN 0
+                                WHEN LOWER(p.question) LIKE LOWER(?) THEN 1
+                                WHEN LOWER(p.question) LIKE LOWER(?) THEN 1
+                                WHEN LOWER(p.question) LIKE LOWER(?) THEN 2
+                                WHEN LOWER(p.question) LIKE LOWER(?) THEN 3
+                                WHEN LOWER(p.question) LIKE LOWER(?) THEN 3
+                                WHEN LOWER(p.question) LIKE LOWER(?) THEN 4
+                                ELSE 5
+                            END
+                        LIMIT 20
+                `,
+                [
+                    params[0], params[3], params[6],
+                    params[0], params[1], params[2], params[3], params[4], params[5], params[6]
+        
+                ]
+            );
+            return results.data || [];
+        },
+        /**
+         * Add new problem along its details
+         * @param { string } question Text of problem
+         * @param { solution? } solution Solution of problem
+         * @param { int } source Id of source of problem
+         * @param { int } year Year of source of problem
+         * @param { int } topic Id of topic of problem
+         * @param { string } course Id of course of problem
+         * @returns { Promise<string> } Id of problem
+         */
+        Add: async function(question, solution, source, year, topic, course)
+        {
+            const result = await SQL.Query("INSERT INTO problems (question, solution, source, year, topic, course, timeadded, lastedited) VALUES (?, ?, ?, ?, ?, ?, ?, ?)", [question, solution, source, year, topic, course, Date.now(), Date.now()]);
+            return result.data?.insertId;
+        },
+        /**
+         * Update existing problem
+         * @param { string } id Original id of problem
+         * @param { string? } question Text of problem
+         * @param { solution? } solution Solution of problem
+         * @param { int? } source Id of source of problem
+         * @param { int? } year Year of source of problem
+         * @returns { Promise<boolean> } @true if operation completed successfully, otherwise @false
+         */
+        Update: async function(id, question, solution, source, year)
+        {
+            const keys = [];
+            const values = [];
+
+            if (question)
+            {
+                keys.push("question");
+                values.push(question);
+            }
+            if (solution)
+            {
+                keys.push("solution");
+                values.push(solution);
+            }
+            if (source)
+            {
+                keys.push("source");
+                values.push(source);
+            }
+            if (year)
+            {
+                keys.push("year");
+                values.push(parseInt(year));
+            }
+
+            if (keys.length == 0)
+                return true;
+
+            for (let i = 0; i < values.length; i++)
+                if (values[i] == "@null")
+                    values[i] = null;
+
+            const result = await SQL.Query(
+                "UPDATE problems SET " + keys.map(o => o + "=?").join(", ") + ", lastedited=? WHERE id=?", 
+                [...values, Date.now(), id]
+            );
+
+            return result.success;
+        },
+        /**
+         * Move existing problem to another topic
+         * @param { string } id Id of problem
+         * @param { int } topic Id of topic
+         * @returns { Promise<boolean> } @true if operation completed successfully, otherwise @false
+         */
+        Move: async function(id, topic)
+        {
+            const result = await SQL.Query("UPDATE problems SET topic=? WHERE id=?", [topic, id]);
+
+            return result.success;
+        },
+        /**
+         * Delete problem
+         * @param { int } Id Id of problem
+         * @returns { Promise<boolean> } @true if operation completed successfully, otherwise @false
+         */
+        Remove: async function(id)
+        {
+            const result = await SQL.Query("DELETE FROM problems WHERE id=?", [id]);
+            return result.success;
+        },
+        Sources: 
+        {
+            /**
+             * Get all type of sources of problem
+             * @returns { Promise<Array<{
+             *      id: number,
+             *      name: string
+             * }>> }
+             */
+            Get: async function()
+            {
+                const result = await SQL.Query("SELECT * FROM problem_sources ORDER BY id");
+                return result.data || [];
+            },
+            /**
+             * Add source type of problem
+             * @param { string } name Name of source
+             * @returns { Promise<boolean> } @true if operation completed successfully, otherwise @false
+             */
+            Add: async function(name)
+            {
+                const result = await SQL.Query("INSERT INTO problem_sources (name) VALUES (?)", [name]);
+                return result.success;
+            },
+            /**
+             * Update source type of problem
+             * @param { number } id Id of source
+             * @param { string } name Name of source
+             * @returns { Promise<boolean> } @true if operation completed successfully, otherwise @false
+             */
+            Update: async function(id, name)
+            {
+                const result = await SQL.Query("UPDATE problem_sources SET name=? WHERE id=?", [name, id]);
+                return result.success;
+            },
+            /**
+             * Delete source type of problem
+             * @param { number } id Name of source
+             * @returns { Promise<boolean> } @true if operation completed successfully, otherwise @false
+             */
+            Remove: async function(id)
+            {
+                const result = await SQL.Query("DELETE FROM problem_sources WHERE id=?", [id]);
+                return result.success;
+            }
+        }
+    },
+    Banners: 
+    {
+        /**
+         * Save banner of course
+         * @param { string } id Id of course 
+         * @param { Array<Buffer> } buffer Buffer of image
+         * @returns { Promise<boolean> } @true if operation completed successfully, otherwise @false
+         */
+        Save: async function(id, buffer)
+        {
+            try
+            {
+                const path = "./src/banners/" + id;
+                FileIO.writeFileSync(path, buffer);
+                await SQL.Query("UPDATE courses SET bannerversion = bannerversion + 1 WHERE id = ?", [id]);
+                return true;
+            }
+            catch(error)
+            {
+                console.error(error);
+                return false;
+            }
+        },
+        /**
+         * Rename banner of course
+         * @param { string } oldid Old id of course 
+         * @param { string } newid New id of course 
+         * @returns { Promise<boolean> } @true if operation completed successfully, otherwise @false
+         */
+        Rename: async function(oldid, newid)
+        {
+            try
+            {
+                const path1 = "./src/banners/" + oldid;
+                const path2 = "./src/banners/" + newid;
+                
+                if (FileIO.existsSync(path1))
+                    FileIO.renameSync(path1, path2);
+
+                return true;
+            }
+            catch(error)
+            {
+                console.error(error);
+                return false;
+            }
+        },
+        /**
+         * Delete banner of course
+         * @param { string } id Id of course 
+         * @returns { Promise<boolean> } @true if operation completed successfully, otherwise @false
+         */
+        Delete: async function(id)
+        {
+            try
+            {
+                const path = "./src/banners/" + id;
+                
+                if (FileIO.existsSync(path))
+                    FileIO.unlinkSync(path);
+
+                await SQL.Query("UPDATE courses SET bannerversion = bannerversion + 1 WHERE id = ?", [id]);
+
+                return true;
+            }
+            catch(error)
+            {
+                console.error(error);
+                return false;
+            }
+        }
+    },
+}
+
+module.exports = Courses;

@@ -1,0 +1,656 @@
+<ad-title><#? course.name ?#></ad-title>
+
+<style>
+    @import url("/<#? applang ?#>/courses.css");
+    @import url("/<#? applang ?#>/problems.css");
+
+    .root .main:has(> .activity)
+    {
+        grid-auto-flow: column;
+        grid-auto-columns: 400px auto;
+    }
+        .root .main > .activity
+        {
+            position: relative
+        }
+        .root .main > .activity:nth-child(1)
+        {
+            background: var(--gray-7);
+			box-shadow: inset -10px 0 5px -10px var(--border-sidebar);
+        }
+            .root .main > #Activity_Topic > .header > .buttons > .back
+            {
+                visibility: hidden;
+            }
+    @media screen and (max-width: 800px) 
+    {
+        .root 
+        {
+            grid-auto-rows: auto 0;
+        }
+        .root .main > .activity:nth-child(1)
+        {
+            background: var(--background-page);
+			box-shadow: none;
+        }
+        .root .main > .activity
+        {
+            padding-bottom: env(safe-area-inset-bottom);
+        }
+    }
+    @media screen and (max-width: 1140px)
+    {
+        .root .main:has(> .activity)
+        {
+            grid-auto-columns: auto 0;
+        }
+        .root .main:has(> #Activity_Topic)
+        {
+            grid-auto-columns: 0 auto;
+        }
+            .root .main > #Activity_Topic > .header > .buttons > .back
+            {
+                visibility: visible;
+            }
+    }
+</style>
+
+<div class="header cascaded">
+    <div class="buttons dynamic" theme="dark">
+        <button class="back" onclick="Courses.Back('/admin')" id="Button_BackCourses"></button>
+        <button id="Button_Edit" class="icon" ad-tooltip="<$ courses edit_title />">&#xf7cf;</button>
+        <button id="Button_New" class="icon" ad-tooltip="<$ topics new_title />">&#xf8dd;</button>
+    </div>
+    <div class="title hide"><#? course.alias ?#></div>
+</div>
+
+<div class="content">
+    <div id="Grid_CourseCard" theme="dark">
+        <h3 ad-property="name"><#? course.name ?#></h3>
+        <span id="Grid_CourseDescription" ad-property="description"><#? course.description ?#></span>
+        <div class="details">
+            <div>
+                <span><$ generic code /></span>
+                <span ad-property="id"><#? course.id ?#></span>
+            </div>
+            <div>
+                <span><$ generic alias /></span>
+                <span ad-property="alias"><#? course.alias ?#></span>
+            </div>
+            <div>
+                <span><$ generic semester /></span>
+                <span ad-property="semester"><#? course.semester ?#></span>
+            </div>
+            <div>
+                <span><$ generic sks /></span>
+                <span ad-property="sks"><#? course.sks ?#></span>
+            </div>
+        </div>
+    </div>
+    <div id="Grid_CourseTopics"> 
+        <div class="progressring"></div>
+    </div>
+</div>
+
+<div id="PopOver_EditCourse" class="popover" preventDefault>
+    <div class="activity">
+        <div class="header cascaded">
+            <div class="buttons">
+                <button id="Button_CancelEdit"><$ generic cancel /></button>
+                <button id="Button_SaveEdit">
+                    <span><$ generic save /></span>
+                    <div class="progressring"></div>
+                </button>
+            </div>
+            <div class="title"><$ courses edit_title /></div>
+        </div>
+        <div class="content">
+            <div id="List_Banner" class="list" ad-header="<$ generic banner />" ad-action="<$ generic clear />">
+                <div class="banner">
+                    <img id="Image_Banner" src="/banner/<#? course.id ?#>?v=<#? course.bannerversion ?#>"/>
+                    <input type="file" id="Input_File" accept=".jpg, .jpeg, .png, .webp"/>
+                </div>
+            </div>
+            <div class="list" ad-header="<$ courses information_basic />">
+                <div class="stack">
+                    <span><$ generic name /></span>
+                    <input type="text" class="plain" maxlength="128" id="Input_CourseName" placeholder="<$ generic name_placeholder />"/>
+                </div>
+                <div class="stack">
+                    <span><$ generic alias /></span>
+                    <input type="text" class="plain" maxlength="16" id="Input_CourseAlias" placeholder="<$ generic alias_placeholder />"/>
+                </div>
+                <div class="stack">
+                    <span><$ generic description /></span>
+                    <textarea class="plain" maxlength="1000" id="Input_CourseDescription" placeholder="<$ generic description_placeholder />"></textarea>
+                </div>
+            </div>
+            <div class="list" ad-header="<$ courses information_additional />">
+                <div class="stack">
+                    <span><$ generic code /></span>
+                    <input type="text" class="plain" maxlength="16" id="Input_CourseId" placeholder="<$ generic id_placeholder />">
+                </div>
+                <div class="stack">
+                    <span><$ generic semester /></span>
+                    <input type="number" class="plain" min="1" max="8" id="Input_CourseSemester" placeholder="<$ generic semester_placeholder />"/>
+                </div>
+                <div class="stack">
+                    <span><$ generic sks /></span>
+                    <input type="number" class="plain" min="1" max="16" id="Input_CourseSKS" placeholder="<$ generic sks_placeholder />"/>
+                </div>
+            </div>
+            <span class="error hidden" id="Text_Error"></span>
+            <button class="plain critical" id="Button_DeleteCourse">
+                <span><$ courses delete_title /></span>
+            </button>
+        </div>
+    </div>
+</div>
+
+<div id="PopOver_NewTopic" class="popover">
+    <div class="activity">
+        <div class="header cascaded">
+            <div class="buttons">
+                <button id="Button_CancelNew"><$ generic cancel /></button>
+                <button id="Button_SubmitNew">
+                    <span><$ generic create /></span>
+                    <div class="progressring"></div>
+                </button>
+            </div>
+            <div class="title"><$ topics new_title /></div>
+        </div>
+        <div class="content">
+            <div class="list">
+                <div class="stack">
+                    <span><$ generic name /></span>
+                    <input type="text" class="plain" maxlength="128" id="Input_TopicName" placeholder="<$ topics name_placeholder />"/>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="PopOver_RenameTopic" class="popover">
+    <div class="activity">
+        <div class="header cascaded">
+            <div class="buttons">
+                <button id="Button_CancelRename"><$ generic cancel /></button>
+                <button id="Button_DoneRename">
+                    <span><$ generic rename /></span>
+                    <div class="progressring"></div>
+                </button>
+            </div>
+            <div class="title"><$ topics rename_title /></div>
+        </div>
+        <div class="content">
+            <div class="list">
+                <div class="stack">
+                    <span><$ generic name /></span>
+                    <input type="text" class="plain" maxlength="128" id="Input_TopicNameRename" placeholder="<$ topics name_placeholder />"/>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    PendingId = "<#? topic.pending.id ?#>";
+    Courses.Label(Button_BackCourses, "/admin");
+    {
+        Courses.Active = JSON.parse(`<#? course ?#>`);
+
+        const a = Topics.Render;
+
+        Topics.Render = function(topic)
+        {
+            const box = a(topic);
+            box.oncontextmenu = function(event)
+            {
+                Components.ContextMenu.Open("Topic_Admin", this, event);
+            }
+            box.draggable = true;
+            return box;
+        }
+
+        Input_CourseName.oninput = 
+        Input_CourseAlias.oninput =
+        Input_CourseDescription.oninput =
+        Input_CourseId.oninput = 
+        Input_CourseSKS.oninput = 
+        Input_CourseSemester.oninput = function()
+        {
+            Inputs_Check();
+        }
+
+        PopOver_EditCourse.onbeforeclose = function()
+        {
+            if (PopOver_EditCourse.isunsaved == false)
+                return PopOver_EditCourse.close(true);
+
+            Components.ActionSheet.Open(
+            {
+                Title: "<$ courses discard_edit_confirm_title />",
+                Description: "<$ courses discard_edit_confirm_message />",
+                Actions: [
+                    { 
+                        Title: "<$ generic discard />", Type: "Options.Critical", 
+                        Action: o => 
+                        {
+                            PopOver_EditCourse.close(true);
+                        }
+                    },
+                    { 
+                        Title: "<$ courses keep_editing />", Type: "Footer"
+                    }
+                ]
+            }); 
+        }
+        Button_Edit.onclick = function()
+        {
+            Input_CourseId.value = Courses.Active.id;
+            Input_CourseName.value = Courses.Active.name;
+            Input_CourseAlias.value = Courses.Active.alias;
+            Input_CourseDescription.value = Courses.Active.description || "";
+            Input_CourseSemester.value = Courses.Active.semester;
+            Input_CourseSKS.value = Courses.Active.sks;
+            PopOver_EditCourse.open(this);
+            Text_Error.classList.add("hidden");
+            Inputs_Check();
+        }
+        Button_SaveEdit.onclick = function()
+        {
+            Button_CancelEdit.disabled = true;
+            Button_SaveEdit.disabled = true;
+            PopOver_EditCourse.isloading = true;
+            Text_Error.classList.add("hidden");
+            $("#PopOver_EditCourse :where(input, textarea)").attr("disabled", true);
+            
+            const editedCourse = 
+            {
+                oldId: "<#? course.id ?#>",
+                id: Input_CourseId.value.replace(/([^A-Za-z0-9\-\_])/gi, ""),
+                name: Input_CourseName.value,
+                alias: Input_CourseAlias.value,
+                description: Input_CourseDescription.value,
+                semester: Input_CourseSemester.value,
+                sks: Input_CourseSKS.value,
+            };
+
+            $.ajax(
+            {
+                type: "patch",
+                url: "/admin/courses/update",
+                data: editedCourse,
+                success: function(changes)
+                {
+                    if (Object.keys(changes).includes("name"))
+                    {
+                        document.title = document.title.replace(Courses.Active.name, changes.name);
+                        $("[ad-property=name]").text(changes.name || "");
+                    }
+
+                    if (Object.keys(changes).includes("alias"))
+                    {
+                        $(".root > .main > .activity > .header > [ad-activitytitle]").attr("ad-activitytitle", changes.alias || "");
+                        $("[ad-property=alias]").text(changes.alias || "");
+                    }
+                    
+                    if (Object.keys(changes).includes("description"))
+                        $("[ad-property=description]").text(changes.description || "");
+
+                    if (Object.keys(changes).includes("id"))
+                        window.location.replace("/admin/courses/" + changes.id);
+
+                    Object.assign(Courses.Active, changes);
+                    Button_CancelEdit.disabled = false;
+                    Button_SaveEdit.disabled = false;
+                    PopOver_EditCourse.isloading = false;
+                    PopOver_EditCourse.close(true);
+                    $("#PopOver_EditCourse :where(input, textarea)").removeAttr("disabled");
+                },
+                error: function(error)
+                {
+                    Text_Error.innerText = error.responseText || "<$ courses error_generic />";
+                    Text_Error.classList.remove("hidden");
+                    Button_CancelEdit.disabled = false;
+                    Button_SaveEdit.disabled = false;
+                    PopOver_EditCourse.classList.remove("loading");
+                    $("#PopOver_EditCourse :where(input, textarea)").removeAttr("disabled");
+                }
+            });
+        }
+        Button_CancelEdit.onclick = function()
+        {
+            PopOver_EditCourse.onbeforeclose();  
+        }
+        Input_TopicName.onkeydown = function(event)
+        {
+            if (event.keyCode == 13)
+                Button_SubmitNew.click();
+        }
+        Button_New.onclick = function()
+        {
+            PopOver_NewTopic.open(this);
+            Input_TopicName.value = "";
+            Input_TopicName.focus();
+        }
+        Button_SubmitNew.onclick = function()
+        {
+            Button_CancelNew.disabled = true;
+            Button_SubmitNew.disabled = true;
+            Input_TopicName.disabled = true;
+            PopOver_NewTopic.iscloseable = false;
+            PopOver_NewTopic.isloading = true;
+
+            $.ajax(
+            {
+                type: "post",
+                url: "/admin/topics/create",
+                data: 
+                { 
+                    course: "<#? course.id ?#>",
+                    name: Input_TopicName.value 
+                },
+                success: function(topic)
+                {
+                    const box = Topics.Render(topic);
+                    Grid_CourseTopics.append(box);
+
+                    Button_CancelNew.disabled = false;
+                    Button_SubmitNew.disabled = false;
+                    Input_TopicName.disabled = false;
+                    PopOver_NewTopic.iscloseable = true;
+                    PopOver_NewTopic.isloading = false;
+                    PopOver_NewTopic.close();
+                },
+                error: function(error)
+                {
+                    Button_CancelNew.disabled = false;
+                    Button_SubmitNew.disabled = false;
+                    Input_TopicName.disabled = false;
+                    PopOver_NewTopic.iscloseable = true;
+                    PopOver_NewTopic.isloading = false;
+                }
+            });
+        }
+        Button_CancelNew.onclick = function()
+        {
+            PopOver_NewTopic.close();
+        }
+        Input_TopicNameRename.onkeydown = function(event)
+        {
+            if (event.keyCode == 13)
+                Button_DoneRename.click();
+        }
+        Button_DoneRename.onclick = function()
+        {
+            Button_CancelRename.disabled = true;
+            Button_DoneRename.disabled = true;
+            Input_TopicNameRename.disabled = true;
+            PopOver_RenameTopic.isloading = true;
+            PopOver_RenameTopic.iscloseable = false;
+
+            $.ajax(
+            {
+                type: "patch",
+                url: "/admin/topics/update",
+                data: 
+                { 
+                    id: PopOver_RenameTopic.element.data.id,
+                    name: Input_TopicNameRename.value.trim()
+                },
+                success: function()
+                {
+                    
+                    const data = PopOver_RenameTopic.element.data;
+                    data.name = Input_TopicNameRename.value.trim();
+                    PopOver_RenameTopic.element.find("name").innerText = data.name;
+                    PopOver_RenameTopic.element.classList.remove("active");
+
+                    if (Topics.IsOpened())
+                        PopOver_RenameTopic.element.click();
+
+                    Button_CancelRename.disabled = false;
+                    Button_DoneRename.disabled = false;
+                    Input_TopicNameRename.disabled = false;
+                    PopOver_RenameTopic.isloading = false;
+                    PopOver_RenameTopic.iscloseable = true;
+                    PopOver_RenameTopic.close();
+                },
+                error: function(error)
+                {
+                    Button_CancelRename.disabled = false;
+                    Button_DoneRename.disabled = false;
+                    Input_TopicNameRename.disabled = false;
+                    PopOver_RenameTopic.isloading = false;
+                    PopOver_RenameTopic.iscloseable = true;
+                }
+            });
+        }
+        Button_CancelRename.onclick = function()
+        {
+            PopOver_RenameTopic.close();
+        }
+        Button_DeleteCourse.onclick = function()
+        {
+            Components.ActionSheet.Open(
+            {
+                Title: "<$ courses delete_confirm_title />".format(Courses.Active.name),
+                Description: "<$ courses delete_confirm_message />",
+                Actions: [
+                    { 
+                        Title: "<$ generic delete />", Type: "Options.Critical", 
+                        Action: function() 
+                        {
+                            return new Promise(function(resolve)
+                            {
+                                $.ajax({
+                                    type: "delete",
+                                    url: "/admin/courses/delete", 
+                                    data: { id: Courses.Active.id },
+                                    success: function()
+                                    {
+                                        Courses.Back('/admin');
+                                        resolve();
+                                    },
+                                    error: function(error)
+                                    {
+                                        resolve();
+                                        Components.Notification.Send({ Id: "delete_failed", Title: "<$ courses delete_error_title />", Message: error.responseText || "<$ courses error_generic />", Icon: "\ufe60", Buttons: [{Text: "<$ generic dismiss />"}] });
+                                    }
+                                });
+                            })
+                        }
+                    },
+                    { 
+                        Title: "<$ generic cancel />", Type: "Footer"
+                    }
+                ]
+            });
+        }
+
+        $.ajax({
+            type: "get",
+            url: "/topics/get/<#? course.id ?#>?type=course",
+            success: function(topics)
+            {
+                Grid_CourseTopics.innerHTML = "";
+                Topics.Append(topics, Grid_CourseTopics);
+
+                const active = [...Grid_CourseTopics.children].find(o => o.classList.contains("active"));
+
+                if (active)
+                    Grid_CourseTopics.parentNode.parentNode.scrollTop = active.offsetTop - 100;
+            }
+        });
+
+        Grid_CourseDescription.onclick = function()
+        {
+            this.classList.add("expanded");
+        }
+
+        let dragged;
+        Grid_CourseTopics.ondragstart = function(event)
+        {
+            dragged = event.target;
+            dragged.classList.add("dragging");
+        }
+        Grid_CourseTopics.ondragover = function(event)
+        {
+            event.preventDefault();
+            event.dataTransfer.effectAllowed = "move";
+            const target = event.target;
+            if (target != dragged && target.classList.contains("topic"))
+            {
+                const rect = target.getBoundingClientRect();
+                const next = (Components.Pointer.Position(event).Y - rect.top) > (rect.height / 2);
+                this.insertBefore(dragged, next ? target.nextSibling : target);
+            }
+        }
+        document.ondragend = function(event) 
+        {
+            if (dragged) 
+            {
+                event.preventDefault();
+                dragged.classList.remove("dragging");
+                const index = [...dragged.parentNode.children].indexOf(dragged);
+
+                $.ajax({
+                    type: "patch",
+                    url: "/admin/topics/reorder",
+                    data: { id: dragged.data.id, sort: index + 1 }
+                })
+
+                dragged = null;
+            }
+        }
+
+        Image_Banner.onclick = o => Input_File.click();
+
+        Input_File.oninput = function(event)
+        {
+            const files = Array.from(this.files);
+            this.value = null;
+
+            if (files.length == 0)
+                return;
+
+            if (files[0].size > 2000000)
+                return Components.Notification.Send({ Id: "banner_failed", Title: "<$ courses banner_upload_error_title />", Message: "<$ courses banner_upload_error_message />", Icon: "\ufe64", Buttons: [{Text: "<$ generic dismiss />"}] });
+                
+            Button_CancelEdit.disabled = true;
+            Button_SaveEdit.disabled = true;
+            PopOver_EditCourse.isloading = true;
+            Text_Error.classList.add("hidden");
+            $("#PopOver_EditCourse :where(input, textarea)").attr("disabled", true);
+            
+            const form = new FormData();
+            form.append("id", "<#? course.id ?#>");
+            form.append("file", files[0]);
+
+            $.ajax({
+                type: "post",
+                url: "/admin/courses/setbanner",
+                data: form,
+                contentType: false,
+                processData: false,
+                success: async function()
+                {
+                    Grid_CourseCard.classList.remove("hasBanner");
+                    const url = await Courses.FetchBanner("<#? course.id ?#>", true);
+                    Grid_CourseCard.style.setProperty("--image", "url(" + url[0] + ")");
+                    Grid_CourseCard.style.setProperty("--blur", "url(" + url[1] + ")");
+                    Image_Banner.src = url[0];
+                    Grid_CourseCard.classList.add("hasBanner");
+
+                    Inputs_Check();
+                    Button_CancelEdit.disabled = false;
+                    PopOver_EditCourse.isloading = false;
+                    Text_Error.classList.remove("hidden");
+                    $("#PopOver_EditCourse :where(input, textarea)").removeAttr("disabled");
+
+                    Components.Notification.Remove({ Id: "banner_failed" });
+                    Components.Notification.Send({ Id: "banner_success", Title: "<$ courses banner_upload_success_title />", Message: "<$ courses banner_upload_success_message />", Icon: "\uf873"});
+                },
+                error: function(error)
+                {                   
+                    Inputs_Check();
+                    Button_CancelEdit.disabled = false;
+                    PopOver_EditCourse.isloading = false;
+                    Text_Error.classList.remove("hidden");
+                    $("#PopOver_EditCourse :where(input, textarea)").removeAttr("disabled");
+
+                    Components.Notification.Send({ Id: "banner_failed", Title: "<$ courses banner_upload_error_title />", Message: error.responseText || "<$ courses error_generic />", Icon: "\ufe64", Buttons: [{Text: "<$ generic dismiss />"}] });
+                }
+            });
+        }
+
+        List_Banner.onaction = function()
+        {
+            $.ajax({
+                type: "post",
+                url: "/admin/courses/clearbanner",
+                data: { id: "<#? course.id ?#>" },
+                success: async function()
+                {
+                    Grid_CourseCard.classList.remove("hasBanner");
+                    const url = await Courses.FetchBanner("<#? course.id ?#>", true);
+                    Grid_CourseCard.style.setProperty("--image", "url(" + url[0] + ")");
+                    Grid_CourseCard.style.setProperty("--blur", "url(" + url[1] + ")");
+                    Image_Banner.src = url[0];
+                    Grid_CourseCard.classList.add("hasBanner");
+
+                    Inputs_Check();
+                    Button_CancelEdit.disabled = false;
+                    PopOver_EditCourse.isloading = false;
+                    $("#PopOver_EditCourse :where(input, textarea)").removeAttr("disabled");
+
+                    Components.Notification.Send({ Id: "banner_success", Title: "<$ courses banner_clear_success_title />", Message: "<$ courses banner_clear_success_message />", Icon: "\uf873"});
+                },
+                error: function()
+                {
+                    Inputs_Check();
+                    Button_CancelEdit.disabled = false;
+                    PopOver_EditCourse.isloading = false;
+                    $("#PopOver_EditCourse :where(input, textarea)").removeAttr("disabled");
+
+                    Components.Notification.Send({ Id: "banner_failed", Title: "<$ courses banner_clear_error_title />", Message: "<$ courses error_generic />", Icon: "\ufe64", Buttons: [{Text: "<$ generic dismiss />"}] });
+                }
+            });
+        }
+
+        window.addEventListener("DOMContentLoaded", async function()
+        {
+            Grid_CourseCard.classList.remove("hasBanner");
+            const url = await Courses.FetchBanner("<#? course.id ?#>?v=<#? course.bannerversion ?#>");
+            Grid_CourseCard.style.setProperty("--image", "url(" + url[0] + ")");
+            Grid_CourseCard.style.setProperty("--blur", "url(" + url[1] + ")");
+            Grid_CourseCard.classList.add("hasBanner");
+        });
+
+        if ("<#? activeuser.role ?#>" != "admin")
+            Button_DeleteCourse.disabled = true;
+
+        function Inputs_Check()
+        {
+            const data = Courses.Active;
+            if (
+                Input_CourseName.value.trim() == data.name &&
+                Input_CourseAlias.value.trim() == (data.alias || "") &&
+                Input_CourseDescription.value.trim() == (data.description || "") &&
+                Input_CourseId.value.trim() == data.id &&
+                Input_CourseSemester.value.trim() == data.semester &&
+                Input_CourseSKS.value.trim() == data.sks
+            )
+            {
+                Button_SaveEdit.disabled = true;
+                PopOver_EditCourse.isunsaved = false;
+            }
+            else
+            {
+                Button_SaveEdit.disabled = false;
+                PopOver_EditCourse.isunsaved = true;
+            }
+        }
+    }
+</script>

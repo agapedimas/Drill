@@ -1,0 +1,156 @@
+<ad-title><$ home title /></ad-title>
+
+<style>
+    @import url("/<#? applang ?#>/courses.css");
+    @import url("/<#? applang ?#>/collections.css");
+</style>
+
+<div class="header">
+    <div class="title"><$ home title /></div>
+</div>
+
+<div class="content">
+    <section ad-header="<$ courses pinned />">
+        <div class="arrow prev hidden" id="Arrow_PrevPins">&#xef3d;</div>
+        <div class="arrow next hidden" id="Arrow_NextPins">&#xef3e;</div>
+        <div id="Grid_Courses">
+            <div class="course"></div>
+            <div class="course"></div>
+            <div class="course"></div>
+            <div class="course"></div>
+        </div>
+    </section>
+    <section ad-header="<$ topics recently_updated_title />">
+        <div class="arrow prev hidden" id="Arrow_PrevRecents">&#xef3d;</div>
+        <div class="arrow next hidden" id="Arrow_NextRecents">&#xef3e;</div>
+        <div id="Grid_CourseTopics"></div>
+    </section>
+    <section ad-header="Events">
+        <div class="arrow prev hidden" id="Arrow_PrevEvents">&#xef3d;</div>
+        <div class="arrow next hidden" id="Arrow_NextEvents">&#xef3e;</div>
+        <div id="Grid_Events"></div>
+    </section>
+    <section ad-header="<$ generic editors />">
+        <div class="arrow prev hidden" id="Arrow_PrevEditors">&#xef3d;</div>
+        <div class="arrow next hidden" id="Arrow_NextEditors">&#xef3e;</div>
+        <div id="Grid_Editors"></div>
+    </section>
+</div>
+
+<script>
+    {
+        const a = Courses.Pins.AppendSidebar;
+        Courses.Pins.AppendSidebar = function()
+        {
+            a();
+            const ids = Courses.Pins.Get().map(o => o.id).slice(0, 10);
+
+            if (ids.length == 0)
+            {
+                Grid_Courses.innerHTML = null;
+                return;
+            }
+        
+            $.post("/courses/get", { id: ids }, function(courses)
+            {
+                Grid_Courses.innerHTML = null;
+                Courses.Append(courses, Grid_Courses);
+                Arrow.Check(Grid_Courses);
+            });
+        }
+        Courses.Pins.AppendSidebar();
+
+        Grid_Courses.onscroll = o => Arrow.Check(Grid_Courses);
+        Grid_Courses.parentNode.onheaderclick = function()
+        {
+            window.location.href = "/pins";
+        }
+        Grid_CourseTopics.onscroll = o => Arrow.Check(Grid_CourseTopics);
+        Grid_Events.parentNode.onheaderclick = function()
+        {
+        }
+        Grid_Editors.onscroll = o => Arrow.Check(Grid_Editors);
+
+        Arrow_PrevPins.onclick = o => Arrow.Click(Grid_Courses, "backward");
+        Arrow_NextPins.onclick = o => Arrow.Click(Grid_Courses, "forward");
+        Arrow_PrevRecents.onclick = o => Arrow.Click(Grid_CourseTopics, "backward");
+        Arrow_NextRecents.onclick = o => Arrow.Click(Grid_CourseTopics, "forward");
+        Arrow_PrevEvents.onclick = o => Arrow.Click(Grid_Events, "backward");
+        Arrow_NextEvents.onclick = o => Arrow.Click(Grid_Events, "forward");
+        Arrow_PrevEditors.onclick = o => Arrow.Click(Grid_Editors, "backward");
+        Arrow_NextEditors.onclick = o => Arrow.Click(Grid_Editors, "forward");
+
+        window.addEventListener("resize", function()
+        {
+            Arrow.Check(Grid_Courses);
+            Arrow.Check(Grid_CourseTopics);
+            Arrow.Check(Grid_Events);
+            Arrow.Check(Grid_Editors);
+        });
+
+        const b = Topics.Render;
+        Topics.Render = function(topic)
+        {
+            const box = b(topic);
+            
+            const course = document.createElement("span");
+            course.classList.add("course");
+            course.append(topic.coursename);
+            
+            box.find("details").prepend(course);
+            box.find("problemcount").remove();
+            box.find("lastedited").remove();
+            box.onclick = function()
+            {
+                const url = new URL(window.location.href);
+                url.searchParams.set("name", topic.name);
+                const name = url.search.replace("?name=", "").replaceAll("+", "-").replaceAll("---", "-").toLowerCase();
+                window.location.href = "/courses/" + box.data.course + "/" + name;
+            }
+
+            return box;
+        }
+
+        $.get("/topics/recent", null, function(topics)
+        {
+            Grid_CourseTopics.innerHTML = null;
+            Topics.Append(topics, Grid_CourseTopics);
+            Arrow.Check(Grid_CourseTopics);
+        })
+
+        $.get("/accounts/get?type=editor", null, function(accounts)
+        {
+            for (const account of accounts)
+            {
+                const img = document.createElement("img");
+                img.src = "/avatar/" + account.id + "?v=" + account.avatarversion;
+
+                const name = document.createElement("span");
+                name.classList.add("name");
+                name.innerHTML = account.nickname;
+
+                const role = document.createElement("span");
+                role.classList.add("role");
+                role.innerHTML = account.role.name;
+
+                const details = document.createElement("div");
+                details.classList.add("details");
+                details.append(name);
+                details.append(role);
+
+                const box = document.createElement("div");
+                box.classList.add("editor");
+                box.append(img);
+                box.append(details);
+                box.onclick = function()
+                {
+                    if (account.url)
+                        window.open(account.url, "_blank");
+                }
+
+                Grid_Editors.append(box);
+            }
+            Arrow.Check(Grid_Editors);
+        });
+    }
+</script>

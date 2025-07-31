@@ -1,0 +1,12 @@
+{
+    "title": "Cari",
+
+    "showing_results": "Menampilkan hasil untuk “{0}”",
+    "searchbar_placeholder": "Mata kuliah, topik, atau soal",
+
+    "start_title": "Cari",
+    "start_message": "Coba cari mata kuliah, topik, atau soal.",
+
+    "noresults_title": "Tidak Ada Hasil",
+    "noresults_message": "Coba cari yang lain."
+}

@@ -1,0 +1,49 @@
+<style>
+    @media screen and (max-width: 800px) 
+    {
+        .root 
+        {
+            grid-auto-rows: auto 0;
+        }
+    }
+</style>
+
+<div class="header">
+    <div class="buttons">
+        <button class="back" onclick="Topics.Back()"><$ generic back /></button>
+        <button id="Button_Quiz" class="icon" ad-tooltip="<$ topics practice_label />">&#xfb41;</button>
+        <button id="Button_Print" class="icon" ad-tooltip="<$ generic print />">&#xf948;</button>
+    </div>
+    <div class="title"><#? topic.name ?#></div>
+</div>
+
+<div class="content">
+    <div id="Grid_CourseProblems">
+        <div class="progressring"></div>
+    </div>
+</div>
+
+<script>
+    {
+        Button_Print.onclick = function()
+        {
+            window.print();
+        }
+        Button_Quiz.onclick = function()
+        {
+            const path = window.location.pathname.substring(window.location.pathname.indexOf("/courses") + 8);
+            window.location.href = "/mentor" + path;
+        }
+
+        $.ajax(
+        {
+            type: "get",
+            url: "/problems/get/<#? topic.id ?#>?type=topic",
+            success: function(problems)
+            {
+                Grid_CourseProblems.innerHTML = "";
+                Problems.Append(problems, Grid_CourseProblems);
+            }
+        });
+    }
+</script>

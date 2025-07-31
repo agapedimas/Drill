@@ -1,0 +1,18 @@
+{
+    "avatar_change": "Ganti Avatar",
+    "avatar_upload_error_title": "Gagal Ngupload Avatar",
+    "avatar_upload_error_message": "File sizenya max 2 MB yaa.",
+    "avatar_upload_success_title": "Avatar Udah Ke-Ganti",
+    "avatar_upload_success_message": "Avatar udah berhasil di-sett.",
+
+    "create_account_title": "Bikin Akun",
+    "create_account_error_title": "Gagal Bikin Akun",
+    "delete_account_confirm_title": "Seriusan nih mau apus akun?",
+    "delete_account_confirm_message": "Ini auto keapus aksesnya ya, tapi kalo matkul, topik, soal yang dia bikin tetep aman kok.",
+    "delete_error_title": "Gagal Ngehapus",
+
+    "error_generic": "Something went wrong nih.",
+    "error_parameter_missing": "{0} gaboleh empty yaa.",
+    "error_create_nopermission": "You dont have the permission buat bikin account.",
+    "error_delete_nopermission": "You dont have the permission buat apus account."
+}
