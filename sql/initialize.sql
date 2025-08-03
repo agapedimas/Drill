@@ -105,7 +105,7 @@ CREATE TABLE IF NOT EXISTS `problem_sources`
         `id` int UNSIGNED NOT NULL AUTO_INCREMENT, 
         `name` varchar(128) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,
             PRIMARY KEY (`id`), 
-            UNIQUE KEY `source` (`source`)
+            UNIQUE KEY `name` (`name`)
     ) 
 ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;
 
