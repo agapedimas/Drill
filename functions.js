@@ -23,11 +23,10 @@ const Functions =
 				console.error("Server shut down"); 
 				process.exit(); 
 			}
-			
-			// check every 5 minutes
-			setTimeout(check, 1000 * 60 * 5);
 		}
-		check();
+			
+		// check every 5 minutes
+		setInterval(check, 1000 * 60 * 5);
 	},
 	Administrator_Log: async function(userid, type, from, to, reference)
 	{
