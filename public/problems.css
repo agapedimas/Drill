@@ -264,6 +264,11 @@
                 {
                     background: var(--gray-5);
                 }
+                mjx-container 
+                {
+                    display: inline-block;
+                    margin: 0;
+                }
             }
             .pivot:has(.section > textarea) .section .preview
             {
