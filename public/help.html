@@ -1,6 +1,10 @@
-<ad-title>Help</ad-title>
+<ad-title><$ help title /></ad-title>
 
 <style>
+    html:not([theme=dark]) .root .main
+    {
+        background: var(--gray-6);
+    }
     .list 
     {
         max-width: 800px;
@@ -25,11 +29,11 @@
 </style>
 
 <div class="header">
-    <div class="title">Help</div>
+    <div class="title"><$ help title /></div>
 </div>
 
 <div class="content">
-    <div class="list" ad-header="Contact Us" id="List_Accounts"></div>
+    <div class="list" ad-header="<$ help contactus />" id="List_Accounts"></div>
 </div>
 
 <script>

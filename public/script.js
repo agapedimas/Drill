@@ -70,11 +70,11 @@ const Courses =
 
         box.find = function(child)
         {
-            if (child == "hover")        return hover;
-            if (child == "banner")       return banner;
-            if (child == "id")           return id;
-            if (child == "name")         return name;
-            if (child == "description")  return description;
+            if (child == "hover")       return hover;
+            if (child == "banner")      return banner;
+            if (child == "id")          return id;
+            if (child == "name")        return name;
+            if (child == "description") return description;
         }
         box.setAttribute("goto", "courses/" + course.id);
         box.data = course;
@@ -86,13 +86,13 @@ const Courses =
             {
                 context.commands[0].Show = false;
                 context.commands[1].Show = true;
-                context.commands[1].Title = "Unpin “" + (course.alias || course.name) + "”";
+                context.commands[1].Title = "<$ courses context_unpin_template />".replace("{courseName}", (course.alias || course.name));
             }
             else
             {
                 context.commands[1].Show = false;
                 context.commands[0].Show = true;
-                context.commands[0].Title = "Pin “" + (course.alias || course.name) + "”";
+                context.commands[0].Title = "<$ courses context_pin_template />".replace("{courseName}", (course.alias || course.name));
             }
             Components.ContextMenu.Open("Course", box, event);
         }
@@ -179,7 +179,7 @@ const Courses =
                     const context = Components.ContextMenu.List.find(o => o.id == "Course");
                     context.commands[0].Show = false;
                     context.commands[1].Show = true;
-                    context.commands[1].Title = "Unpin";
+                    context.commands[1].Title = "<$ courses context_unpin />";
             
                     Components.ContextMenu.Open("Course", a, event);
                 }
@@ -246,7 +246,7 @@ Components.ContextMenu.Add("Course",
             Action: (element) => { Courses.Pins.Remove(element.data.id) }
         },
         {
-            Title: "Open in new tab",
+            Title: "<$ courses context_open_in_new_tab />",
             Icon: "fbc1",
             Action: (element) => { window.open("/courses/" + element.data.id) }
         }
@@ -254,19 +254,19 @@ Components.ContextMenu.Add("Course",
 Components.ContextMenu.Add("Course_More", 
     [
         {
-            Title: "Pin",
+            Title: "<$ courses context_pin />",
             Show: o => Courses.Pins.Includes(Courses.Active.id) == false,
             Icon: "f892",
             Action: o => Courses.Pins.Add(Courses.Active.id, Courses.Active.name)
         },
         {
-            Title: "Unpin",
+            Title: "<$ courses context_unpin />",
             Show: o => Courses.Pins.Includes(Courses.Active.id) == true,
             Icon: "f88f",
             Action: o => Courses.Pins.Remove(Courses.Active.id)
         },
         {
-            Title: "Print...",
+            Title: "<$ courses context_print />",
             Icon: "f948",
             Action: function (element) 
             { 
@@ -308,7 +308,7 @@ const Topics =
 
         const back = document.createElement("button");
         back.classList.add("back");
-        back.innerHTML = "Back";
+        back.innerHTML = "<$ topics back />";
         back.onclick = Topics.Back;
 
         const buttons = document.createElement("buttons");
@@ -393,7 +393,7 @@ const Topics =
         name.append(topic.name);
 
         const problemcount_title = document.createElement("span");
-        problemcount_title.append("Problems:");
+        problemcount_title.append("<$ topics problems_label />");
 
         const problemcount = document.createElement("span");
         problemcount.classList.add("problemcount");
@@ -404,8 +404,8 @@ const Topics =
         problemcount_container.append(problemcount);
 
         const lastedited_title = document.createElement("span");
-        lastedited_title.append("Updated");
-                    
+        lastedited_title.append("<$ topics updated_label />");
+                        
         const t1 = parseInt(topic.lastedited);
         const t2 = new Date(Date.now() - topic.lastedited);
         const time = t1 == 0 ? 0 : t2 > 1000 * 3600 * 24 * 6 ? moment(t1).format("ll") : moment(t1).fromNow();
@@ -429,9 +429,9 @@ const Topics =
         box.append(details);
         box.find = function(child)
         {
-            if (child == "name")  return name;
-            if (child == "problemcount")  return problemcount;
-            if (child == "lastedited")  return lastedited;
+            if (child == "name")            return name;
+            if (child == "problemcount")    return problemcount;
+            if (child == "lastedited")      return lastedited;
         }
         box.data = topic;
         box.onclick = function()
@@ -555,7 +555,7 @@ const Problems =
         return group;
     },
     Sort: function(container)
-    {                
+    {                   
         let sorted;
         const classes = container.children[0]?.classList;
 
@@ -577,7 +577,7 @@ const Problems =
 }
 
 window.onbeforeprint = async function(event)
-{    
+{   
     if (Courses.PendingPrint)
     {
         let latest = 0;
@@ -594,7 +594,7 @@ window.onbeforeprint = async function(event)
 
         if (latest > 0)
         {
-            const date = new Date(latest).toLocaleDateString("id", 
+            const date = new Date(latest).toLocaleDateString(document.documentElement.lang, 
             {
                 year: "numeric",
                 month: "long",
@@ -698,3 +698,4 @@ window.addEventListener("popstate", function()
 })
 
 marked.use({ extensions: [mathExtension, mathBlockExtension] });
+moment.locale(document.documentElement.lang);

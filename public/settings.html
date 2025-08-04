@@ -1,4 +1,4 @@
-<ad-title>Settings</ad-title>
+<ad-title><$ settings title /></ad-title>
 
 <style>
     html:not([theme=dark]) .root .main
@@ -94,21 +94,21 @@
 </style>
 
 <div class="header">
-    <div class="title">Settings</div>
+    <div class="title"><$ settings title /></div>
 </div>
 
 <div class="content">
-    <div class="list" ad-header="Appearance" ad-footer="">
+    <div class="list" ad-header="<$ settings appearance />" ad-footer="">
         <div class="stack">
-            <div>Theme</div>
+            <div><$ settings theme /></div>
             <select class="plain" name="theme" id="Select_Theme">
-                <option value="system">System default</option>
-                <option value="light">Light</option>
-                <option value="dark">Dark</option>
+                <option value="system"><$ settings theme_system /></option>
+                <option value="light"><$ settings theme_light /></option>
+                <option value="dark"><$ settings theme_dark /></option>
             </select>
         </div>
         <div class="stack">
-            <div>Accent color</div>
+            <div><$ settings accent_color /></div>
             <div id="Settings_Accents">
                 <div class="color" accent="red"></div>
                 <div class="color" accent="yellow"></div>
@@ -119,25 +119,33 @@
                 <div class="color" accent="purple"></div>
             </div>
         </div>
-    </div>
-    <div class="list" ad-header="About App" ad-footer="">
         <div class="stack">
-            <div>Git Repository</div>
+            <div><$ settings language /></div>
+            <select class="plain" name="language" id="Select_Language">
+                <option value="en">English</option>
+                <option value="id">Bahasa Indonesia</option>
+            </select>
+        </div>
+    </div>
+    <div class="list" ad-header="<$ settings about_app />" ad-footer="">
+        <div class="stack">
+            <div><$ settings git_repository /></div>
             <button class="plain" goto="https://github.com/agapedimas/drill" ad-type="newtab">
                 <span>agapedimas/drill</span>
                 <span class="icon">&#xebad;</span>
             </button>
         </div>
         <div class="stack">
-            <div>Version</div>
+            <div><$ settings version /></div>
             <div style="opacity: 0.6"><#? appversion ?#></div>
         </div>
         <div class="stack vertical">
-            <div>Copyright</div>
-            <div style="opacity: 0.6;">© 2025 Agape Dimas. All rights reserved.</div>
+            <div><$ settings copyright /></div>
+            <div style="opacity: 0.6;"><$ settings copyright_text /></div>
         </div>
     </div>
 </div>
+
 
 <script>
     Select_Theme.value = localStorage.getItem("theme");
@@ -154,5 +162,12 @@
     {
         localStorage.setItem("theme", theme);
         CheckTheme();
+    }
+    
+    Select_Language.value = document.documentElement.lang;
+    Select_Language.onchange = async function()
+    {
+        await $.post("/language/", { language: this.value });
+        window.location.reload();
     }
 </script>

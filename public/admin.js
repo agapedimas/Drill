@@ -1,7 +1,7 @@
 Components.ContextMenu.Add("Course_Admin", 
     [
         {
-            Title: "Open in new tab",
+            Title: "<$ courses context_open_in_new_tab />",
             Icon: "fbc1",
             Action: (element) => { window.open("/admin/courses/" + element.data.id) }
         }
@@ -10,7 +10,7 @@ Components.ContextMenu.Add("Course_Admin",
 Components.ContextMenu.Add("Topic_Admin", 
     [
         {
-            Title: "Rename",
+            Title: "<$ topics context_rename />",
             Icon: "eef7",
             Action: (element) => 
             { 
@@ -21,7 +21,7 @@ Components.ContextMenu.Add("Topic_Admin",
             }
         },
         {
-            Title: "Delete",
+            Title: "<$ topics context_delete />",
             Show: ActiveUser.role == "admin",
             Icon: "fd3c",
             Type: "critical",
@@ -29,11 +29,11 @@ Components.ContextMenu.Add("Topic_Admin",
             {
                 Components.ActionSheet.Open(
                 {
-                    Title: "Are you sure want to delete topic \n'" + element.data.name + "'?",
-                    Description: "All problems and its solution will also be deleted. This action cannot be undone.",
+                    Title: "<$ topics delete_topic_confirm_title />".replace("{topicName}", element.data.name),
+                    Description: "<$ topics delete_topic_confirm_desc />",
                     Actions: [
                         { 
-                            Title: "Delete", Type: "Options.Critical", 
+                            Title: "<$ topics delete />", Type: "Options.Critical", 
                             Action: function() 
                             {   
                                 return new Promise(function(resolve)
@@ -51,14 +51,14 @@ Components.ContextMenu.Add("Topic_Admin",
                                         error: function(error)
                                         {
                                             resolve();
-                                            Components.Notification.Send({ Id: "delete_failed", Title: "Unable to Delete", Message: error.responseText || "Something went wrong.", Icon: "\ufe60", Buttons: [{Text: "Dismiss"}] });
+                                            Components.Notification.Send({ Id: "delete_failed", Title: "<$ topics delete_error_title />", Message: error.responseText || "<$ topics error_generic />", Icon: "\ufe60", Buttons: [{Text: "<$ topics dismiss />"}] });
                                         }
                                     });
                                 })
                             }
                         },
                         { 
-                            Title: "Cancel", Type: "Footer"
+                            Title: "<$ topics cancel />", Type: "Footer"
                         }
                     ]
                 });    
@@ -69,7 +69,7 @@ Components.ContextMenu.Add("Topic_Admin",
 Components.ContextMenu.Add("Problem_Admin", 
     [
         {
-            Title: "Edit",
+            Title: "<$ problems context_edit />",
             Icon: "f7cf",
             Action: async (element) => 
             { 
@@ -86,18 +86,18 @@ Components.ContextMenu.Add("Problem_Admin",
             }
         },
         {
-            Title: "Delete",
+            Title: "<$ problems context_delete />",
             Icon: "fd3c",
             Type: "critical",
             Action: (element) => 
             {
                 Components.ActionSheet.Open(
                 {
-                    Title: "Are you sure want to delete this problem?",
-                    Description: "Its solution will also be deleted. This action cannot be undone.",
+                    Title: "<$ problems delete_problem_confirm_title />",
+                    Description: "<$ problems delete_problem_confirm_desc />",
                     Actions: [
                         { 
-                            Title: "Delete", Type: "Options.Critical", 
+                            Title: "<$ problems delete />", Type: "Options.Critical", 
                             Action: function() 
                             {
                                 return new Promise(function(resolve)
@@ -114,14 +114,14 @@ Components.ContextMenu.Add("Problem_Admin",
                                         error: function(error)
                                         {
                                             resolve();
-                                            Components.Notification.Send({ Id: "delete_failed", Title: "Unable to Delete", Message: error.responseText || "Something went wrong.", Icon: "\ufe60", Buttons: [{Text: "Dismiss"}] });
+                                            Components.Notification.Send({ Id: "delete_failed", Title: "<$ problems delete_error_title />", Message: error.responseText || "<$ problems error_generic />", Icon: "\ufe60", Buttons: [{Text: "<$ problems dismiss />"}] });
                                         }
                                     });
                                 })
                             }
                         },
                         { 
-                            Title: "Cancel", Type: "Footer"
+                            Title: "<$ problems cancel />", Type: "Footer"
                         }
                     ]
                 });    
@@ -132,7 +132,7 @@ Components.ContextMenu.Add("Problem_Admin",
 Components.ContextMenu.Add("Accounts", 
 [
     {
-        Title: "Delete",
+        Title: "<$ settings context_delete />",
         Show: ActiveUser.role == "admin",
         Icon: "fd3c",
         Type: "critical",
@@ -140,11 +140,11 @@ Components.ContextMenu.Add("Accounts",
         {
             Components.ActionSheet.Open(
             {
-                Title: "Are you sure want to delete this account?",
-                Description: "This will remove their access, but their created courses, topics, and problems will still be available.",
+                Title: "<$ settings delete_account_confirm_title />",
+                Description: "<$ settings delete_account_confirm_desc />",
                 Actions: [
                     { 
-                        Title: "Delete", Type: "Options.Critical", 
+                        Title: "<$ settings delete />", Type: "Options.Critical", 
                         Action: function() 
                         {
                             return new Promise(function(resolve)
@@ -161,14 +161,14 @@ Components.ContextMenu.Add("Accounts",
                                     error: function(error)
                                     {
                                         resolve();
-                                        Components.Notification.Send({ Id: "delete_failed", Title: "Unable to Delete", Message: error.responseText || "Something went wrong.", Icon: "\ufe60", Buttons: [{Text: "Dismiss"}] });
+                                        Components.Notification.Send({ Id: "delete_failed", Title: "<$ settings delete_error_title />", Message: error.responseText || "<$ settings error_generic />", Icon: "\ufe60", Buttons: [{Text: "<$ settings dismiss />"}] });
                                     }
                                 });
                             })
                         }
                     },
                     { 
-                        Title: "Cancel", Type: "Footer"
+                        Title: "<$ settings cancel />", Type: "Footer"
                     }
                 ]
             });    

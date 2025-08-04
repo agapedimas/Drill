@@ -1,8 +1,8 @@
 <ad-title><#? course.name ?#></ad-title>
 
 <style>
-    @import url("/courses.css");
-    @import url("/problems.css");
+    @import url("/<#? applang ?#>/courses.css");
+    @import url("/<#? applang ?#>/problems.css");
 
     .root .main:has(> .activity)
     {
@@ -48,7 +48,7 @@
 
 <div class="header cascaded">
     <div class="buttons dynamic" theme="dark">
-        <button class="back" onclick="Courses.Back()">Courses</button>
+        <button class="back" onclick="Courses.Back()"><$ courses title /></button>
         <button class="icon" id="Button_More" ad-tooltip="More">&#xf153;</button>
     </div>
     <div class="title hide"><#? course.alias ?#></div>
@@ -57,22 +57,22 @@
 <div class="content">
     <div id="Grid_CourseCard" theme="dark">
         <h3><#? course.name ?#></h3>
-        <span id="Grid_CourseDescription"><#? course.description ?#></span>
+        <span id="Grid_CourseDescription" ad-property="description"><#? course.description ?#></span>
         <div class="details">
             <div>
-                <span>Id</span>
+                <span><$ courses id_label /></span>
                 <span ad-property="id"><#? course.id ?#></span>
             </div>
             <div>
-                <span>AKA</span>
+                <span><$ courses alias_label /></span>
                 <span ad-property="alias"><#? course.alias ?#></span>
             </div>
             <div>
-                <span>Semester</span>
+                <span><$ courses semester_label /></span>
                 <span ad-property="semester"><#? course.semester ?#></span>
             </div>
             <div>
-                <span>SKS</span>
+                <span><$ courses sks_label /></span>
                 <span ad-property="sks"><#? course.sks ?#></span>
             </div>
         </div>
@@ -86,13 +86,13 @@
     <div class="activity">
         <div class="header cascaded">
             <div class="buttons">
-                <button id="Button_CancelPrint">Cancel</button>
+                <button id="Button_CancelPrint"><$ courses cancel /></button>
                 <button id="Button_SubmitPrint">
-                    <span>Print</span>
+                    <span><$ courses print /></span>
                     <div class="progressring"></div>
                 </button>
             </div>
-            <div class="title">Select Up to 5 Topics</div>
+            <div class="title"><$ courses print_title /></div>
         </div>
         <div class="content">
             <div id="Grid_PrintCourseTopics"></div>

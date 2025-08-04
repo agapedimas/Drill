@@ -1,9 +1,20 @@
 {
     "title": "Mata Kuliah",
+    
+    "context_open_in_new_tab": "Buka di tab baru",
+    "context_pin_template": "Sematkan “{courseName}”",
+    "context_unpin_template": "Lepaskan “{courseName}”",
+    "context_pin": "Sematkan",
+    "context_unpin": "Lepaskan",
+    "context_print": "Cetak...",
 
     "tooltip_new_course": "Buat Mata Kuliah Baru",
     "tooltip_edit_course": "Edit Mata Kuliah",
     "tooltip_new_topic": "Buat Topik Baru",
+
+    "pinned": "Mata Kuliah Disematkan",
+    "pinned_all": "Semua Sematan",
+    "pins": "Sematan",
 
     "cancel": "Batal",
     "create": "Buat",
@@ -13,6 +24,9 @@
     "clear": "Hapus",
     "dismiss": "Tutup",
     "discard": "Buang",
+    "print": "Cetak",
+
+    "print_title": "Pilih Maksimal 5 Topik",
     
     "new_course_title": "Mata Kuliah Baru",
     "edit_course_title": "Edit Mata Kuliah",
@@ -59,6 +73,15 @@
     "banner_clear_error_title": "Gak bisa bersihin banner",
     "banner_clear_success_title": "Dibersihkan",
     "banner_clear_success_message": "Banner berhasil dibersihkan.",
+
+    "empty_courses_title": "Belum Ada Mata Kuliah",
+    "empty_courses_subtitle": "Mata kuliah yang ditambahkan akan muncul di sini.",
+    "empty_pins_title": "Belum Ada Pin",
+    "empty_pins_subtitle": "Sematkan mata kuliah dan akan muncul di sini.",
+    "empty_topics_title": "Belum Ada Topik",
+    "empty_topics_subtitle": "Topik yang ditambahkan akan muncul di sini.",
+    "notfound_title": "Mata Kuliah Tidak Ditemukan",
+    "notfound_subtitle": "Mungkin sudah dipindahkan atau dihapus.",
     
     "error_generic": "Terjadi suatu kesalahan."
 }

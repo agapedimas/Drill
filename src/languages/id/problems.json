@@ -1,0 +1,18 @@
+{
+    "context_edit": "Edit",
+    "context_delete": "Hapus",
+    "delete": "Hapus",
+    "cancel": "Batal",
+    "dismiss": "Tutup",
+    
+    "delete_problem_confirm_title": "Yakin mau hapus soal ini?",
+    "delete_problem_confirm_desc": "Solusinya juga bakal ikut kehapus. Aksi ini gak bisa dibatalin.",
+    "delete_error_title": "Gagal Menghapus",
+    
+    "empty_problems_title": "Belum Ada Soal",
+    "empty_problems_subtitle": "Soal yang ditambahkan akan muncul di sini.",
+    "notfound_topic_title": "Topik Tidak Ditemukan",
+    "notfound_topic_subtitle": "Mungkin sudah dipindahkan atau dihapus.",
+
+    "error_generic": "Terjadi suatu kesalahan."
+}

@@ -20,7 +20,7 @@
     "create": "Buat",
     "create_account_title": "Buat Akun",
     "username": "Nama pengguna",
-    "nickname": "Nama panggilan",
+    "nickname": "Panggilan",
     "url": "URL",
     "role": "Peran",
     "password": "Kata sandi",
@@ -36,5 +36,11 @@
     "avatar_upload_error_title": "Gagal Mengupload Avatar",
     "avatar_upload_error_size": "Ukuran file maksimum adalah 2MB.",
     "avatar_upload_success_title": "Berhasil Upload",
-    "avatar_upload_success_message": "Avatar telah berhasil disetel."
+    "avatar_upload_success_message": "Avatar telah berhasil disetel.",
+
+    "context_delete": "Hapus",
+    "delete": "Hapus",
+    "delete_account_confirm_title": "Yakin mau hapus akun ini?",
+    "delete_account_confirm_desc": "Akses akun ini bakal dicabut, tapi mata kuliah, topik, dan soal yang pernah dibuat bakal tetep ada.",
+    "delete_error_title": "Gagal Menghapus"
 }

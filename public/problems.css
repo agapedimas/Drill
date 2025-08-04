@@ -171,7 +171,7 @@
         width: 30px;
     }
 #Grid_CourseProblems:empty
-{    
+{   
     justify-content: center;
     align-items: center;
     align-content: center;
@@ -181,27 +181,27 @@
 }
     #Grid_CourseProblems:empty::before
     {
-        content: "No Problems";
+        content: "<$ problems empty_problems_title />";
         font-family: var(--font-bold);
         font-size: 1.5em;
     }
     #Grid_CourseProblems:empty::after
     {
-        content: "They'll will show up here once it added.";
+        content: "<$ problems empty_problems_subtitle />";
         font-size: 1.12em;
         color: var(--foreground-description);
     }
 #Grid_CourseProblems.notfound:empty
-{    
+{   
     height: 100%;
 }
     #Grid_CourseProblems.notfound:empty::before
     {
-        content: "Topic Not Found";
+        content: "<$ problems notfound_topic_title />";
     }
     #Grid_CourseProblems.notfound:empty::after
     {
-        content: "It may have been moved or deleted.";
+        content: "<$ problems notfound_topic_subtitle />";
     }
     #Grid_PrintContent section
     {

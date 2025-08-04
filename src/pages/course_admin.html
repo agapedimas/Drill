@@ -1,8 +1,8 @@
 <ad-title><#? course.name ?#></ad-title>
 
 <style>
-    @import url("/courses.css");
-    @import url("/problems.css");
+    @import url("/<#? applang ?#>/courses.css");
+    @import url("/<#? applang ?#>/problems.css");
 
     .root .main:has(> .activity)
     {
@@ -48,9 +48,9 @@
 
 <div class="header cascaded">
     <div class="buttons dynamic" theme="dark">
-        <button class="back" onclick="Courses.Back('/admin')">Courses</button>
-        <button id="Button_Edit" class="icon" ad-tooltip="Edit Course">&#xf7cf;</button>
-        <button id="Button_New" class="icon" ad-tooltip="New Topic">&#xf8dd;</button>
+        <button class="back" onclick="Courses.Back('/admin')"><$ courses title /></button>
+        <button id="Button_Edit" class="icon" ad-tooltip="<$ courses tooltip_edit_course />">&#xf7cf;</button>
+        <button id="Button_New" class="icon" ad-tooltip="<$ courses tooltip_new_topic />">&#xf8dd;</button>
     </div>
     <div class="title hide"><#? course.alias ?#></div>
 </div>
@@ -61,19 +61,19 @@
         <span id="Grid_CourseDescription" ad-property="description"><#? course.description ?#></span>
         <div class="details">
             <div>
-                <span>Id</span>
+                <span><$ courses id_label /></span>
                 <span ad-property="id"><#? course.id ?#></span>
             </div>
             <div>
-                <span>AKA</span>
+                <span><$ courses alias_label /></span>
                 <span ad-property="alias"><#? course.alias ?#></span>
             </div>
             <div>
-                <span>Semester</span>
+                <span><$ courses semester_label /></span>
                 <span ad-property="semester"><#? course.semester ?#></span>
             </div>
             <div>
-                <span>SKS</span>
+                <span><$ courses sks_label /></span>
                 <span ad-property="sks"><#? course.sks ?#></span>
             </div>
         </div>
@@ -87,52 +87,52 @@
     <div class="activity">
         <div class="header cascaded">
             <div class="buttons">
-                <button id="Button_CancelEdit">Cancel</button>
+                <button id="Button_CancelEdit"><$ courses cancel /></button>
                 <button id="Button_SaveEdit">
-                    <span>Save</span>
+                    <span><$ courses save /></span>
                     <div class="progressring"></div>
                 </button>
             </div>
-            <div class="title">Edit Course</div>
+            <div class="title"><$ courses edit_course_title /></div>
         </div>
         <div class="content">
-            <div id="List_Banner" class="list" ad-header="Banner" ad-action="Clear">
+            <div id="List_Banner" class="list" ad-header="<$ courses banner_label />" ad-action="<$ courses clear />">
                 <div class="banner">
                     <img id="Image_Banner" src="/banner/<#? course.id ?#>"/>
                     <input type="file" id="Input_File" accept=".jpg, .jpeg, .png, .webp"/>
                 </div>
             </div>
-            <div class="list" ad-header="Basic Info">
+            <div class="list" ad-header="<$ courses header_basic_info />">
                 <div class="stack">
-                    <span>Name</span>
-                    <input type="text" class="plain" maxlength="128" id="Input_CourseName" placeholder="e.g: Basic Programming"/>
+                    <span><$ courses name_label /></span>
+                    <input type="text" class="plain" maxlength="128" id="Input_CourseName" placeholder="<$ courses name_placeholder />"/>
                 </div>
                 <div class="stack">
-                    <span>AKA</span>
-                    <input type="text" class="plain" maxlength="16" id="Input_CourseAlias" placeholder="e.g: DasPro"/>
+                    <span><$ courses alias_label /></span>
+                    <input type="text" class="plain" maxlength="16" id="Input_CourseAlias" placeholder="<$ courses alias_placeholder />"/>
                 </div>
                 <div class="stack">
-                    <span>Description</span>
-                    <textarea class="plain" maxlength="1000" id="Input_CourseDescription" placeholder="e.g: A course that gains your coding skills."></textarea>
+                    <span><$ courses description_label /></span>
+                    <textarea class="plain" maxlength="1000" id="Input_CourseDescription" placeholder="<$ courses description_placeholder />"></textarea>
                 </div>
             </div>
-            <div class="list" ad-header="Additional Info">
+            <div class="list" ad-header="<$ courses header_additional_info />">
                 <div class="stack">
-                    <span>Id</span>
-                    <input type="text" class="plain" maxlength="16" id="Input_CourseId" placeholder="e.g: AIF2301062">
+                    <span><$ courses id_label /></span>
+                    <input type="text" class="plain" maxlength="16" id="Input_CourseId" placeholder="<$ courses id_placeholder />">
                 </div>
                 <div class="stack">
-                    <span>Semester</span>
-                    <input type="number" class="plain" min="1" max="8" id="Input_CourseSemester" placeholder="e.g: 1"/>
+                    <span><$ courses semester_label /></span>
+                    <input type="number" class="plain" min="1" max="8" id="Input_CourseSemester" placeholder="<$ courses semester_placeholder />"/>
                 </div>
                 <div class="stack">
-                    <span>SKS</span>
-                    <input type="number" class="plain" min="1" max="16" id="Input_CourseSKS" placeholder="e.g: 3"/>
+                    <span><$ courses sks_label /></span>
+                    <input type="number" class="plain" min="1" max="16" id="Input_CourseSKS" placeholder="<$ courses sks_placeholder />"/>
                 </div>
             </div>
             <span class="error hidden" id="Text_Error"></span>
             <button class="plain critical" id="Button_DeleteCourse">
-                <span>Delete Course</span>
+                <span><$ courses delete_course /></span>
             </button>
         </div>
     </div>
@@ -142,19 +142,19 @@
     <div class="activity">
         <div class="header cascaded">
             <div class="buttons">
-                <button id="Button_CancelNew">Cancel</button>
+                <button id="Button_CancelNew"><$ courses cancel /></button>
                 <button id="Button_SubmitNew">
-                    <span>Create</span>
+                    <span><$ courses create /></span>
                     <div class="progressring"></div>
                 </button>
             </div>
-            <div class="title">New Topic</div>
+            <div class="title"><$ courses new_topic_title /></div>
         </div>
         <div class="content">
             <div class="list">
                 <div class="stack">
-                    <span>Name</span>
-                    <input type="text" class="plain" maxlength="128" id="Input_TopicName" placeholder="e.g: Input and Output"/>
+                    <span><$ courses topic_name_label /></span>
+                    <input type="text" class="plain" maxlength="128" id="Input_TopicName" placeholder="<$ courses topic_name_placeholder />"/>
                 </div>
             </div>
         </div>
@@ -165,19 +165,19 @@
     <div class="activity">
         <div class="header cascaded">
             <div class="buttons">
-                <button id="Button_CancelRename">Cancel</button>
+                <button id="Button_CancelRename"><$ courses cancel /></button>
                 <button id="Button_DoneRename">
-                    <span>Rename</span>
+                    <span><$ courses rename /></span>
                     <div class="progressring"></div>
                 </button>
             </div>
-            <div class="title">Rename Topic</div>
+            <div class="title"><$ courses rename_topic_title /></div>
         </div>
         <div class="content">
             <div class="list">
                 <div class="stack">
-                    <span>Name</span>
-                    <input type="text" class="plain" maxlength="128" id="Input_TopicNameRename" placeholder="e.g: Input and Output"/>
+                    <span><$ courses topic_name_label /></span>
+                    <input type="text" class="plain" maxlength="128" id="Input_TopicNameRename" placeholder="<$ courses topic_name_placeholder />"/>
                 </div>
             </div>
         </div>
@@ -208,18 +208,18 @@
         {
             Components.ActionSheet.Open(
             {
-                Title: "Discard Changes?",
-                Description: "Your changes won't be saved.",
+                Title: "<$ courses discard_edit_confirm_title />",
+                Description: "<$ courses discard_edit_confirm_desc />",
                 Actions: [
                     { 
-                        Title: "Discard", Type: "Options.Critical", 
+                        Title: "<$ courses discard />", Type: "Options.Critical", 
                         Action: o => 
                         {
                             PopOver_EditCourse.close(true);
                         }
                     },
                     { 
-                        Title: "Keep Editing", Type: "Footer"
+                        Title: "<$ courses keep_editing />", Type: "Footer"
                     }
                 ]
             }); 
@@ -288,7 +288,7 @@
                 },
                 error: function(error)
                 {
-                    Text_Error.innerText = error.responseText;
+                    Text_Error.innerText = error.responseText || "<$ courses error_generic />";
                     Text_Error.classList.remove("hidden");
                     Button_CancelEdit.disabled = false;
                     Button_SaveEdit.disabled = false;
@@ -414,11 +414,11 @@
         {
             Components.ActionSheet.Open(
             {
-                Title: "Are you sure want to delete\n'" + course.name + "'?",
-                Description: "All problems and its solution will also be deleted. This action cannot be undone.",
+                Title: "<$ courses delete_course_confirm_title />".replace("{courseName}", course.name),
+                Description: "<$ courses delete_course_confirm_desc />",
                 Actions: [
                     { 
-                        Title: "Delete", Type: "Options.Critical", 
+                        Title: "<$ courses delete />", Type: "Options.Critical", 
                         Action: function() 
                         {
                             return new Promise(function(resolve)
@@ -435,14 +435,14 @@
                                     error: function(error)
                                     {
                                         resolve();
-                                        Components.Notification.Send({ Id: "delete_failed", Title: "Unable to Delete", Message: error.responseText || "Something went wrong.", Icon: "\ufe60", Buttons: [{Text: "Dismiss"}] });
+                                        Components.Notification.Send({ Id: "delete_failed", Title: "<$ courses delete_error_title />", Message: error.responseText || "<$ courses error_generic />", Icon: "\ufe60", Buttons: [{Text: "<$ courses dismiss />"}] });
                                     }
                                 });
                             })
                         }
                     },
                     { 
-                        Title: "Cancel", Type: "Footer"
+                        Title: "<$ courses cancel />", Type: "Footer"
                     }
                 ]
             });
@@ -508,14 +508,14 @@
 
         Input_File.oninput = function(event)
         {
-			const files = Array.from(this.files);
-			this.value = null;
+            const files = Array.from(this.files);
+            this.value = null;
 
-			if (files.length == 0)
+            if (files.length == 0)
                 return;
 
             if (files[0].size > 2000000)
-                return Components.Notification.Send({ Id: "banner_failed", Title: "Can't upload banner", Message: "Maximum file size is 2MB.", Icon: "\ufe64", Buttons: [{Text: "Dismiss"}] });
+                return Components.Notification.Send({ Id: "banner_failed", Title: "<$ courses banner_upload_error_title />", Message: "<$ courses banner_upload_error_size />", Icon: "\ufe64", Buttons: [{Text: "<$ courses dismiss />"}] });
                 
             Button_CancelEdit.disabled = true;
             Button_SaveEdit.disabled = true;
@@ -549,19 +549,19 @@
                     $("#PopOver_EditCourse :where(input, textarea)").removeAttr("disabled");
 
                     Components.Notification.Remove({ Id: "banner_failed" });
-                    Components.Notification.Send({ Id: "banner_success", Title: "Upload done", Message: "Banner has been uploaded successfully", Icon: "\uf873"});
+                    Components.Notification.Send({ Id: "banner_success", Title: "<$ courses banner_upload_success_title />", Message: "<$ courses banner_upload_success_message />", Icon: "\uf873"});
 
                     PopOver_EditCourse.close(true);
                 },
                 error: function(error)
-                {                    
+                {                   
                     Button_CancelEdit.disabled = false;
                     Button_SaveEdit.disabled = false;
                     PopOver_EditCourse.isloading = false;
                     Text_Error.classList.remove("hidden");
                     $("#PopOver_EditCourse :where(input, textarea)").removeAttr("disabled");
 
-				    Components.Notification.Send({ Id: "banner_failed", Title: "Can't upload banner", Message: error.responseText || "Something went wrong", Icon: "\ufe64", Buttons: [{Text: "Dismiss"}] });
+                    Components.Notification.Send({ Id: "banner_failed", Title: "<$ courses banner_upload_error_title />", Message: error.responseText || "<$ courses error_generic />", Icon: "\ufe64", Buttons: [{Text: "<$ courses dismiss />"}] });
                 }
             });
         }
@@ -586,7 +586,7 @@
                     Text_Error.classList.remove("hidden");
                     $("#PopOver_EditCourse :where(input, textarea)").removeAttr("disabled");
 
-                    Components.Notification.Send({ Id: "banner_success", Title: "Cleared", Message: "Banner has been cleared successfully", Icon: "\uf873"});
+                    Components.Notification.Send({ Id: "banner_success", Title: "<$ courses banner_clear_success_title />", Message: "<$ courses banner_clear_success_message />", Icon: "\uf873"});
                 },
                 error: function()
                 {
@@ -596,7 +596,7 @@
                     Text_Error.classList.remove("hidden");
                     $("#PopOver_EditCourse :where(input, textarea)").removeAttr("disabled");
 
-				    Components.Notification.Send({ Id: "banner_failed", Title: "Can't clear banner", Message: "Something went wrong", Icon: "\ufe64", Buttons: [{Text: "Dismiss"}] });
+                    Components.Notification.Send({ Id: "banner_failed", Title: "<$ courses banner_clear_error_title />", Message: "<$ courses error_generic />", Icon: "\ufe64", Buttons: [{Text: "<$ courses dismiss />"}] });
                 }
             });
         }

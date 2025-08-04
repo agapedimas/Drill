@@ -1,0 +1,53 @@
+{
+
+    "back": "Kembali",
+    "tooltip_print": "Cetak",
+    "problems_label": "Jumlah Soal:",
+    "updated_label": "Diperbarui",
+    "context_rename": "Ganti Nama",
+    "context_delete": "Hapus",
+    "delete": "Hapus",
+    "cancel": "Batal",
+    "create": "Buat",
+    "save": "Simpan",
+    "dismiss": "Tutup",
+    "discard": "Buang",
+    
+    "tooltip_new_problem": "Soal Baru",
+    "new_problem_title": "Soal Baru",
+    "edit_problem_title": "Edit Soal",
+    
+    "source_header": "Sumber Soal",
+    "type_label": "Tipe",
+    "academic_year_label": "Tahun Ajaran",
+    "academic_year_placeholder": "cth: 2025",
+    
+    "markdown_tab": "Markdown",
+    "preview_tab": "Pratinjau",
+    "problem_text_placeholder": "Ketik soal di sini...",
+
+    "delete_topic_confirm_title": "Yakin mau hapus topik\\n'{topicName}'?",
+    "delete_topic_confirm_desc": "Semua soal dan solusinya juga bakal ikut kehapus. Aksi ini gak bisa dibatalin.",
+    "delete_error_title": "Gagal Menghapus",
+    
+    "discard_create_problem_title": "Buang Draf Soal?",
+    "discard_create_problem_desc": "Soal baru akan dibuang dan gak akan diposting.",
+    "keep_creating_problem": "Lanjutin Buat Soal",
+    
+    "discard_edit_problem_title": "Buang Perubahan?",
+    "discard_edit_problem_desc": "Perubahanmu gak akan disimpan.",
+    "keep_editing_problem": "Lanjutin Edit Soal",
+
+    "create_success_title": "Berhasil Dibuat",
+    "create_success_message": "Soal berhasil dibuat.",
+    "create_failed_title": "Gagal Membuat",
+    
+    "edit_success_title": "Berhasil Disimpan",
+    "edit_success_message": "Soal berhasil diubah dan disimpan.",
+    "edit_failed_title": "Gagal Menyimpan",
+
+    "error_generic": "Terjadi suatu kesalahan.",
+
+    "questionbank": "Kumpulan Soal",
+    "questionbank_disclaimer": "Mohon untuk tidak mendistribusikan naskah soal di luar lingkup Universitas Katolik Parahyangan.\nPergunakan naskah soal sebagaimana mestinya."
+}

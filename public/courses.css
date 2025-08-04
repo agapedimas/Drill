@@ -5,7 +5,7 @@
     gap: 16px;
 }
 #Grid_Courses:empty
-{    
+{   
     all: unset;
     display: grid;
     grid-auto-rows: max-content;
@@ -18,23 +18,23 @@
 }
     #Grid_Courses:empty::before
     {
-        content: "No Courses";
+        content: "<$ courses empty_courses_title />";
         font-family: var(--font-bold);
         font-size: 1.5em;
     }
     #Grid_Courses:empty::after
     {
-        content: "They'll will show up here once it added.";
+        content: "<$ courses empty_courses_subtitle />";
         font-size: 1.12em;
         color: var(--foreground-description);
     }
     #Grid_Courses.pins:empty::before
     {
-        content: "No Pins";
+        content: "<$ courses empty_pins_title />";
     }
     #Grid_Courses.pins:empty::after
     {
-        content: "Pin some courses and it'll show up here.";
+        content: "<$ courses empty_pins_subtitle />";
     }
     #Grid_Courses .course
     {
@@ -81,7 +81,7 @@
             white-space: pre-line;
         }
         #Grid_Courses .course .hover
-        {    
+        {   
             position: absolute;
             display: block;
             top: 0;
@@ -257,27 +257,27 @@
     align-content: center;
     gap: 0.25em;
     text-align: center;
-    margin: 70px 0 0;   
+    margin: 70px 0 0;  
 }
     #Grid_CourseTopics:empty::before
     {
-        content: "No Topics";
+        content: "<$ courses empty_topics_title />";
         font-family: var(--font-bold);
         font-size: 1.5em;
     }
     #Grid_CourseTopics:empty::after
     {
-        content: "They'll will show up here once it added.";
+        content: "<$ courses empty_topics_subtitle />";
         font-size: 1.12em;
         color: var(--foreground-description);
     }
     #Grid_CourseTopics.notfound:empty::before
     {
-        content: "Course Not Found";
+        content: "<$ courses notfound_title />";
     }
     #Grid_CourseTopics.notfound:empty::after
     {
-        content: "It may have been moved or deleted.";
+        content: "<$ courses notfound_subtitle />";
     }
     :where(#Grid_CourseTopics, #Grid_PrintCourseTopics) .progressring
     {

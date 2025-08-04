@@ -1,13 +1,13 @@
-<ad-title>Courses</ad-title>
+<ad-title><$ courses title /></ad-title>
 
-<style>@import url("/courses.css");</style>
+<style>@import url("/<#? applang ?#>/courses.css");</style>
 
 <div class="header">
     <div class="buttons">
         <span></span>
-        <button id="Button_New" class="icon" ad-tooltip="New Course">&#xf8dd;</button>
+        <button id="Button_New" class="icon" ad-tooltip="<$ courses tooltip_new_course />">&#xf8dd;</button>
     </div>
-    <div class="title">Courses</div>
+    <div class="title"><$ courses title /></div>
 </div>
 
 <div class="content">
@@ -23,41 +23,41 @@
     <div class="activity">
         <div class="header cascaded">
             <div class="buttons">
-                <button id="Button_CancelNew">Cancel</button>
+                <button id="Button_CancelNew"><$ courses cancel /></button>
                 <button id="Button_SubmitNew">
-                    <span>Create</span>
+                    <span><$ courses create /></span>
                     <div class="progressring"></div>
                 </button>
             </div>
-            <div class="title">New Course</div>
+            <div class="title"><$ courses new_course_title /></div>
         </div>
         <div class="content">
-            <div class="list" ad-header="Basic Info">
+            <div class="list" ad-header="<$ courses header_basic_info />">
                 <div class="stack">
-                    <span>Name</span>
-                    <input type="text" class="plain" maxlength="128" id="Input_CourseName" placeholder="e.g: Basic Programming"/>
+                    <span><$ courses name_label /></span>
+                    <input type="text" class="plain" maxlength="128" id="Input_CourseName" placeholder="<$ courses name_placeholder />"/>
                 </div>
                 <div class="stack">
-                    <span>AKA</span>
-                    <input type="text" class="plain" maxlength="16" id="Input_CourseAlias" placeholder="e.g: DasPro"/>
+                    <span><$ courses alias_label /></span>
+                    <input type="text" class="plain" maxlength="16" id="Input_CourseAlias" placeholder="<$ courses alias_placeholder />"/>
                 </div>
                 <div class="stack">
-                    <span>Description</span>
-                    <textarea class="plain" maxlength="1000" id="Input_CourseDescription" placeholder="e.g: A course that gains your coding skills."></textarea>
+                    <span><$ courses description_label /></span>
+                    <textarea class="plain" maxlength="1000" id="Input_CourseDescription" placeholder="<$ courses description_placeholder />"></textarea>
                 </div>
             </div>
-            <div class="list" ad-header="Additional Info">
+            <div class="list" ad-header="<$ courses header_additional_info />">
                 <div class="stack">
-                    <span>Id</span>
-                    <input type="text" class="plain" maxlength="16" id="Input_CourseId" placeholder="e.g: AIF2301062">
+                    <span><$ courses id_label /></span>
+                    <input type="text" class="plain" maxlength="16" id="Input_CourseId" placeholder="<$ courses id_placeholder />">
                 </div>
                 <div class="stack">
-                    <span>Semester</span>
-                    <input type="number" class="plain" min="1" max="8" id="Input_CourseSemester" placeholder="e.g: 1"/>
+                    <span><$ courses semester_label /></span>
+                    <input type="number" class="plain" min="1" max="8" id="Input_CourseSemester" placeholder="<$ courses semester_placeholder />"/>
                 </div>
                 <div class="stack">
-                    <span>SKS</span>
-                    <input type="number" class="plain" min="1" max="16" id="Input_CourseSKS" placeholder="e.g: 3"/>
+                    <span><$ courses sks_label /></span>
+                    <input type="number" class="plain" min="1" max="16" id="Input_CourseSKS" placeholder="<$ courses sks_placeholder />"/>
                 </div>
             </div>
             <span class="error hidden" id="Text_Error"></span>
@@ -93,18 +93,18 @@
     {
         Components.ActionSheet.Open(
         {
-            Title: "Discard Creating?",
-            Description: "All inputs will be discarded and won't be submitted.",
+            Title: "<$ courses discard_create_confirm_title />",
+            Description: "<$ courses discard_create_confirm_desc />",
             Actions: [
                 { 
-                    Title: "Discard", Type: "Options.Critical", 
+                    Title: "<$ courses discard />", Type: "Options.Critical", 
                     Action: o => 
                     {
                         PopOver_NewCourse.close(true);
                     }
                 },
                 { 
-                    Title: "Keep Creating", Type: "Footer"
+                    Title: "<$ courses keep_creating />", Type: "Footer"
                 }
             ]
         }); 

@@ -64,6 +64,7 @@ function Route(Server)
                 }
                 else
                 {
+                    res.setHeader("Cache-Control", "no-store");
                     return res.status(403).send();
                 }
             }
@@ -123,6 +124,29 @@ function Route(Server)
             {
                 res.status(404).send("Language '" + req.body.language + "' is not available.");
             }
+        });
+
+        Server.get("/:language/*", function(req, res, next) 
+        {
+            if (Language.Available.includes(req.params.language))
+            {
+                req.session.language = req.params.language;
+
+                if (req.path.endsWith(".js") == false && req.path.endsWith(".css") == false)
+                    return res.redirect("/" + req.params[0]);
+
+                req.filepath = "./public/" + req.params[0];
+            }
+
+            next();
+        });
+        
+        Server.get("*", function(req, res, next)
+        {
+            if (req.query.contentOnly == "true")
+                req.contentOnly = true;
+
+            next();
         });
     }
 
@@ -728,6 +752,8 @@ function Map(Server)
         
         const rootPath = req.filepath ? "" : "./public/";
         const isHTML = FileIO.existsSync(rootPath + path + ".html") || FileIO.existsSync(rootPath + path + "/index.html");
+        const isJS = path.endsWith(".js") && FileIO.existsSync(rootPath + path);
+        const isCSS = path.endsWith(".css") && FileIO.existsSync(rootPath + path);
         const isIndex = isHTML ? FileIO.existsSync(rootPath + path + ".html") == false : false;
         const isImage = /(\.png|\.webp|\.jpg|\.bmp|\.jpeg)$/g.test(path);
         const pageType = path.startsWith("admin") || req.isAdmin == true ? "admin" : "public";
@@ -741,12 +767,23 @@ function Map(Server)
                 data = FileIO.readFileSync(rootPath + path + ".html");
 
             data = data.toString();
-            data = Functions.Page_Compile(pageType, data, req.session?.language, path, false);
+            data = Functions.Page_Compile(pageType, data, req.session?.language, path, req.contentOnly == true);
             
             if (req.variables)
                 for (const variable of Object.keys(req.variables))
                     data = data.replace(new RegExp("<#\\?(| )" + variable + "(| )\\?#>", "gi"), req.variables[variable] || "");
             
+            res.send(data);
+        }
+        else if (isJS || isCSS)
+        {
+            if (isJS)
+                res.header("Content-Type", "text/javascript; charset=utf-8");
+            else if (isCSS)
+                res.header("Content-Type", "text/css");
+            
+            let data = FileIO.readFileSync(rootPath + path).toString();
+            data = Language.Compile(data, req.session.language);
             res.send(data);
         }
         else
@@ -849,14 +886,6 @@ function PrettifyPath(req)
     {
         refresh = true;
         path = path.substring(0, path.length - 6);
-    }
-    if (Language.Available.includes(path.split("/")[0]))
-    {
-        const language = path.split("/")[0];
-        req.session.saved = true;
-        req.session.language = language;
-        path = path.split("/").splice(1).join("/");
-        refresh = true;
     }
 
     return {

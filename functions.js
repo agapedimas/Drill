@@ -156,22 +156,7 @@ const Functions =
 			hrefLang += "<link rel='alternate' hreflang='" + language + "' href='" + Variables.WebHost + "/" + language + "/" + path + "'>";
 
 		body = body.replaceAll("<#? hreflang ?#>", hrefLang);
-
-		language_prefix = body.match(/<\$(.*?)\/>/g);
-		if (language_prefix != null) 
-		{
-			for (let prefix of language_prefix)
-			{
-				let page = prefix.substring(2, prefix.length - 2).split(" ")[1];
-				let param = prefix.substring(2, prefix.length - 2).split(" ")[2];
-				let replacement = prefix;
-
-				if (Language.Data[language][page] != null && Language.Data[language][page][param] != null)
-					replacement = Language.Data[language][page][param];
-					
-				body = body.replaceAll(prefix, replacement);
-			}
-		}
+		body = Language.Compile(body, language);
 
 		const pageVariables = 
 		[

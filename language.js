@@ -24,6 +24,33 @@ function Initialize()
 	}
 }
 
+/**
+ * Compiles string for specific language and page by accessing: <$ [page] [param] />
+ * 
+ * **For example:** \
+ * `<$ home welcome />` will fetches file `./src/languages/xx/home.json` and returns value of key `welcome`
+ */
+function Compile(content, language)
+{
+	const language_prefix = content.match(/<\$(.*?)\/>/g);
+	if (language_prefix != null) 
+	{
+		for (const prefix of language_prefix)
+		{
+			let page = prefix.substring(2, prefix.length - 2).split(" ")[1];
+			let param = prefix.substring(2, prefix.length - 2).split(" ")[2];
+			let replacement = prefix;
+
+			if (Data[language][page] != null && Data[language][page][param] != null)
+				replacement = Data[language][page][param];
+				
+			content = content.replaceAll(prefix, replacement);
+		}
+	}
+
+	return content;
+}
+
 const Data = {}
 const Languages = [];
 
@@ -35,11 +62,12 @@ module.exports =
      */
 	Available: Languages,
     /**
-     * Get string for specific language and page by accessing: `Language.Data.<lang>.<page>.<param>`.
+     * Get string for specific language and page by accessing: `Language.Data.[lang].[page].[param]`.
      * 
      * **For example:** \
      * `Language.Data["en"]["home"]["welcome"]` will fetches file `./src/languages/en/home.json` and returns value of key `welcome`
      */
 	Data: Data,
+	Compile: Compile,
 	Initialize: Initialize
 };
