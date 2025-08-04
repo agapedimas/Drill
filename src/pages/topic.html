@@ -32,9 +32,8 @@
 
         $.ajax(
         {
-            type: "post",
-            url: "/problems/get",
-            data: { id: "<#? topic.id ?#>", type: "topic" },
+            type: "get",
+            url: "/problems/get?id=<#? topic.id ?#>&type=topic",
             success: function(problems)
             {
                 Grid_CourseProblems.innerHTML = "";

@@ -24,12 +24,19 @@ const Courses =
 
             if (urlPrev.origin == urlNow.origin && urlPrev.pathname == origin + "/courses")
             {
+                if (Topics.IsOpened())
+                    window.history.back();
+
                 window.history.back();
             }
             else
             {
                 window.location.href = origin + "/courses/";
             }
+        }
+        else
+        {
+            window.location.href = origin + "/courses/";
         }
     },
     Render: function(course)
@@ -141,6 +148,9 @@ const Courses =
         },
         AppendSidebar: function()
         {
+            if (window['Grid_PinnedCourses'] == null)
+                return;
+
             const pins = Courses.Pins.Get();
             Grid_PinnedCourses.innerHTML = "";
 
@@ -185,7 +195,7 @@ const Courses =
 
         for (const topic of topics)
         {
-            const problems = await $.post("/problems/get", { id: topic.id, type: "topic" } ,"/problems/get");
+            const problems = await $.get("/problems/get?id=" + topic.id + "&type=topic", "/problems/get");
             
             const section = document.createElement("section");
 
@@ -260,26 +270,7 @@ Components.ContextMenu.Add("Course_More",
             Icon: "f948",
             Action: function (element) 
             { 
-                Grid_PrintCourseTopics.innerHTML = "";
-                for (const item of [...Grid_CourseTopics.children])
-                {
-                    const checkbox = document.createElement("input");
-                    checkbox.type = "checkbox";
-
-                    const box = Topics.Render(item.data);
-                    box.onclick = function()
-                    {
-                        const checkes = [...Grid_PrintCourseTopics.children].filter(o => o.checkbox.checked == true);
-
-                        if (checkes.length < 5 || box.checkbox.checked == true)
-                            checkbox.click();
-                    }
-
-                    box.prepend(checkbox);
-                    box.checkbox = checkbox;
-                    Grid_PrintCourseTopics.append(box);
-                }
-                PopOver_PrintAll.Open(element); 
+                PopOver_PrintAll.open(element); 
             }
         }
     ]);
@@ -291,20 +282,109 @@ const Topics =
     {
         return window['Activity_Topic'] != null;
     },
-    Back: function()
+    Back: function(ignorePopState = false)
     {
         if (Topics.IsOpened())
+        {
             Activity_Topic.remove();
+
+            if (ignorePopState == false)
+                window.history.back();
+        }
 
         for (const box of [...Grid_CourseTopics.children])
             box.classList.remove("active");
         
-        const url = new URL(window.location.href);
-        const course = url.pathname.match(/courses\/(.*?)\//gi);
-        let path = url.pathname;
-        path = path.substring(0, path.indexOf("courses")) + course;
-        window.history.replaceState(null, null, path);
         Topics.Active = null;
+    },
+    Loading: function(topic)
+    {
+        if (Topics.IsOpened())
+            Activity_Topic.remove();
+
+        const title = document.createElement("div");
+        title.classList.add("title");
+        title.classList.add("hide");
+
+        const back = document.createElement("button");
+        back.classList.add("back");
+        back.innerHTML = "Back";
+        back.onclick = Topics.Back;
+
+        const buttons = document.createElement("buttons");
+        buttons.classList.add("buttons");
+        buttons.append(back);
+
+        const header = document.createElement("div");
+        header.classList.add("header");
+        header.classList.add("cascaded");
+        header.appendChild(buttons);
+        header.appendChild(title);
+
+        const h3 = document.createElement("h3");
+        h3.innerText = topic.name;
+
+        const progressring = document.createElement("div");
+        progressring.classList.add("progressring");
+
+        const problems = document.createElement("div");
+        problems.setAttribute("id", "Grid_CourseProblems");
+        problems.appendChild(progressring);
+
+        const content = document.createElement("div");
+        content.classList.add("content");
+        content.appendChild(h3);
+        content.appendChild(problems);
+
+        const activity = document.createElement("div");
+        activity.classList.add("activity"); 
+        activity.setAttribute("id", "Activity_Topic");
+        activity.appendChild(header);
+        activity.appendChild(content);
+
+        $(".root > .main").append(activity);
+    },
+    Open: function(topic, ignorePopState = false)
+    {
+        const url = new URL(window.location.href);
+        let path = url.pathname;
+        path = path.substring(0, path.indexOf("courses")) + "courses/" + topic.course;
+
+        Topics.Back();
+        // Topics.Loading(topic);
+
+        const box = [...Grid_CourseTopics.children].find(o => o.data.id == topic.id);
+        box?.classList.add("active");
+
+        const activity = document.createElement("div");
+        activity.classList.add("activity"); 
+        activity.setAttribute("id", "Activity_Topic");
+
+        const output = function(page)
+        {
+            Topics.Active = topic;
+            url.searchParams.set("name", topic.name);
+            const name = url.search.replace("?name=", "").replaceAll("+", "-").replaceAll("---", "-").toLowerCase();
+
+            if (ignorePopState == false)
+                window.history.pushState({ page: "problems", topic: topic }, null, path + "/" + name);
+
+            activity.innerHTML = page;
+            $(".root > .main").append(activity);
+        }
+
+        $.ajax({
+            type: "post",
+            url: path + "/" + topic.id,
+            success: function(page)
+            {
+                output(page);
+            },
+            error: function(page)
+            {
+                output(page.responseText);
+            }
+        });
     },
     Render: function(topic)
     {
@@ -359,37 +439,13 @@ const Topics =
             if (box.classList.contains("active"))
                 return;
 
-            const activity = document.createElement("div");
-            activity.classList.add("activity"); 
-            activity.setAttribute("id", "Activity_Topic");
-
-            const url = new URL(window.location.href);
-            let path = url.pathname;
-            path = path.substring(0, path.indexOf("courses")) + "courses/" + topic.course;
-
-            $.ajax({
-                type: "post",
-                url: path + "/" + topic.id,
-                success: function(page)
-                {
-                    Topics.Back();
-
-                    Topics.Active = topic;
-                    url.searchParams.set("name", topic.name);
-                    const name = url.search.replace("?name=", "").replaceAll("+", "-").replaceAll("---", "-").toLowerCase();
-                    window.history.replaceState(null, null, path + "/" + name);
-
-                    box.classList.add("active");
-
-                    activity.innerHTML = page;
-                    $(".root > .main").append(activity);
-                }
-            });
+            Topics.Open(topic);
         }
 
         if (topic.id == PendingId)
-        {
-            box.click();
+        {   
+            Topics.Open(topic);
+            box.classList.add("active");
             PendingId = null;
         }
 
@@ -444,7 +500,7 @@ const Problems =
         for (const latex of latexes)
         {
             MathJax.texReset();
-            const renderedLatex = await MathJax.tex2chtmlPromise(latex.innerHTML);
+            const renderedLatex = await MathJax.tex2chtmlPromise(latex.innerText);
             latex.parentNode.replaceChild(renderedLatex, latex);
             MathJax.startup.document.clear();
             MathJax.startup.document.updateDocument();
@@ -491,17 +547,32 @@ const Problems =
             container.append(group);
         }
 
+        // removes empty group
+        if (problem.parentNode?.children?.length == 2)
+            problem.parentNode.remove();
+
         group.append(problem);
         return group;
     },
     Sort: function(container)
-    {
-        const sorted = 
-            Array.from(container.children)
-                .sort((a,b) => b.data.source.id - a.data.source.id)
-                .sort((a,b) => b.data.year - a.data.year);
+    {                
+        let sorted;
+        const classes = container.children[0]?.classList;
 
-        sorted.forEach(element => container.appendChild(element));
+        if (classes.contains("problem") || classes.contains("details"))
+        {
+            const children = [...container.children].filter(o => o.data != null);
+            sorted = children.sort((a,b) => a.data.id - b.data.id);
+        }
+        else if (classes.contains("group"))
+        {
+            const children = [...container.children];
+            sorted = children
+                        .sort((a,b) => b.data.source.id - a.data.source.id)
+                        .sort((a,b) => b.data.year - a.data.year);
+        }
+
+        sorted.forEach(o => container.appendChild(o));
     }
 }
 
@@ -587,4 +658,43 @@ const mathExtension =
     }
 };
 
-marked.use({ extensions: [mathExtension] });
+const mathBlockExtension = {
+    name: "mathblock",
+    level: "block",
+    start(src) {
+        return src.indexOf("$$");
+    },
+    tokenizer(src, tokens) {
+        const match = src.match(/^\$\$\s*([\s\S]+?)\s*\$\$/);
+        if (!match) return;
+        return {
+            type: "mathblock",
+            raw: match[0],
+            text: match[1].trim(),
+            tokens: []
+        };
+    },
+    renderer(token) {
+        return `<math-latex block>${token.text}</math-latex>`;
+    }
+};
+
+window.addEventListener("popstate", function()
+{
+    if (window.history.state?.page == "problems")
+    {
+        Topics.Open(window.history.state.topic, true);
+    }
+    else if (Topics.IsOpened())
+    {
+        Topics.Back(true);
+    }
+    else
+    {
+        CheckAccent();
+        CheckTheme();
+        Courses.Pins.AppendSidebar();
+    }
+})
+
+marked.use({ extensions: [mathExtension, mathBlockExtension] });

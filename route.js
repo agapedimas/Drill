@@ -29,7 +29,7 @@ function Route(Server)
             {
                 const account = (await Accounts.Get({ username: req.body.username })).at(0);
                 const sessionId = await Authentication.Add(account.id, req.ip, true);
-                req.session.admin = sessionId;
+                req.session.account = sessionId;
                 res.send();
             }
             else
@@ -40,9 +40,9 @@ function Route(Server)
 
         Server.get("/admin/signout", async function(req, res)
         {
-            if (req.session.admin)
+            if (req.session.account)
             {
-                await Authentication.Remove(req.session.admin);
+                await Authentication.Remove(req.session.account);
                 delete req.session["admin"];
             }
 
@@ -53,7 +53,7 @@ function Route(Server)
         {
             const path = req.url;
             const isHTML = FileIO.existsSync("./public/" + path + ".html") || FileIO.existsSync("./public/" + path + "/index.html");
-            const hasAccess = await Authentication.HasAccess(req.session.admin);
+            const hasAccess = await Authentication.HasAccess(req.session.account, ["editor", "admin"]);
 
             if (hasAccess == false && path != "/admin/signin" && path != "/admin/manifest.json")
             {
@@ -80,15 +80,17 @@ function Route(Server)
                         return res.redirect("/admin" + Variables.WebHomepage);
                 }
 
-                const id = await Authentication.GetAccountId(req.session.admin);
+                const id = await Authentication.GetAccountId(req.session.account);
                 const account = await Accounts.Get({ id });
                 
                 Object.assign(req.variables, 
                     {
+                        "activeuser": JSON.stringify(account[0]),
                         "activeuser.id": account[0].id,
                         "activeuser.nickname": account[0].nickname || account[0].username,
                         "activeuser.username": account[0].username,
                         "activeuser.role": account[0].role,
+                        "activeuser.role.display": Language.Data[req.session.language]["roles"][account[0].role],
                         "activeuser.url": account[0].url
                     }
                 );
@@ -100,7 +102,7 @@ function Route(Server)
         Server.post("/admin*", async function(req, res, next)
         {
             const path = req.url;
-            if (await Authentication.HasAccess(req.session.admin) == false && path != "/admin/signin")
+            if (await Authentication.HasAccess(req.session.account, ["editor", "admin"]) == false && path != "/admin/signin")
             {
                 res.status(403).send();
             }
@@ -109,12 +111,32 @@ function Route(Server)
                 next();
             }
         });
+
+        Server.post("/language/", async function(req, res)
+        {
+            if (Language.Available.includes(req.body.language))
+            {
+                req.session.language = req.body.language;
+                res.send();
+            }
+            else
+            {
+                res.status(404).send("Language '" + req.body.language + "' is not available.");
+            }
+        });
     }
 
     Server.get("/avatar/*", async function(req, res)
     {
         res.header("Cache-Control", "public, max-age=3600");
-        res.sendFile("./src/avatar.webp", { root: "./" });
+        
+        const paths = req.path.split("/").filter(o => o != "");
+        const avatarPath = "./src/avatars/" + paths[1];
+
+        if (FileIO.existsSync(avatarPath))
+            res.sendFile(avatarPath, { root: "./" });
+        else
+            res.sendFile("./src/avatar.webp", { root: "./" });
     });
 
     Server.get("/banner/*", async function(req, res)
@@ -130,9 +152,136 @@ function Route(Server)
             res.sendFile("./src/blank.png", { root: "./" });
     });
 
-    Server.post("/courses/get", async function(req, res)
+    Server.get("/roles/get", async function(req, res)
     {
-        const courses = await Courses.Get(req.body.id);
+        if (await Authentication.HasAccess(req.session.account, ["editor", "admin"]) == false)
+            return res.status(403).send();
+
+        const result = await SQL.Query("SELECT name FROM roles;");
+
+        res.send(result.data?.map(o => { 
+            return {
+                name: Language.Data[req.session.language]["roles"][o.name], 
+                value: o.name 
+            }
+        }) || []);
+    });
+
+    Server.get("/accounts/get", async function(req, res)
+    {
+        if (await Authentication.HasAccess(req.session.account, ["editor", "admin"]) == true)
+            res.header("Cache-Control", "public, max-age=60");
+        
+        const type = req.query.type;
+        let accounts;
+        
+        if (type == "editor")
+        {
+            const type1 = await Accounts.Get({ role: "admin" });
+            const type2 = await Accounts.Get({ role: "editor" });
+            accounts = type1.concat(type2);
+        }
+        else if (type)
+        {
+            accounts = await Accounts.Get({ role: type });
+        }
+        else
+        {
+            accounts = await Accounts.Get();
+        }
+
+        res.send(accounts);
+    });
+
+    Server.post("/accounts/create", async function(req, res)
+    {
+        if (await Authentication.HasAccess(req.session.account, "admin") == false)
+            return res.status(403).send("You don't have permission to create an account.");
+        
+        const details = 
+        {
+            username: req.body.username,
+            nickname: req.body.nickname,
+            url: req.body.url,
+            password: req.body.password,
+            role: req.body.role
+        }
+
+        for (const key of Object.keys(details))
+        {
+            if ((details[key] == null || details[key].trim() == "") && key != "url")
+                return res.status(400).send(key + " can't be empty");
+            else
+                details[key] = details[key].trim();
+        }
+
+        const id = await Accounts.Add(details.username, details.nickname, details.url, details.password, details.role);
+        const account = await Accounts.Get({ id: id });
+
+        if (id)
+            res.send(account[0]);
+        else
+            res.status(500).send();
+    });
+
+    Server.delete("/accounts/delete", async function(req, res)
+    {
+        if (await Authentication.HasAccess(req.session.account, "admin") == false)
+            return res.status(403).send("You don't have permission to delete an account.");
+
+        if (req.body.id == null || req.body.id.trim() == "")
+            return res.status(400).send("Id can't be empty.");
+
+        const success = await Accounts.Remove(req.body.id);
+
+        if (success)
+            res.send();
+        else
+            res.status(500).send();
+    });
+
+    Server.post("/accounts/setavatar", async function(req, res)
+    {
+        const id = req.session.account;
+        const account = await Authentication.GetAccountId(id);
+
+        if (!id || !account)
+            return res.status(403).send();
+        
+        const buffer = req.files.file.data;
+
+        if (buffer.length > 2000000)
+            return res.status(400).send("Maximum file size is 2MB.");
+        
+        const success = await Accounts.Avatars.Save(account, buffer);
+        
+        if (success)
+            res.send();
+        else
+            res.status(500).send();
+    });
+
+    Server.post("/accounts/clearavatar", async function(req, res)
+    {
+        const id = req.session.account;
+
+        if (id == null)
+            return res.status(403).send();
+        
+        const success = Accounts.Avatars.Delete(id);
+        
+        if (success)
+            res.send();
+        else
+            res.status(500).send();
+    });
+
+    Server.get("/courses/get", async function(req, res)
+    {
+        if (await Authentication.HasAccess(req.session.account, ["editor", "admin"]) == true)
+            res.header("Cache-Control", "public, max-age=30");
+
+        const courses = await Courses.Get(req.query.id);
         res.send(courses);
     });
 
@@ -151,6 +300,7 @@ function Route(Server)
             if (course.length == 0)
             {
                 req.filepath = "./src/pages/course_404";
+                res.status(404);
             }
             else
             {
@@ -234,7 +384,11 @@ function Route(Server)
             const topic = await Courses.Topics.Get({ topic: paths[2] });
 
             if (topic.length == 0)
-                return res.status(404).send();
+            {
+                req.filepath = "./src/pages/topic_404";
+                res.status(404);
+                return next();
+            }
             
             if (isAdmin)
                 req.filepath = "./src/pages/topic_admin";
@@ -337,6 +491,9 @@ function Route(Server)
 
     Server.delete("/admin/courses/delete", async function(req, res)
     {
+        if (await Authentication.HasAccess(req.session.account, "admin") == false)
+            return res.status(403).send("You don't have permission to delete a course.");
+
         const success = await Courses.Remove(req.body.id);
 
         if (success)
@@ -372,10 +529,13 @@ function Route(Server)
             res.status(500).send();
     });
     
-    Server.post("/topics/get", async function(req, res)
+    Server.get("/topics/get", async function(req, res)
     {
-        const type = req.body.type; 
-        const topic = await Courses.Topics.Get(type == "topic" ? { topic: req.body.id } : { course: req.body.id });
+        if (await Authentication.HasAccess(req.session.account, ["editor", "admin"]) == true)
+            res.header("Cache-Control", "public, max-age=30");
+
+        const type = req.query.type; 
+        const topic = await Courses.Topics.Get(type == "topic" ? { topic: req.query.id } : { course: req.query.id });
         res.send(topic);
     });
 
@@ -414,6 +574,9 @@ function Route(Server)
 
     Server.delete("/admin/topics/delete", async function(req, res)
     {
+        if (await Authentication.HasAccess(req.session.account, "admin") == false)
+            return res.status(403).send("You don't have permission to delete a topic.");
+
         const id = req.body.id?.trim();
         
         if (!id)
@@ -439,24 +602,27 @@ function Route(Server)
 
     Server.get("/sources/get", async function(req, res)
     {
-        if (await Authentication.HasAccess(req.session.admin) == false)
+        if (await Authentication.HasAccess(req.session.account, ["editor", "admin"]) == false)
             return res.status(403).send();
 
         const result = await Courses.Problems.Sources.Get();
         res.send(result);
     });
     
-    Server.post("/problems/get", async function(req, res)
+    Server.get("/problems/get", async function(req, res)
     {
-        const type = req.body.type; 
+        if (await Authentication.HasAccess(req.session.account, ["editor", "admin"]) == true)
+            res.header("Cache-Control", "public, max-age=30");
+
+        const type = req.query.type; 
         let problems = [];
 
         if (type == "problem")
-            problems = await Courses.Problems.Get({ problem: req.body.id });
+            problems = await Courses.Problems.Get({ problem: req.query.id });
         else if (type == "course")
-            problems = await Courses.Problems.Get({ course: req.body.id });
+            problems = await Courses.Problems.Get({ course: req.query.id });
         else if (type == "topic")
-            problems = await Courses.Problems.Get({ topic: req.body.id });
+            problems = await Courses.Problems.Get({ topic: req.query.id });
 
         res.send(problems);
     });
@@ -471,9 +637,12 @@ function Route(Server)
 
         if (data.year)
             data.year = parseInt(data.year);
+        
+        if (data.question == null || data.source == null || data.year == null)
+            return res.status(400).send("Question, source, and year can't be empty.");
 
-        if (data.question == null || data.source == null || data.year == null || data.topic == null || data.course == null)
-            return res.status(400).send("Queestion, source, year, topic, and course can't be empty.");
+        if (data.topic == null || data.course == null)
+            return res.status(400).send("Topic and course can't be empty.");
 
         if (isNaN(data.year))
             return res.status(400).send("Year must be a number.");
@@ -504,8 +673,11 @@ function Route(Server)
             else if (typeof data[key] == "string")
                 data[key] = data[key].trim();
 
-        if (data.id == "@null" || data.question == "@null" || data.source == "@null" || data.source.id == null)
-            return res.status(400).send("Id, question, and source can't be empty.");
+        if (data.question == "@null" || data.source == "@null" || data.source.id == null)
+            return res.status(400).send("Question and source can't be empty.");
+
+        if (data.id == "@null")
+            return res.status(400).send("Id can't be empty.");
         
         const success = await Courses.Problems.Update(data.id, data.question, data.solution, data.source.id, data.year);
 
@@ -517,6 +689,9 @@ function Route(Server)
 
     Server.delete("/admin/problems/delete", async function(req, res)
     {
+        if (await Authentication.HasAccess(req.session.account, ["admin", "editor"]) == false)
+            return res.status(403).send("You don't have permission to delete a course.");
+        
         const id = req.body.id?.trim();
         
         if (!id)

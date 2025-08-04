@@ -481,7 +481,10 @@ const Courses =
             try
             {
                 const path = "./src/banners/" + id;
-                FileIO.unlinkSync(path);
+                
+                if (FileIO.existsSync(path))
+                    FileIO.unlinkSync(path);
+
                 return true;
             }
             catch(error)

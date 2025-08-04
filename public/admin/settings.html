@@ -1,7 +1,7 @@
-<ad-title>Settings</ad-title>
+<ad-title><$ settings title /></ad-title>
 
 <div class="header">
-    <div class="title">Settings</div>
+    <div class="title"><$ settings title /></div>
 </div>
 
 <style>
@@ -22,12 +22,49 @@
         align-items: center;
         gap: 1.5em;
     }
-        #Settings_Account img
+        #Settings_Account .avatar
         {
-            width: 100%;
-            aspect-ratio: 1 / 1;
+            position: relative;
             border-radius: 100%;
+            overflow: hidden;
         }
+            #Settings_Account .avatar::before
+            {
+                content: "\edfc";
+                position: absolute;
+                bottom: 0;
+                display: grid;
+                font-family: var(--font-icon);
+                font-size: 1.3em;
+                width: 100%;
+                height: 35px;
+                background: #00000080;
+                color: white;
+                align-items: center;
+                justify-content: center;
+                transition: 0.5s var(--key-animation) transform;
+                transform: translateY(100%);
+                z-index: 1;
+            }
+            #Settings_Account .avatar:hover::before
+            {
+                transform: translateY(0);
+            }
+            #Settings_Account .avatar img
+            {
+                display: block;
+                width: 100%;
+                aspect-ratio: 1 / 1;
+                transition: 0.1s filter;
+            }
+            #Settings_Account .avatar:hover img
+            {
+                filter: var(--filter-accent-plain-hover);
+            }
+            #Settings_Account .avatar:active img
+            {
+                filter: var(--filter-accent-plain-active);
+            }
         #Settings_Account .details
         {
         }
@@ -96,28 +133,66 @@
         {
             background: #af52de;
         }
+        
+    #List_Accounts .stack img
+    {
+        width: 100%;
+        aspect-ratio: 1 / 1;
+        border-radius: 100%;
+    }
+    #List_Accounts .stack .details
+    {
+        display: grid;
+    }
+        #List_Accounts .stack .details .role
+        {
+            color: var(--foreground-description);
+        }
+        
+    #PopOver_AddAccount .list > .stack
+    {
+        grid-auto-columns: 95px auto;
+    }
+        #PopOver_AddAccount .list > .stack > span:first-child 
+        {
+            font-family: var(--font-semibold);
+        }
+        #PopOver_AddAccount .list > .stack > textarea
+        {
+            field-sizing: content;
+        }
+        #PopOver_AddAccount .list > .stack *:has(select)
+        {
+            text-align: left;
+        }
+            #PopOver_AddAccount .list > .stack select
+            {
+                width: 100%;
+            }
 </style>
 
 <div class="content">
     <div id="Settings_Account">
-        <img class="picture" src="/avatar/<#? activeuser.id ?#>"/>
+        <div class="avatar" id="Grid_Avatar" ad-tooltip="<$ settings avatar_change />">
+            <img id="Image_Avatar" src="/avatar/<#? activeuser.id ?#>"/>
+        </div>
         <div class="details">
             <div class="name"><#? activeuser.nickname ?#></div>
-            <div class="description"><#? activeuser.username ?#></div>
-            <button id="Button_SignOut" class="critical plain">Sign out</button>
+            <div class="description">@<#? activeuser.username ?#> • <#? activeuser.role.display ?#></div>
+            <button id="Button_SignOut" class="critical plain"><$ settings signout /></button>
         </div>
-    </div>
-    <div class="list" ad-header="Appearance" ad-footer="">
+    </div> 
+    <div class="list" ad-header="<$ settings appearance />" ad-footer="">
         <div class="stack">
-            <div>Theme</div>
+            <div><$ settings theme /></div>
             <select class="plain" name="theme" id="Select_Theme">
-                <option value="system">System default</option>
-                <option value="light">Light</option>
-                <option value="dark">Dark</option>
+                <option value="system"><$ settings theme_system /></option>
+                <option value="light"><$ settings theme_light /></option>
+                <option value="dark"><$ settings theme_dark /></option>
             </select>
         </div>
         <div class="stack">
-            <div>Accent color</div>
+            <div><$ settings accent_color /></div>
             <div id="Settings_Accents">
                 <div class="color" accent="red"></div>
                 <div class="color" accent="yellow"></div>
@@ -128,22 +203,65 @@
                 <div class="color" accent="purple"></div>
             </div>
         </div>
-    </div>
-    <div class="list" ad-header="About App" ad-footer="">
         <div class="stack">
-            <div>Git Repository</div>
+            <div><$ settings language /></div>
+            <select class="plain" name="language" id="Select_Language">
+                <option value="en">English</option>
+                <option value="id">Bahasa Indonesia</option>
+            </select>
+        </div>
+    </div> <div class="list" ad-header="<$ settings accounts />" id="List_Accounts" onaction="Account_Add()"></div>
+    <div class="list" ad-header="<$ settings about_app />" ad-footer="">
+        <div class="stack">
+            <div><$ settings git_repository /></div>
             <button class="plain" goto="https://github.com/agapedimas/drill" ad-type="newtab">
                 <span>agapedimas/drill</span>
                 <span class="icon">&#xebad;</span>
             </button>
         </div>
         <div class="stack">
-            <div>Version</div>
+            <div><$ settings version /></div>
             <div style="opacity: 0.6"><#? appversion ?#></div>
         </div>
         <div class="stack vertical">
-            <div>Copyright</div>
-            <div style="opacity: 0.6;">© 2025 Agape Dimas. All rights reserved.</div>
+            <div><$ settings copyright /></div>
+            <div style="opacity: 0.6;"><$ settings copyright_text /></div>
+        </div>
+    </div>
+</div>
+
+<div class="popover" id="PopOver_AddAccount">
+    <div class="activity">
+        <div class="header cascaded">
+            <div class="buttons">
+                <button id="Button_CancelAdd"><$ settings cancel /></button>
+                <button id="Button_SubmitAdd"><$ settings create /></button>
+            </div>
+            <div class="title"><$ settings create_account_title /></div>
+        </div>
+        <div class="content">
+            <div class="list">
+                <div class="stack">
+                    <span><$ settings username /></span>
+                    <input type="text" class="plain" id="Input_Username" placeholder="<$ settings placeholder_username />"/>
+                </div>
+                <div class="stack">
+                    <span><$ settings nickname /></span>
+                    <input type="text" class="plain" id="Input_Nickname" placeholder="<$ settings placeholder_nickname />"/>
+                </div>
+                <div class="stack">
+                    <span><$ settings url /></span>
+                    <input type="text" class="plain" id="Input_URL" placeholder="<$ settings placeholder_url />"/>
+                </div>
+                <div class="stack">
+                    <span><$ settings role /></span>
+                    <select class="plain" id="Select_Role"></select>
+                </div>
+                <div class="stack">
+                    <span><$ settings password /></span>
+                    <input type="text" class="plain" id="Input_Password" placeholder="<$ settings placeholder_password />"/>
+                </div>
+            </div>
         </div>
     </div>
 </div>
@@ -153,6 +271,9 @@
     $("#Settings_Accents .color").on("click", function () { Color_Change(this.getAttribute("accent")) });
     Select_Theme.onchange = function () { Theme_Change(this.value) }
     Button_SignOut.onclick = SignOut;
+    
+    if ("<#? activeuser.role ?#>" == "admin")
+        List_Accounts.setAttribute("ad-action", "<$ settings add_account />");
 
     function Color_Change(accent)
     {
@@ -168,6 +289,208 @@
 
     function SignOut()
     {
-        window.location.href = "/admin/signout";
+        Components.ActionSheet.Open(
+        {
+            Title: "<$ settings signout_confirm_title />",
+            Description: "<$ settings signout_confirm_desc />",
+            Actions: [
+                { 
+                    Title: "<$ settings signout />", Type: "Options.Critical", 
+                    Action: function()
+                    {
+                        return new Promise(function()
+                        {
+                            window.location.href = "/admin/signout";
+                        });
+                    }
+                },
+                { 
+                    Title: "<$ settings cancel />", Type: "Footer"
+                }
+            ]
+        });     
     }
+    
+    Select_Language.value = document.documentElement.lang;
+    Select_Language.onchange = async function()
+    {
+        await $.post("/language/", { language: this.value });
+        window.location.reload();
+    }
+    Button_CancelAdd.onclick = function()
+    {
+        PopOver_AddAccount.close();
+    }
+    Button_SubmitAdd.onclick = function()
+    {
+        PopOver_AddAccount.iscloseable = false;
+        PopOver_AddAccount.isloading = true;
+        Button_CancelAdd.disabled = true;
+        Button_SubmitAdd.disabled = true;
+
+        $.post(
+        {
+            type: "post",
+            url: "/accounts/create",
+            data: 
+            {
+                username: Input_Username.value,
+                nickname: Input_Nickname.value,
+                url: Input_URL.value,
+                password: Input_Password.value,
+                role: Select_Role.value
+            },
+            success: function(account)
+            {
+                PopOver_AddAccount.iscloseable = true;
+                PopOver_AddAccount.isloading = false;
+                Button_CancelAdd.disabled = false;
+                Button_SubmitAdd.disabled = false;
+                PopOver_AddAccount.close();
+                Account_Append(account);
+
+                Components.Notification.Remove({ Id: "createaccount_failed" });
+            },
+            error: function(error)
+            {
+                PopOver_AddAccount.iscloseable = true;
+                PopOver_AddAccount.isloading = false;
+                Button_CancelAdd.disabled = false;
+                Button_SubmitAdd.disabled = false;
+
+                Components.Notification.Send({ Id: "createaccount_failed", Title: "<$ settings create_account_error_title />", Message: error.responseText || "<$ settings error_generic />", Icon: "\ufe60", Buttons: [{Text: "<$ settings dismiss />"}] });
+            }
+        })
+    }
+
+    PopOver_AddAccount.onopened = function()
+    {
+        Input_Username.value = "";
+        Input_Nickname.value = "";
+        Input_URL.value = "";
+        Input_Password.value = "";
+        Select_Role.value = "user";
+    }
+        
+    async function Account_Add()
+    {
+        PopOver_AddAccount.open();
+
+        if (Select_Role.options.length == 0)
+        {
+            const roles = await $.get("/roles/get");
+
+            for (const role of roles)
+            {
+                const option = document.createElement("option");
+                option.value = role.value;
+                option.innerText = role.name;
+
+                Select_Role.append(option);
+            }
+        }
+    }
+
+    function Account_Append(account)
+    {
+        const img = document.createElement("img");
+        img.src = "/avatar/" + account.id;
+
+        const name = document.createElement("span");
+        name.classList.add("name");
+        name.innerHTML = account.nickname;
+
+        const role = document.createElement("span");
+        role.classList.add("role");
+        role.innerHTML = "@" + account.username + " • " + account.role;
+
+        const details = document.createElement("div");
+        details.classList.add("details");
+        details.append(name);
+        details.append(role);
+
+        const url = document.createElement("span");
+        url.innerHTML = account.url;
+
+        const action = document.createElement("span");
+        action.classList.add("icon");
+        action.innerHTML = "\uebd2";
+
+        const button = document.createElement("button");
+        button.classList.add("plain");
+        button.append(url);
+        button.append(action);
+        button.disabled = true;
+
+        const stack = document.createElement("div");
+        stack.append(img);
+        stack.append(details);
+        stack.append(button);
+        stack.classList.add("stack");
+        stack.classList.add("iconed");
+        stack.classList.add("clickable");
+
+        stack.onclick = function()
+        {
+            if (account.url)
+                window.open(account.url, "_blank");
+        }
+
+        stack.oncontextmenu = function(event)
+        {
+            Components.ContextMenu.Open("Accounts", this, event);
+        }
+
+        stack.data = account;
+
+        List_Accounts.append(stack);
+    }
+
+    Grid_Avatar.onclick = function()
+    {
+        const file = document.createElement("input");
+        file.type = "file";
+        file.accept = ".png, .jpg, .jpeg, .webp";
+        file.click();
+
+        file.oninput = function()
+        {
+            file.oninput = null;
+            const files = Array.from(this.files);
+            this.value = null;
+
+            if (files.length == 0)
+                return;
+
+            if (files[0].size > 2000000)
+                return Components.Notification.Send({ Id: "avatar_failed", Title: "<$ settings avatar_upload_error_title />", Message: "<$ settings avatar_upload_error_size />", Icon: "\ufe64", Buttons: [{Text: "<$ settings dismiss />"}] });
+                
+            const form = new FormData();
+            form.append("file", files[0]);
+
+            $.ajax({
+                type: "post",
+                url: "/accounts/setavatar",
+                data: form,
+                contentType: false,
+                processData: false,
+                success: async function()
+                {
+                    Image_Avatar.src = "/avatar/<#? activeuser.id ?#>?cache=false";
+                    Components.Notification.Remove({ Id: "avatar_failed" });
+                    Components.Notification.Send({ Id: "avatar_success", Title: "<$ settings avatar_upload_success_title />", Message: "<$ settings avatar_upload_success_message />", Icon: "\uf873"});
+                },
+                error: function(error)
+                {                   
+                    Components.Notification.Send({ Id: "avatar_failed", Title: "<$ settings avatar_upload_error_title />", Message: error.responseText || "<$ settings error_generic />", Icon: "\ufe64", Buttons: [{Text: "<$ settings dismiss />"}] });
+                }
+            });
+        }
+    }
+    
+    $.get("/accounts/get", null, function(accounts)
+    {
+        for (const account of accounts)
+            Account_Append(account);
+    });
 </script>

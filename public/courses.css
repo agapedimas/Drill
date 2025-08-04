@@ -142,7 +142,11 @@
         background-image: var(--image);
         background-size: cover;
         background-position: center;
-        filter: brightness(0.7);
+        filter: brightness(0.5);
+        animation: 1s var(--key-animation) BackgroundIn;
+    }
+    #Grid_CourseCard.hasBanner::before
+    {   
         animation: 1s var(--key-animation) BackgroundIn;
     }
     #Grid_CourseCard::after
@@ -241,7 +245,7 @@
 {
     display: grid;
     gap: 10px;
-    margin: -0.5em 0 0;
+    margin: -0.75em 0 0;
 }
 #Grid_CourseTopics:empty
 {
@@ -267,6 +271,14 @@
         font-size: 1.12em;
         color: var(--foreground-description);
     }
+    #Grid_CourseTopics.notfound:empty::before
+    {
+        content: "Course Not Found";
+    }
+    #Grid_CourseTopics.notfound:empty::after
+    {
+        content: "It may have been moved or deleted.";
+    }
     :where(#Grid_CourseTopics, #Grid_PrintCourseTopics) .progressring
     {
         place-self: center;
@@ -276,9 +288,9 @@
     {
         position: relative;
         display: grid;
-        gap: 0.15em;
-        padding: 0.5em 0.75em 0.5em 0.75em;
-        margin: 0 -0.75em;
+        gap: 0.2em;
+        padding: 0.75em 1em;
+        margin: 0 -1em;
         border-radius: 10px;
     }
     #Grid_CourseTopics .topic.dragging
@@ -366,4 +378,3 @@
             {
                 display: none;
             }
-    

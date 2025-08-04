@@ -1,0 +1,64 @@
+{
+    "title": "Mata Kuliah",
+
+    "tooltip_new_course": "Buat Mata Kuliah Baru",
+    "tooltip_edit_course": "Edit Mata Kuliah",
+    "tooltip_new_topic": "Buat Topik Baru",
+
+    "cancel": "Batal",
+    "create": "Buat",
+    "save": "Simpan",
+    "rename": "Ganti Nama",
+    "delete": "Hapus",
+    "clear": "Hapus",
+    "dismiss": "Tutup",
+    "discard": "Buang",
+    
+    "new_course_title": "Mata Kuliah Baru",
+    "edit_course_title": "Edit Mata Kuliah",
+    "delete_course": "Hapus Mata Kuliah",
+
+    "new_topic_title": "Topik Baru",
+    "rename_topic_title": "Ganti Nama Topik",
+
+    "header_basic_info": "Info Dasar",
+    "header_additional_info": "Info Tambahan",
+
+    "name_label": "Nama",
+    "name_placeholder": "cth: Dasar Pemrograman",
+    "alias_label": "Alias",
+    "alias_placeholder": "cth: Daspro",
+    "description_label": "Deskripsi",
+    "description_placeholder": "cth: Mata kuliah untuk mengasah skill koding.",
+    "id_label": "Kode MK",
+    "id_placeholder": "cth: AIF2301062",
+    "semester_label": "Semester",
+    "semester_placeholder": "cth: 1",
+    "sks_label": "SKS",
+    "sks_placeholder": "cth: 3",
+    "banner_label": "Banner",
+    "topic_name_label": "Nama Topik",
+    "topic_name_placeholder": "cth: Input dan Output",
+
+    "keep_creating": "Lanjutin Ngedit",
+    "keep_editing": "Lanjutin Edit",
+    
+    "discard_create_confirm_title": "Buang Draf?",
+    "discard_create_confirm_desc": "Semua yang udah kamu isi bakal hilang dan gak akan disimpan.",
+    "discard_edit_confirm_title": "Buang Perubahan?",
+    "discard_edit_confirm_desc": "Perubahan yang kamu buat gak akan disimpan.",
+
+    "delete_course_confirm_title": "Yakin mau hapus mata kuliah\\n'{courseName}'?",
+    "delete_course_confirm_desc": "Semua soal dan jawabannya juga bakal ikut kehapus. Aksi ini gak bisa dibatalin.",
+    "delete_error_title": "Gagal Menghapus",
+
+    "banner_upload_error_title": "Gak bisa unggah banner",
+    "banner_upload_error_size": "Ukuran file maksimal 2MB.",
+    "banner_upload_success_title": "Unggahan selesai",
+    "banner_upload_success_message": "Banner berhasil diunggah.",
+    "banner_clear_error_title": "Gak bisa bersihin banner",
+    "banner_clear_success_title": "Dibersihkan",
+    "banner_clear_success_message": "Banner berhasil dibersihkan.",
+    
+    "error_generic": "Terjadi suatu kesalahan."
+}

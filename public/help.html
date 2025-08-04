@@ -1,6 +1,27 @@
 <ad-title>Help</ad-title>
 
 <style>
+    .list 
+    {
+        max-width: 800px;
+    }
+        .list .stack
+        {
+        }
+            #List_Accounts .stack img
+            {
+                width: 100%;
+                aspect-ratio: 1 / 1;
+                border-radius: 100%;
+            }
+            #List_Accounts .stack .details
+            {
+                display: grid;
+            }
+                #List_Accounts .stack .details .role
+                {
+                    color: var(--foreground-description);
+                }
 </style>
 
 <div class="header">
@@ -8,7 +29,58 @@
 </div>
 
 <div class="content">
+    <div class="list" ad-header="Contact Us" id="List_Accounts"></div>
 </div>
 
 <script>
+    $.get("/accounts/get?type=editor", null, function(accounts)
+    {
+        for (const account of accounts)
+        {
+            const img = document.createElement("img");
+            img.src = "/avatar/" + account.id;
+
+            const name = document.createElement("span");
+            name.classList.add("name");
+            name.innerHTML = account.nickname;
+
+            const role = document.createElement("span");
+            role.classList.add("role");
+            role.innerHTML = account.role;
+
+            const details = document.createElement("div");
+            details.classList.add("details");
+            details.append(name);
+            details.append(role);
+
+            const url = document.createElement("span");
+            url.innerHTML = account.url;
+
+            const action = document.createElement("span");
+            action.classList.add("icon");
+            action.innerHTML = "\uebd2";
+
+            const button = document.createElement("button");
+            button.classList.add("plain");
+            button.append(url);
+            button.append(action);
+            button.disabled = true;
+
+            const stack = document.createElement("div");
+            stack.append(img);
+            stack.append(details);
+            stack.append(button);
+            stack.classList.add("stack");
+            stack.classList.add("iconed");
+            stack.classList.add("clickable");
+
+            stack.onclick = function()
+            {
+                if (account.url)
+                    window.open(account.url, "_blank");
+            }
+
+            List_Accounts.append(stack);
+        }
+    });
 </script>

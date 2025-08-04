@@ -1,7 +1,7 @@
 const Variables = 
 {
     Production: (process.env.NODE_ENV == "production"),
-	Version: "1.0.0",
+	Version: "1.0.4",
 
 	AppIcon: "https://assets.agapedimas.com/icon_logo.ico",
 	AppTitle: "Drill",

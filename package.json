@@ -16,6 +16,8 @@
 		"express-fileupload": "^1.5.2",
 		"express-mysql-session": "^3.0.3",
 		"express-session": "^1.17.3",
-		"mysql": "^2.18.1"
+		"jimp": "^1.6.0",
+		"mysql": "^2.18.1",
+		"webp-converter": "^2.3.3"
 	}
 }

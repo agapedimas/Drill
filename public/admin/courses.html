@@ -64,6 +64,7 @@
         </div>
     </div>
 </div>
+
 <script>
     {
         const a = Courses.Render;
@@ -78,7 +79,7 @@
         }
     }
     $.ajax({
-        type: "post",
+        type: "get",
         url: "/courses/get",
         data: null,
         success: function(courses)
@@ -88,7 +89,7 @@
         }
     });
 
-    PopOver_NewCourse.OnClosing = function()
+    PopOver_NewCourse.onbeforeclose = function()
     {
         Components.ActionSheet.Open(
         {
@@ -99,7 +100,7 @@
                     Title: "Discard", Type: "Options.Critical", 
                     Action: o => 
                     {
-                        PopOver_NewCourse.Close(true);
+                        PopOver_NewCourse.close(true);
                     }
                 },
                 { 
@@ -112,13 +113,13 @@
     {
         $("#PopOver_NewCourse :where(input, textarea)").val("");
         Text_Error.classList.add("hidden");
-        Components.PopOver.Open(PopOver_NewCourse, this);
+        PopOver_NewCourse.open(this);
     }
     Button_SubmitNew.onclick = function()
     {
         Button_CancelNew.disabled = true;
         Button_SubmitNew.disabled = true;
-        PopOver_NewCourse.IsLoading = true;
+        PopOver_NewCourse.isloading = true;
         Text_Error.classList.add("hidden");
         $("#PopOver_NewCourse :where(input, textarea)").attr("disabled", true);
         
@@ -142,8 +143,8 @@
                 window.location.href = "/admin/courses/" + course.id; 
                 Button_CancelNew.disabled = false;
                 Button_SubmitNew.disabled = false;
-                PopOver_NewCourse.IsLoading = false;
-                PopOver_NewCourse.Close(true);
+                PopOver_NewCourse.isloading = false;
+                PopOver_NewCourse.close(true);
                 $("#PopOver_NewCourse :where(input, textarea)").removeAttr("disabled");
             },
             error: function(error)
@@ -152,13 +153,13 @@
                 Text_Error.classList.remove("hidden");
                 Button_CancelNew.disabled = false;
                 Button_SubmitNew.disabled = false;
-                PopOver_NewCourse.IsLoading = false;
+                PopOver_NewCourse.isloading = false;
                 $("#PopOver_NewCourse :where(input, textarea)").removeAttr("disabled");
             }
         })
     }
     Button_CancelNew.onclick = function()
     {
-        PopOver_NewCourse.Close();
+        PopOver_NewCourse.close();
     }
 </script>

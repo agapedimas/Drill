@@ -61,7 +61,7 @@
         {
             opacity: 0.3;
         }
-    :where(#PopOver_NewCourse, #PopOver_EditCourse) .list > .stack 
+    :where(#PopOver_NewCourse, #PopOver_EditCourse, #PopOver_NewTopic, #PopOver_RenameTopic) .list > .stack 
     {
         grid-auto-columns: 95px auto;
     }
@@ -119,21 +119,28 @@
         {
             display: grid;
         }
+            :where(#PopOver_Problem, #PopOver_EditProblem) .pivot:has(.section > textarea) .section .preview
+            {
+                padding: 1em;
+                font-size: 1.15em;
+                line-height: 1.35em;
+                background: var(--background-list);
+                border-radius: 8px;
+                min-height: 100%;
+                overflow: hidden;
+            }
     :where(#PopOver_Problem, #PopOver_EditProblem) .stack :where(input, select)
     {
         text-align: right;
     }
-    :where(#PopOver_Problem, #PopOver_EditProblem) textarea
+    :where(#PopOver_Problem, #PopOver_EditProblem) textarea,    
+    :where(#PopOver_Problem, #PopOver_EditProblem) textarea:hover,   
+    :where(#PopOver_Problem, #PopOver_EditProblem) textarea:focus   
     {
-        font-family: "Cascadia Mono", monospace;
-        border: 0;
-        padding: 1em;
-        line-height: 1.35em;
-    }
-    :where(#PopOver_Problem, #PopOver_EditProblem) textarea
-    {
+        background: var(--background-list);
         font-family: "Cascadia Mono", monospace;
         border: 1px solid transparent;
         padding: 1em;
         line-height: 1.35em;
     }
+    

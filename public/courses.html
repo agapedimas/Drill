@@ -17,8 +17,8 @@
 
 <script>
     $.ajax({
-        type: "post",
-        url: "/courses/get",
+        type: "get",
+        url: "/courses/get?cache=false",
         data: null,
         success: function(courses)
         {

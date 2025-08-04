@@ -75,8 +75,7 @@ CREATE TABLE IF NOT EXISTS `courses`
         `description` varchar(1000) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin, 
         `semester` int NOT NULL, 
         `sks` int NOT NULL,
-            PRIMARY KEY (`id`), 
-            UNIQUE KEY `name` (`name`)
+            PRIMARY KEY (`id`)
     ) 
 ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;
 

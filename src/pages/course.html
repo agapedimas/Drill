@@ -44,18 +44,6 @@
                 visibility: visible;
             }
     }
-    .background
-    {
-        position: absolute;
-        top: 0;
-        right: 0;
-        left: 0;
-        bottom: 0;
-        background: var(--overlay-7);
-        z-index: -1;
-        pointer-events: none;
-        border-right: 1px solid var(--border-sidebar);
-    }
 </style>
 
 <div class="header cascaded">
@@ -122,13 +110,17 @@
         }
 
         $.ajax({
-            type: "post",
-            url: "/topics/get",
-            data: { id: "<#? course.id ?#>", type: "course" },
+            type: "get",
+            url: "/topics/get?id=<#? course.id ?#>&type=course",
             success: function(topics)
             {
                 Grid_CourseTopics.innerHTML = "";
                 Topics.Append(topics, Grid_CourseTopics);
+
+                const active = [...Grid_CourseTopics.children].find(o => o.classList.contains("active"));
+
+                if (active)
+                    Grid_CourseTopics.parentNode.parentNode.scrollTop = active.offsetTop - 100;
             }
         });
 
@@ -139,29 +131,62 @@
 
         Button_CancelPrint.onclick = function()
         {
-            PopOver_PrintAll.Close();
+            PopOver_PrintAll.close();
         }
         Button_SubmitPrint.onclick = async function()
         {
             Button_CancelPrint.disabled = true;
             Button_SubmitPrint.disabled = true;
-            PopOver_PrintAll.IsLoading = true;
-            PopOver_PrintAll.IsCloseable = false;
+            PopOver_PrintAll.isloading = true;
+            PopOver_PrintAll.iscloseable = false;
 
             await Courses.Print();
-            PopOver_PrintAll.Close();
+            PopOver_PrintAll.close(true);
             window.print();
 
             Button_CancelPrint.disabled = false;
             Button_SubmitPrint.disabled = false;
-            PopOver_PrintAll.IsLoading = false;
-            PopOver_PrintAll.IsCloseable = true ;
+            PopOver_PrintAll.isloading = false;
+            PopOver_PrintAll.iscloseable = true ;
+        }
+        PopOver_PrintAll.onbeforeopen = function()
+        {
+            Grid_PrintCourseTopics.innerHTML = "";
+            for (const item of [...Grid_CourseTopics.children])
+            {
+                const checkbox = document.createElement("input");
+                checkbox.type = "checkbox";
+
+                const box = Topics.Render(item.data);
+                box.onclick = function()
+                {
+                    const checkes = [...Grid_PrintCourseTopics.children].filter(o => o.checkbox.checked == true);
+
+                    if (checkes.length < 5 || box.checkbox.checked == true)
+                        checkbox.click();
+                }
+
+                box.prepend(checkbox);
+                box.checkbox = checkbox;
+                Grid_PrintCourseTopics.append(box);
+            }
         }
 
         window.addEventListener("DOMContentLoaded", async function()
         {
+            Grid_CourseCard.classList.remove("hasBanner");
             const url = await Courses.FetchBanner("<#? course.id ?#>");
             Grid_CourseCard.style.setProperty("--image", "url(" + url + ")");
+            Grid_CourseCard.classList.add("hasBanner");
         });
     }
+
+    window.addEventListener("keydown", async function(event)
+    {
+        if (event.ctrlKey && event.key == "p")
+        {
+            event.preventDefault();
+            PopOver_PrintAll.open();
+        }
+    });
 </script>

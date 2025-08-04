@@ -1,4 +1,9 @@
 const SQL = require("./sql");
+const FileIO = require("fs");
+const ConvertWEBP = require("webp-converter");
+const { Jimp } = require("jimp");
+
+ConvertWEBP.grant_permission();
 
 const Accounts = 
 {
@@ -40,6 +45,103 @@ const Accounts =
 
         const results = await SQL.Query(query, [params]);            
         return results.data || [];
+    },
+    /**
+     * @param { string } username
+     * @param { string } nickname
+     * @param { string } url
+     * @param { string } password
+     * @param { string } role
+     * @returns { Promise<string> } Id of account
+     */
+    Add: async function(username, nickname, url, password, role)
+    {
+        const id = (Date.now() * 50 + 321).toString(36);
+        await SQL.Query("INSERT INTO accounts (id, username, nickname, url, password, role) VALUES (?,?,?,?,?,?)", [id, username, nickname, url, password, role]);
+
+        return id;
+    },
+    /**
+     * @param { string } id
+     * @returns { Promise<boolean> } @true if the operation completed successfully, otherwise @false
+     */
+    Remove: async function(id)
+    {
+        const result1 = await SQL.Query("DELETE FROM accounts WHERE id=?", [id]);
+        const result2 = await Accounts.Avatars.Delete(id);
+        
+        return result1.success && result2;
+    },
+    Avatars: 
+    {
+        /**
+         * Save avatar
+         * @param { string } id Id of account 
+         * @param { Array<Buffer> } buffer Buffer of image
+         * @returns { Promise<boolean> } @true if operation completed successfully, otherwise @false
+         */
+        Save: async function(id, buffer)
+        {
+            try
+            {
+                const path = "./src/avatars/" + id;
+                FileIO.writeFileSync(path + ".png", buffer);
+                
+                const image = await Jimp.read(path + ".png");
+                const bg = new Jimp({ width: 720, height: 720 });
+
+                let x = 0, y = 0;
+                if (image.width < image.height)
+                {
+                    image.resize({ w: 720});
+                    y = (image.height / 2) + (image.height / 2) * -1;
+                }
+                else if (image.width > image.height)
+                {
+                    image.resize({ h: 720});
+                    x = (image.width / 2) + image.width / 2 * -1;
+                }
+                else
+                {
+                    image.resize({ w: 720, h: 720});
+                }
+
+                bg.composite(image, x, y);
+                await bg.write(path + ".png");
+                
+                await ConvertWEBP.cwebp(path + ".png", path);
+                FileIO.unlinkSync(path + ".png", o => o);
+
+                return true;
+            }
+            catch(error)
+            {
+                console.error(error);
+                return false;
+            }
+        },
+        /**
+         * Delete avatar
+         * @param { string } id Id of account 
+         * @returns { Promise<boolean> } @true if operation completed successfully, otherwise @false
+         */
+        Delete: function(id)
+        {
+            try
+            {
+                const path = "./src/avatars/" + id;
+                
+                if (FileIO.existsSync(path))
+                    FileIO.unlinkSync(path);
+
+                return true;
+            }
+            catch(error)
+            {
+                console.error(error);
+                return false;
+            }
+        }
     }
 };
 

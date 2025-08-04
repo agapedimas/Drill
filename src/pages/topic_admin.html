@@ -17,7 +17,7 @@
 </div>
 
 <div class="content">
-    <h3><#? topic.name ?#></h3>
+    <h3 id="Text_TopicName"><#? topic.name ?#></h3>
     <div id="Grid_CourseProblems">
         <div class="progressring"></div>
     </div>
@@ -162,7 +162,7 @@
             }
         }
         Input_ProblemTextEdit.onpaste = Input_ProblemText.onpaste;
-        PopOver_Problem.OnClosing = function()
+        PopOver_Problem.onbeforeclose = function()
         {
             Components.ActionSheet.Open(
             {
@@ -173,7 +173,7 @@
                         Title: "Discard", Type: "Options.Critical", 
                         Action: o => 
                         {
-                            PopOver_Problem.Close(true);
+                            PopOver_Problem.close(true);
                         }
                     },
                     { 
@@ -182,7 +182,7 @@
                 ]
             }); 
         }
-        PopOver_EditProblem.OnClosing = function()
+        PopOver_EditProblem.onbeforeclose = function()
         {
             Components.ActionSheet.Open(
             {
@@ -193,7 +193,7 @@
                         Title: "Discard", Type: "Options.Critical", 
                         Action: o => 
                         {
-                            PopOver_EditProblem.Close(true);
+                            PopOver_EditProblem.close(true);
                         }
                     },
                     { 
@@ -204,11 +204,11 @@
         }
         Button_NewProblem.onclick = function()
         {
-            Pivot_Problem.Tabs.Selected = 0;
+            Pivot_Problem.tabs.selected = 0;
             Input_ProblemYear.value = "";
             Input_ProblemText.value = "";
             Grid_ProblemPreview.innerHTML = "";
-            PopOver_Problem.Open();
+            PopOver_Problem.open();
             Select_Fetch();
             Select_ProblemSource.value = Select_ProblemSource.options[0]?.value;
         }
@@ -216,7 +216,7 @@
         {
             Button_SubmitNewProblem.disabled = true;
             Button_CancelNewProblem.disabled = true;
-            PopOver_Problem.IsLoading = true;
+            PopOver_Problem.isloading = true;
             $("#PopOver_Problem :where(input, textarea, select)").attr("disabled", true);
 
             $.ajax(
@@ -234,33 +234,41 @@
                 success: async function(problem)
                 {
                     const box = await Problems.Render(problem);
-                    Problems.AddToGroup(box, Grid_CourseProblems);
+                    const group = Problems.AddToGroup(box, Grid_CourseProblems);
 
                     Button_SubmitNewProblem.disabled = false;
                     Button_CancelNewProblem.disabled = false;
-                    PopOver_Problem.IsLoading = false;
-                    PopOver_Problem.Close(true);
+                    PopOver_Problem.isloading = false;
+                    PopOver_Problem.close(true);
                     $("#PopOver_Problem :where(input, textarea, select)").attr("disabled", false);
+
+                    Problems.Sort(group);
                     Problems.Sort(Grid_CourseProblems);
+
+                    Activity_Topic.scrollTop = box.offsetTop;
+                    
+                    Components.Notification.Remove({ Id: "create_failed" });
+                    Components.Notification.Send({ Id: "create_success", Title: "Saved", Message: "The problem has been created successfully.", Icon: "\uef1c"});
                 },
                 error: function(error)
                 {
                     Button_SubmitNewProblem.disabled = false;
                     Button_CancelNewProblem.disabled = false;
-                    PopOver_Problem.IsLoading = false;
+                    PopOver_Problem.isloading = false;
                     $("#PopOver_Problem :where(input, textarea, select)").attr("disabled", false);
+                    Components.Notification.Send({ Id: "create_failed", Title: "Submit Failed", Message: error.responseText || "Something went wrong.", Icon: "\ufe60", Buttons: [{Text: "Dismiss"}] });
                 }
             });
         }
         Button_CancelNewProblem.onclick = function()
         {
-            PopOver_Problem.OnClosing();
+            PopOver_Problem.onbeforeclose();
         }
         Button_DoneEditProblem.onclick = function()
         {
             Button_DoneEditProblem.disabled = true;
             Button_CancelEditProblem.disabled = true;
-            PopOver_EditProblem.IsLoading = true;
+            PopOver_EditProblem.isloading = true;
             $("#PopOver_EditProblem :where(input, textarea, select)").attr("disabled", true);
 
             const editedProblem =
@@ -285,8 +293,8 @@
                 {
                     Button_DoneEditProblem.disabled = false;
                     Button_CancelEditProblem.disabled = false;
-                    PopOver_EditProblem.IsLoading = false;
-                    PopOver_EditProblem.Close(true);
+                    PopOver_EditProblem.isloading = false;
+                    PopOver_EditProblem.close(true);
                     $("#PopOver_EditProblem :where(input, textarea, select)").attr("disabled", false);
                     PopOver_EditProblem.element.data = editedProblem;
                     
@@ -294,56 +302,41 @@
                     const group = Problems.AddToGroup(PopOver_EditProblem.element, Grid_CourseProblems);
                     group.replaceChild(box, PopOver_EditProblem.element);
 
+                    Problems.Sort(group);
                     Problems.Sort(Grid_CourseProblems);
+
+                    Activity_Topic.scrollTop = box.offsetTop;
+                    
+                    Components.Notification.Remove({ Id: "edit_failed" });
+                    Components.Notification.Send({ Id: "edit_success", Title: "Saved", Message: "The problem has been edited and saved.", Icon: "\uef1c"});
                 },
                 error: function(error)
                 {
                     Button_DoneEditProblem.disabled = false;
                     Button_CancelEditProblem.disabled = false;
-                    PopOver_EditProblem.IsLoading = false;
+                    PopOver_EditProblem.isloading = false;
                     $("#PopOver_EditProblem :where(input, textarea, select)").attr("disabled", false);
+                    Components.Notification.Send({ Id: "edit_failed", Title: "Saved Failed", Message: error.responseText || "Something went wrong.", Icon: "\ufe60", Buttons: [{Text: "Dismiss"}] });
                 }
             });
         }
         Button_CancelEditProblem.onclick = function()
         {
-            PopOver_EditProblem.OnClosing();
+            PopOver_EditProblem.onbeforeclose();
         }
-
-        function Select_Fetch()
+        PopOver_Problem.onclosed = function()
         {
-            if (Select_ProblemSource.children.length == 0)
-            {
-                $.ajax({
-                    type: "get",
-                    url: "/sources/get",
-                    success: function(sources)
-                    {
-                        for (const source of sources)
-                        {
-                            const option1 = document.createElement("option");
-                            option1.append(source.name);
-                            option1.value = source.id;
-                            option1.name = source.name;
-
-                            const option2 = document.createElement("option");
-                            option2.append(source.name);
-                            option2.value = source.id;
-                            option2.name = source.name;
-
-                            Select_ProblemSource.append(option1);
-                            Select_ProblemSourceEdit.append(option2);
-                        }
-                    }
-                });
-            }
+            Pivot_Problem.tabs.selected = 0;
+        }
+        PopOver_EditProblem.onclosed = function()
+        {
+            Pivot_ProblemEdit.tabs.selected = 0;
         }
 
         $.ajax(
         {
-            type: "post",
-            url: "/problems/get",
-            data: { id: "<#? topic.id ?#>", type: "topic" },
+            type: "get",
+            url: "/problems/get?id=<#? topic.id ?#>&type=topic",
             success: function(problems)
             {
                 Grid_CourseProblems.innerHTML = "";
