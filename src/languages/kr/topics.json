@@ -1,0 +1,55 @@
+{
+    "back": "뒤로",
+    "tooltip_print": "인쇄",
+
+    "problems_label": "문제 {0}개",
+    "updated_label": "{0}에 업데이트됨",
+
+    "context_rename": "이름 바꾸기",
+    "context_delete": "삭제",
+    
+    "delete": "삭제",
+    "cancel": "취소",
+    "create": "만들기",
+    "save": "저장",
+    "dismiss": "닫기",
+    "discard": "삭제",
+    
+    "tooltip_new_problem": "새 문제",
+    "new_problem_title": "새 문제",
+    "edit_problem_title": "문제 수정",
+    
+    "source_header": "문제 출처",
+    "type_label": "유형",
+    "academic_year_label": "학년도",
+    "academic_year_placeholder": "예: 2025",
+    
+    "markdown_tab": "마크다운",
+    "preview_tab": "미리보기",
+    "problem_text_placeholder": "여기에 문제를 입력하세요...",
+
+    "delete_topic_confirm_title": "'{0}'을(를) 정말 삭제하시겠습니까?",
+    "delete_topic_confirm_desc": "모든 문제와 해당 풀이도 함께 삭제됩니다. 이 작업은 되돌릴 수 없습니다.",
+    "delete_error_title": "삭제 실패",
+    
+    "discard_create_problem_title": "문제 초안을 삭제하시겠습니까?",
+    "discard_create_problem_desc": "새로운 문제는 삭제되며 게시되지 않습니다.",
+    "keep_creating_problem": "계속 만들기",
+    
+    "discard_edit_problem_title": "변경 사항을 삭제하시겠습니까?",
+    "discard_edit_problem_desc": "변경하신 내용이 저장되지 않습니다.",
+    "keep_editing_problem": "계속 수정",
+
+    "create_success_title": "만들기 성공",
+    "create_success_message": "문제가 성공적으로 만들어졌습니다.",
+    "create_failed_title": "만들기 실패",
+    
+    "edit_success_title": "성공적으로 저장됨",
+    "edit_success_message": "문제가 성공적으로 업데이트 및 저장되었습니다.",
+    "edit_failed_title": "저장 실패",
+
+    "error_generic": "문제가 발생했습니다.",
+
+    "questionbank": "문제 은행",
+    "questionbank_disclaimer": "이 문서를 Universitas Katolik Parahyangan의 범위를 벗어나 배포하지 마십시오.\n이 문서를 적절하게 사용하십시오."
+}

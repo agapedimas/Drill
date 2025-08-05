@@ -414,7 +414,7 @@
         {
             Components.ActionSheet.Open(
             {
-                Title: "<$ courses delete_course_confirm_title />".replace("{courseName}", course.name),
+                Title: "<$ courses delete_course_confirm_title />".format(course.name),
                 Description: "<$ courses delete_course_confirm_desc />",
                 Actions: [
                     { 

@@ -208,6 +208,8 @@
             <select class="plain" name="language" id="Select_Language">
                 <option value="en">English</option>
                 <option value="id">Bahasa Indonesia</option>
+                <option value="kr">Korean (한국어)</option>
+                <option value="jp">Japanese (日本語)</option>
             </select>
         </div>
     </div> <div class="list" ad-header="<$ settings accounts />" id="List_Accounts" onaction="Account_Add()"></div>
@@ -225,7 +227,7 @@
         </div>
         <div class="stack vertical">
             <div><$ settings copyright /></div>
-            <div style="opacity: 0.6;"><$ settings copyright_text /></div>
+            <div style="opacity: 0.6;">© 2025 Agape Dimas. <$ settings copyright_text /></div>
         </div>
     </div>
 </div>
@@ -242,24 +244,24 @@
         <div class="content">
             <div class="list">
                 <div class="stack">
-                    <span><$ settings username /></span>
-                    <input type="text" class="plain" id="Input_Username" placeholder="<$ settings placeholder_username />"/>
+                    <span><$ settings username_label /></span>
+                    <input type="text" class="plain" id="Input_Username" placeholder="<$ settings username_placeholder />"/>
                 </div>
                 <div class="stack">
-                    <span><$ settings nickname /></span>
-                    <input type="text" class="plain" id="Input_Nickname" placeholder="<$ settings placeholder_nickname />"/>
+                    <span><$ settings nickname_label /></span>
+                    <input type="text" class="plain" id="Input_Nickname" placeholder="<$ settings nickname_placeholder />"/>
                 </div>
                 <div class="stack">
-                    <span><$ settings url /></span>
-                    <input type="text" class="plain" id="Input_URL" placeholder="<$ settings placeholder_url />"/>
+                    <span><$ settings url_label /></span>
+                    <input type="text" class="plain" id="Input_URL" placeholder="<$ settings url_placeholder />"/>
                 </div>
                 <div class="stack">
-                    <span><$ settings role /></span>
+                    <span><$ settings role_label /></span>
                     <select class="plain" id="Select_Role"></select>
                 </div>
                 <div class="stack">
-                    <span><$ settings password /></span>
-                    <input type="text" class="plain" id="Input_Password" placeholder="<$ settings placeholder_password />"/>
+                    <span><$ settings password_label /></span>
+                    <input type="text" class="plain" id="Input_Password" placeholder="<$ settings password_placeholder />"/>
                 </div>
             </div>
         </div>

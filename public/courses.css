@@ -288,7 +288,7 @@
     {
         position: relative;
         display: grid;
-        gap: 0.2em;
+        gap: 0.25em;
         padding: 0.75em 1em;
         margin: 0 -1em;
         border-radius: 10px;
@@ -359,22 +359,11 @@
             font-size: 0.75em;
             gap: 0.15em;
         }
-            #Grid_CourseTopics .topic .details:has(div:nth-child(2) > .lastedited:not(:empty))::after
+            #Grid_CourseTopics .topic .details:has(.lastedited:not(:empty))::after
             {
                 content: "\ef59";
                 font-size: 0.95em;
                 color: var(--foreground-description);
                 font-family: var(--font-icon);
                 transform: translateX(20%);
-            }
-            :where(#Grid_CourseTopics, #Grid_PrintCourseTopics) .topic .details > div
-            {
-                display: grid;
-                grid-auto-flow: column;
-                grid-auto-columns: max-content;
-                gap: 0.5ch;
-            }
-            :where(#Grid_CourseTopics, #Grid_PrintCourseTopics) .topic .details > div:has(span:empty)
-            {
-                display: none;
             }

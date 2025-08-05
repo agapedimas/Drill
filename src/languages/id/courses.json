@@ -2,8 +2,8 @@
     "title": "Mata Kuliah",
     
     "context_open_in_new_tab": "Buka di tab baru",
-    "context_pin_template": "Sematkan “{courseName}”",
-    "context_unpin_template": "Lepaskan “{courseName}”",
+    "context_pin_template": "Sematkan “{0}”",
+    "context_unpin_template": "Lepaskan “{0}”",
     "context_pin": "Sematkan",
     "context_unpin": "Lepaskan",
     "context_print": "Cetak...",
@@ -51,7 +51,7 @@
     "sks_label": "SKS",
     "sks_placeholder": "cth: 3",
     "banner_label": "Banner",
-    "topic_name_label": "Nama Topik",
+    "topic_name_label": "Nama",
     "topic_name_placeholder": "cth: Input dan Output",
 
     "keep_creating": "Lanjutin Ngedit",
@@ -62,16 +62,16 @@
     "discard_edit_confirm_title": "Buang Perubahan?",
     "discard_edit_confirm_desc": "Perubahan yang kamu buat gak akan disimpan.",
 
-    "delete_course_confirm_title": "Yakin mau hapus mata kuliah\\n'{courseName}'?",
+    "delete_course_confirm_title": "Yakin mau hapus mata kuliah\\n'{0}'?",
     "delete_course_confirm_desc": "Semua soal dan jawabannya juga bakal ikut kehapus. Aksi ini gak bisa dibatalin.",
     "delete_error_title": "Gagal Menghapus",
 
-    "banner_upload_error_title": "Gak bisa unggah banner",
+    "banner_upload_error_title": "Gagal Mengupload Banner",
     "banner_upload_error_size": "Ukuran file maksimal 2MB.",
-    "banner_upload_success_title": "Unggahan selesai",
+    "banner_upload_success_title": "Diupload",
     "banner_upload_success_message": "Banner berhasil diunggah.",
-    "banner_clear_error_title": "Gak bisa bersihin banner",
-    "banner_clear_success_title": "Dibersihkan",
+    "banner_clear_error_title": "Gagal Menghapus Banner",
+    "banner_clear_success_title": "Dihapus",
     "banner_clear_success_message": "Banner berhasil dibersihkan.",
 
     "empty_courses_title": "Belum Ada Mata Kuliah",
@@ -83,5 +83,5 @@
     "notfound_title": "Mata Kuliah Tidak Ditemukan",
     "notfound_subtitle": "Mungkin sudah dipindahkan atau dihapus.",
     
-    "error_generic": "Terjadi suatu kesalahan."
+    "error_generic": "Ada yang salah."
 }

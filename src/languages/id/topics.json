@@ -1,11 +1,13 @@
 {
-
     "back": "Kembali",
     "tooltip_print": "Cetak",
-    "problems_label": "Jumlah Soal:",
-    "updated_label": "Diperbarui",
+
+    "problems_label": "{0} Soal",
+    "updated_label": "Diperbarui {0}",
+
     "context_rename": "Ganti Nama",
     "context_delete": "Hapus",
+    
     "delete": "Hapus",
     "cancel": "Batal",
     "create": "Buat",
@@ -26,7 +28,7 @@
     "preview_tab": "Pratinjau",
     "problem_text_placeholder": "Ketik soal di sini...",
 
-    "delete_topic_confirm_title": "Yakin mau hapus topik\\n'{topicName}'?",
+    "delete_topic_confirm_title": "Yakin mau hapus\\n'{0}'?",
     "delete_topic_confirm_desc": "Semua soal dan solusinya juga bakal ikut kehapus. Aksi ini gak bisa dibatalin.",
     "delete_error_title": "Gagal Menghapus",
     
@@ -46,7 +48,7 @@
     "edit_success_message": "Soal berhasil diubah dan disimpan.",
     "edit_failed_title": "Gagal Menyimpan",
 
-    "error_generic": "Terjadi suatu kesalahan.",
+    "error_generic": "Ada yang salah.",
 
     "questionbank": "Kumpulan Soal",
     "questionbank_disclaimer": "Mohon untuk tidak mendistribusikan naskah soal di luar lingkup Universitas Katolik Parahyangan.\nPergunakan naskah soal sebagaimana mestinya."

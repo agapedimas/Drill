@@ -86,13 +86,13 @@ const Courses =
             {
                 context.commands[0].Show = false;
                 context.commands[1].Show = true;
-                context.commands[1].Title = "<$ courses context_unpin_template />".replace("{courseName}", (course.alias || course.name));
+                context.commands[1].Title = "<$ courses context_unpin_template />".format(course.alias || course.name);
             }
             else
             {
                 context.commands[1].Show = false;
                 context.commands[0].Show = true;
-                context.commands[0].Title = "<$ courses context_pin_template />".replace("{courseName}", (course.alias || course.name));
+                context.commands[0].Title = "<$ courses context_pin_template />".format(course.alias || course.name);
             }
             Components.ContextMenu.Open("Course", box, event);
         }
@@ -392,36 +392,25 @@ const Topics =
         name.classList.add("name");
         name.append(topic.name);
 
-        const problemcount_title = document.createElement("span");
-        problemcount_title.append("<$ topics problems_label />");
-
         const problemcount = document.createElement("span");
         problemcount.classList.add("problemcount");
-        problemcount.append(topic.problemcount);
-
-        const problemcount_container = document.createElement("div");
-        problemcount_container.append(problemcount_title);
-        problemcount_container.append(problemcount);
-
-        const lastedited_title = document.createElement("span");
-        lastedited_title.append("<$ topics updated_label />");
-                        
-        const t1 = parseInt(topic.lastedited);
-        const t2 = new Date(Date.now() - topic.lastedited);
-        const time = t1 == 0 ? 0 : t2 > 1000 * 3600 * 24 * 6 ? moment(t1).format("ll") : moment(t1).fromNow();
-
+        problemcount.append("<$ topics problems_label />".format(topic.problemcount));
+        
         const lastedited = document.createElement("span");
         lastedited.classList.add("lastedited");
-        lastedited.append(time || "");
 
-        const lastedited_container = document.createElement("div");
-        lastedited_container.append(lastedited_title);
-        lastedited_container.append(lastedited);
+        if (topic.lastedited)
+        {
+            const t1 = parseInt(topic.lastedited);
+            const t2 = new Date(Date.now() - topic.lastedited);
+            const time = t1 == 0 ? 0 : t2 > 1000 * 3600 * 24 * 6 ? moment(t1).format("ll") : moment(t1).fromNow();
+            lastedited.append("<$ topics updated_label />".format(time));
+        }
 
         const details = document.createElement("div");
         details.classList.add("details");
-        details.append(problemcount_container);
-        details.append(lastedited_container);
+        details.append(problemcount);
+        details.append(lastedited);
 
         const box = document.createElement("div");
         box.classList.add("topic");
@@ -536,7 +525,7 @@ const Problems =
 
             const source = document.createElement("span");
             source.classList.add("source");
-            source.append(group.data.source.name);
+            source.append(JSON.parse(`<$ problems sources />`)[group.data.source.id]);
 
             const details = document.createElement("div");
             details.classList.add("details");
@@ -612,16 +601,24 @@ window.onbeforeprint = async function(event)
     }
     else
     {
-        const date = new Date(Topics.Active.lastedited).toLocaleDateString("id", 
+        if (Topics.Active.lastedited > 0)
         {
-            year: "numeric",
-            month: "long",
-            day: "numeric",
-        });
+            const date = new Date(Topics.Active.lastedited).toLocaleDateString(document.documentElement.lang, 
+            {
+                year: "numeric",
+                month: "long",
+                day: "numeric",
+            });
+
+            Text_Date.innerText = date;
+        }
+        else
+        {
+            Text_Date.innerText = "";
+        }
 
         Text_PrintCourseName.innerText = Courses.Active.name;
         Text_PrintTopicName.innerText = Topics.Active.name;
-        Text_Date.innerText = date;
         Grid_PrintContent.innerHTML = Grid_CourseProblems.innerHTML;
         
         const title = document.createElement("h3");
@@ -698,4 +695,10 @@ window.addEventListener("popstate", function()
 })
 
 marked.use({ extensions: [mathExtension, mathBlockExtension] });
-moment.locale(document.documentElement.lang);
+
+if (document.documentElement.lang == "kr")
+    moment.locale("ko");
+else if (document.documentElement.lang == "jp")
+    moment.locale("ja");
+else
+    moment.locale(document.documentElement.lang);

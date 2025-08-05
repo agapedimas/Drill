@@ -29,7 +29,7 @@ Components.ContextMenu.Add("Topic_Admin",
             {
                 Components.ActionSheet.Open(
                 {
-                    Title: "<$ topics delete_topic_confirm_title />".replace("{topicName}", element.data.name),
+                    Title: "<$ topics delete_topic_confirm_title />".format(element.data.name),
                     Description: "<$ topics delete_topic_confirm_desc />",
                     Actions: [
                         { 
@@ -189,15 +189,17 @@ function Select_Fetch()
                 {
                     for (const source of sources)
                     {
+                        const name = JSON.parse(`<$ problems sources />`)[source.id];
+
                         const option1 = document.createElement("option");
-                        option1.append(source.name);
+                        option1.append(name);
                         option1.value = source.id;
-                        option1.name = source.name;
+                        option1.name = name;
 
                         const option2 = document.createElement("option");
-                        option2.append(source.name);
+                        option2.append(name);
                         option2.value = source.id;
-                        option2.name = source.name;
+                        option2.name = name;
 
                         Select_ProblemSource.append(option1);
                         Select_ProblemSourceEdit.append(option2);
