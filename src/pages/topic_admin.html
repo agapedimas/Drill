@@ -244,6 +244,7 @@
 
                     Problems.Sort(group);
                     Problems.Sort(Grid_CourseProblems);
+                    UpdateTopicDetails();
 
                     Activity_Topic.scrollTop = box.offsetTop;
                     
@@ -304,6 +305,7 @@
 
                     Problems.Sort(group);
                     Problems.Sort(Grid_CourseProblems);
+                    UpdateTopicDetails();
 
                     Activity_Topic.scrollTop = box.offsetTop;
                     
@@ -343,5 +345,17 @@
                 Problems.Append(problems, Grid_CourseProblems);
             }
         });
+    }
+    async function UpdateTopicDetails()
+    {
+        const item = [...Grid_CourseTopics.children].find(o => o.data.id == Topics.Active.id);
+
+        if (item == null)
+            return;
+
+        const topic = await $.get("/topics/get?id=" + item.data.id + "&type=topic");
+        const box = Topics.Render(topic[0]);
+
+        item.parentNode.replaceChild(box, item); 
     }
 </script>

@@ -218,11 +218,8 @@
             grid-auto-flow: column;
             grid-auto-columns: max-content;
             gap: 0.5ch;
-            text-transform: uppercase;
-            font-size: 0.9em;
+            font-size: 1.1em;
             font-family: var(--font-bold);
-            color: var(--foreground-description);
-            letter-spacing: 0.025em;
         }
         :where(#Grid_CourseProblems, #Grid_PrintContent) .group:not(:nth-child(1)) .details
         {
@@ -234,8 +231,8 @@
             grid-auto-flow: column;
             grid-auto-columns: max-content auto;
             gap: 0.5em;
-            font-size: 1.15em;
-            line-height: 1.75em;
+            font-size: 1.1em;
+            line-height: 1.5em;
             align-items: baseline;
         }
             :where(#Grid_CourseProblems, #Grid_PrintContent) .group .problem::before
@@ -248,18 +245,15 @@
             {
                 display: grid;
                 grid-auto-rows: max-content;
-                gap: 1em;
+                gap: 0.5em;
 
                 *
                 {
                     user-select: text;
-                }
-
-                > *
-                {
                     margin: 0;
                 }
-                ul
+
+                ul, ol
                 {
                     display: grid;
                     grid-auto-rows: max-content;
@@ -285,7 +279,7 @@
                 {
                     display: inline;
                     margin: 0 -50px;
-                    padding: 0 50px;
+                    padding: 0.5ch 50px;
                     overflow-x: auto;
                     overflow-y: hidden;
                     scrollbar-width: none;

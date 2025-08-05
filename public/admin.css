@@ -11,6 +11,7 @@
         position: relative;
         transition: 0.05s background;
         padding: 0;
+        z-index: 1;
     }
     :where(#PopOver_NewCourse, #PopOver_EditCourse) .list .banner:hover
     {

@@ -521,7 +521,7 @@ const Problems =
 
             const year = document.createElement("span");
             year.classList.add("year");
-            year.append("(" + group.data.year + " - " + (group.data.year + 1) + ")");
+            year.append("(" + group.data.year + "-" + (group.data.year + 1) + ")");
 
             const source = document.createElement("span");
             source.classList.add("source");
@@ -536,11 +536,13 @@ const Problems =
             container.append(group);
         }
 
-        // removes empty group
-        if (problem.parentNode?.children?.length == 2)
-            problem.parentNode.remove();
-
+        const oldGroup = problem.parentNode;
         group.append(problem);
+
+        // removes empty group
+        if (oldGroup?.children?.length == 1)
+            oldGroup.remove();
+
         return group;
     },
     Sort: function(container)
@@ -655,13 +657,16 @@ const mathExtension =
     }
 };
 
-const mathBlockExtension = {
+const mathBlockExtension = 
+{
     name: "mathblock",
     level: "block",
-    start(src) {
+    start(src) 
+    {
         return src.indexOf("$$");
     },
-    tokenizer(src, tokens) {
+    tokenizer(src, tokens) 
+    {
         const match = src.match(/^\$\$\s*([\s\S]+?)\s*\$\$/);
         if (!match) return;
         return {
@@ -671,8 +676,54 @@ const mathBlockExtension = {
             tokens: []
         };
     },
-    renderer(token) {
+    renderer(token) 
+    {
         return `<math-latex block>${token.text}</math-latex>`;
+    }
+};
+
+const letterListExtension = 
+{
+    name: "letterlist",
+    level: "block",
+    start(src) 
+    {
+        return src.match(/^[a-zA-Z]\. /m)?.index;
+    },
+    tokenizer(src, tokens) 
+    {
+        if (/^\$\$/.test(src)) return;
+
+        const regex = /^([a-zA-Z])\. .*(\n[a-zA-Z]\. .*)*/;
+        const match = src.match(regex);
+        if (!match) return;
+
+        const raw = match[0];
+        const lines = raw.split('\n');
+
+        const isValid = lines.every(line => /^[a-zA-Z]\. /.test(line));
+        if (!isValid) return;
+
+        const items = lines.map(line => 
+        {
+            const content = line.replace(/^[a-zA-Z]\. /, '').trim();
+            return this.lexer.blockTokens(content);
+        });
+
+        return {
+            type: "letterlist",
+            raw,
+            items
+        };
+    },
+    renderer(token) 
+    {
+        const rendered = token.items.map(itemTokens => 
+        {
+            const html = marked.parser(itemTokens);
+            return `<li>${html}</li>`;
+        }).join("");
+        return `<ol type="a">${rendered}</ol>`;
     }
 };
 
@@ -694,7 +745,7 @@ window.addEventListener("popstate", function()
     }
 })
 
-marked.use({ extensions: [mathExtension, mathBlockExtension] });
+marked.use({ extensions: [letterListExtension, mathBlockExtension, mathExtension] });
 
 if (document.documentElement.lang == "kr")
     moment.locale("ko");

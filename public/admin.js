@@ -108,7 +108,12 @@ Components.ContextMenu.Add("Problem_Admin",
                                         data: { id: element.data.id }, 
                                         success: function()
                                         {
-                                            element.remove();
+                                            if (element.parentNode.children.length == 2)
+                                                element.parentNode.remove();
+                                            else
+                                                element.remove();
+                                            
+                                            UpdateTopicDetails();
                                             resolve();
                                         }, 
                                         error: function(error)

@@ -497,7 +497,7 @@
                 $.ajax({
                     type: "patch",
                     url: "/admin/topics/reorder",
-                    data: { id: dragged.data.id, sort: index - 1 }
+                    data: { id: dragged.data.id, sort: index + 1 }
                 })
 
                 dragged = null;

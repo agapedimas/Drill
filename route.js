@@ -302,7 +302,7 @@ function Route(Server)
 
     Server.get("/courses/get", async function(req, res)
     {
-        if (await Authentication.HasAccess(req.session.account, ["editor", "admin"]) == true)
+        if (await Authentication.HasAccess(req.session.account, ["editor", "admin"]) == false)
             res.header("Cache-Control", "public, max-age=30");
 
         const courses = await Courses.Get(req.query.id);
@@ -555,7 +555,7 @@ function Route(Server)
     
     Server.get("/topics/get", async function(req, res)
     {
-        if (await Authentication.HasAccess(req.session.account, ["editor", "admin"]) == true)
+        if (await Authentication.HasAccess(req.session.account, ["editor", "admin"]) == false)
             res.header("Cache-Control", "public, max-age=30");
 
         const type = req.query.type; 
@@ -635,7 +635,7 @@ function Route(Server)
     
     Server.get("/problems/get", async function(req, res)
     {
-        if (await Authentication.HasAccess(req.session.account, ["editor", "admin"]) == true)
+        if (await Authentication.HasAccess(req.session.account, ["editor", "admin"]) == false)
             res.header("Cache-Control", "public, max-age=30");
 
         const type = req.query.type; 
