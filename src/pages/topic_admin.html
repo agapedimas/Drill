@@ -246,7 +246,7 @@
                     Problems.Sort(Grid_CourseProblems);
                     UpdateTopicDetails();
 
-                    Activity_Topic.scrollTop = box.offsetTop;
+                    Activity_Topic.scrollTop = box.offsetTop - 100;
                     
                     Components.Notification.Remove({ Id: "create_failed" });
                     Components.Notification.Send({ Id: "create_success", Title: "<$ topics create_success_title />", Message: "<$ topics create_success_message />", Icon: "\uef1c"});
@@ -307,7 +307,7 @@
                     Problems.Sort(Grid_CourseProblems);
                     UpdateTopicDetails();
 
-                    Activity_Topic.scrollTop = box.offsetTop;
+                    Activity_Topic.scrollTop = box.offsetTop - 100;
                     
                     Components.Notification.Remove({ Id: "edit_failed" });
                     Components.Notification.Send({ Id: "edit_success", Title: "<$ topics edit_success_title />", Message: "<$ topics edit_success_message />", Icon: "\uef1c"});

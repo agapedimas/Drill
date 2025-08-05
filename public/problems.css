@@ -2,10 +2,36 @@
 {   
     @page
     { 
-        size: auto;
-        margin: 70px;
+        size: A4;
     } 
-    @page:first
+    @page cover
+    {
+        margin: 0;
+    }
+    @page content
+    {
+        margin: 140px 70px 100px 70px;
+        break-after: page;
+        print-color-adjust: exact;
+
+        @top-left
+        {
+            content: url("/assets/logo_fs_monochrome.svg");
+        }
+
+        @bottom-left
+        {
+            content: attr(doctitle);
+            font-size: 12px;
+        }
+        
+        @bottom-right
+        {
+            content: counter(page);
+            font-size: 12px;
+        }
+    }
+    @page backcover
     {
         margin: 0;
     }
@@ -36,8 +62,11 @@
 
 #Grid_Print
 {
+    font-size: 0.9em;
+
     .cover
     {
+        page: cover;
         display: grid;
         position: relative;
         width: 100vw;
@@ -100,6 +129,7 @@
     }
     .content
     {
+        page: content;
         width: calc(100% - 140px);
         text-align: justify;
         
@@ -114,12 +144,14 @@
     }
     .backcover
     {
+        page: backcover;
         break-before: page;
-        break-after: page;
         display: grid;
+        position: relative;
+        width: 100vw;
+        height: 100vh;
+        padding: 70px;
         grid-auto-rows: max-content auto max-content;
-        width: calc(100% - 140px);
-        height: calc(100vh - 160px);
 
         .logo
         {
@@ -134,6 +166,10 @@
             .copyright
             {
                 font-family: var(--font-bold);
+            }
+            .disclaimer
+            {
+                white-space: pre-wrap;
             }
         }
     }
@@ -209,6 +245,7 @@
     }
     :where(#Grid_CourseProblems, #Grid_PrintContent) .group
     {
+        break-inside: avoid-page;
         display: grid;
         gap: 1em;   
     }
@@ -221,12 +258,13 @@
             font-size: 1.1em;
             font-family: var(--font-bold);
         }
-        :where(#Grid_CourseProblems, #Grid_PrintContent) .group:not(:nth-child(1)) .details
+        :where(#Grid_CourseProblems, #Grid_PrintContent) .group:not(:nth-child(1))
         {
             margin-top: 1.5em;
         }
         :where(#Grid_CourseProblems, #Grid_PrintContent) .group .problem
         {
+            break-inside: avoid-page;
             display: grid;
             grid-auto-flow: column;
             grid-auto-columns: max-content auto;
@@ -250,7 +288,6 @@
                 *
                 {
                     user-select: text;
-                    margin: 0;
                 }
 
                 ul, ol
@@ -259,22 +296,40 @@
                     grid-auto-rows: max-content;
                     padding-inline-start: 1em;
                     gap: 0.5em;
-
+                    
                     li
                     {
                         margin: 0;
                     }
                 }
-                table, th, td 
+                table
                 {
-                    border: 1px solid var(--foreground-page);
+                    display: block;
+                    overflow-x: auto;
+                    white-space: nowrap;
+                    margin: 0 -70px;
+                    padding: 0 70px;
                     border-collapse: collapse;
-                    padding: 0.15em 0.5em;
+                    scrollbar-width: none;
+
+                    th, td
+                    {
+                        border: 1px solid var(--foreground-page);
+                        padding: 0.15em 0.5em;
+                        width: max-content;
+                    }
                 }
                 th
                 {
                     background: var(--gray-5);
                 }
+
+                > *,
+                > *:not(mjx-container) *
+                {
+                    margin: 0;
+                }
+
                 mjx-container 
                 {
                     display: inline;

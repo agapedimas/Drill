@@ -627,8 +627,14 @@ window.onbeforeprint = async function(event)
         title.innerText = Topics.Active.name;
         Grid_PrintContent.prepend(title);
     }
-        
+
+    document.documentElement.setAttribute("doctitle", Courses.Active.name);
     Courses.PendingPrint = false;
+}
+
+window.onafterprint = function()
+{
+    document.documentElement.removeAttribute("doctitle");
 }
 
 const mathExtension = 
@@ -745,7 +751,8 @@ window.addEventListener("popstate", function()
     }
 })
 
-marked.use({ extensions: [letterListExtension, mathBlockExtension, mathExtension] });
+marked.use(markedMoreLists());
+marked.use({ extensions: [ mathBlockExtension, mathExtension ] });
 
 if (document.documentElement.lang == "kr")
     moment.locale("ko");
