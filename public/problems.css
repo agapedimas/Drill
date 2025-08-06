@@ -3,6 +3,7 @@
     @page
     { 
         size: A4;
+        print-color-adjust: exact;
     } 
     @page cover
     {
@@ -12,7 +13,6 @@
     {
         margin: 140px 70px 100px 70px;
         break-after: page;
-        print-color-adjust: exact;
 
         @top-left
         {
@@ -179,7 +179,7 @@
     display: grid;
     grid-auto-rows: max-content auto;
 }
-#Activity_Topic > .content:has(.notfound)
+#Activity_Topic > .content:has(.notfound, .offline, .unknownerror)
 {
     grid-auto-rows: auto;
 }
@@ -239,6 +239,22 @@
     {
         content: "<$ problems notfound_topic_subtitle />";
     }
+    #Grid_CourseProblems.offline:empty::before
+    {
+        content: "<$ problems offline_topic_title />";
+    }
+    #Grid_CourseProblems.offline:empty::after
+    {
+        content: "<$ problems offline_topic_subtitle />";
+    }
+    #Grid_CourseProblems.unknownerror:empty::before
+    {
+        content: "<$ problems unknownerror_topic_title />";
+    }
+    #Grid_CourseProblems.unknownerror:empty::after
+    {
+        content: "<$ problems unknownerror_topic_subtitle />";
+    }
     #Grid_PrintContent section
     {
         counter-reset: problem;
@@ -264,6 +280,7 @@
         }
         :where(#Grid_CourseProblems, #Grid_PrintContent) .group .problem
         {
+            position: relative;
             break-inside: avoid-page;
             display: grid;
             grid-auto-flow: column;
@@ -288,6 +305,11 @@
                 *
                 {
                     user-select: text;
+                }
+
+                img
+                {
+                    max-width: 100%;
                 }
 
                 ul, ol

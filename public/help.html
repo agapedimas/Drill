@@ -42,7 +42,7 @@
         for (const account of accounts)
         {
             const img = document.createElement("img");
-            img.src = "/avatar/" + account.id;
+            img.src = "/avatar/" + account.id + "?v=" + account.avatarversion;
 
             const name = document.createElement("span");
             name.classList.add("name");

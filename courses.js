@@ -12,7 +12,8 @@ const Courses =
      *      alias: string,
      *      description: string,
      *      semester: number,
-     *      sks: number
+     *      sks: number,
+     *      bannerversion: number
      * }>>} List of courses
      */
     Get: async function(id)
@@ -124,8 +125,8 @@ const Courses =
         if (id == null)
             return false;
 
-        const result1 = await SQL.Query("DELETE FROM courses WHERE id=?", id);
-        const result2 = await Courses.Banners.Delete(id);
+        const result1 = await Courses.Banners.Delete(id);
+        const result2 = await SQL.Query("DELETE FROM courses WHERE id=?", id);
 
         return result1.success && result2;
     },
@@ -455,14 +456,15 @@ const Courses =
          * Save banner of course
          * @param { string } id Id of course 
          * @param { Array<Buffer> } buffer Buffer of image
-         * @returns { boolean } @true if operation completed successfully, otherwise @false
+         * @returns { Promise<boolean> } @true if operation completed successfully, otherwise @false
          */
-        Save: function(id, buffer)
+        Save: async function(id, buffer)
         {
             try
             {
                 const path = "./src/banners/" + id;
                 FileIO.writeFileSync(path, buffer);
+                await SQL.Query("UPDATE courses SET bannerversion = bannerversion + 1 WHERE id = ?", [id]);
                 return true;
             }
             catch(error)
@@ -476,7 +478,7 @@ const Courses =
          * @param { string } id Id of course 
          * @returns { Promise<boolean> } @true if operation completed successfully, otherwise @false
          */
-        Delete: function(id)
+        Delete: async function(id)
         {
             try
             {
@@ -484,6 +486,8 @@ const Courses =
                 
                 if (FileIO.existsSync(path))
                     FileIO.unlinkSync(path);
+
+                await SQL.Query("UPDATE courses SET bannerversion = bannerversion + 1 WHERE id = ?", [id]);
 
                 return true;
             }

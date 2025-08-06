@@ -19,12 +19,13 @@ const Accounts =
      *      nickname: string,
      *      url: string,
      *      created: string,
-     *      role: string
+     *      role: string,
+     *      avatarversion: number
      * }>> } Details of accounts 
      */
     Get: async function(details)
     {
-        let query = "SELECT id, username, nickname, url, created, role FROM accounts";
+        let query = "SELECT id, username, nickname, url, created, role, avatarversion FROM accounts";
         let params = [];
 
         if (details?.id)
@@ -67,8 +68,8 @@ const Accounts =
      */
     Remove: async function(id)
     {
-        const result1 = await SQL.Query("DELETE FROM accounts WHERE id=?", [id]);
-        const result2 = await Accounts.Avatars.Delete(id);
+        const result1 = await Accounts.Avatars.Delete(id);
+        const result2 = await SQL.Query("DELETE FROM accounts WHERE id=?", [id]);
         
         return result1.success && result2;
     },
@@ -112,6 +113,8 @@ const Accounts =
                 await ConvertWEBP.cwebp(path + ".png", path);
                 FileIO.unlinkSync(path + ".png", o => o);
 
+                await SQL.Query("UPDATE accounts SET avatarversion = avatarversion + 1 WHERE id = ?", [id]);
+
                 return true;
             }
             catch(error)
@@ -125,7 +128,7 @@ const Accounts =
          * @param { string } id Id of account 
          * @returns { Promise<boolean> } @true if operation completed successfully, otherwise @false
          */
-        Delete: function(id)
+        Delete: async function(id)
         {
             try
             {
@@ -133,6 +136,8 @@ const Accounts =
                 
                 if (FileIO.existsSync(path))
                     FileIO.unlinkSync(path);
+
+                await SQL.Query("UPDATE accounts SET avatarversion = avatarversion + 1 WHERE id = ?", [id]);
 
                 return true;
             }

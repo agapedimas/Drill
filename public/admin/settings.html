@@ -174,7 +174,7 @@
 <div class="content">
     <div id="Settings_Account">
         <div class="avatar" id="Grid_Avatar" ad-tooltip="<$ settings avatar_change />">
-            <img id="Image_Avatar" src="/avatar/<#? activeuser.id ?#>"/>
+            <img id="Image_Avatar" src="/avatar/<#? activeuser.id ?#>?v=<#? activeuser.avatarversion ?#>"/>
         </div>
         <div class="details">
             <div class="name"><#? activeuser.nickname ?#></div>
@@ -396,7 +396,7 @@
     function Account_Append(account)
     {
         const img = document.createElement("img");
-        img.src = "/avatar/" + account.id;
+        img.src = "/avatar/" + account.id + "?v=" + account.avatarversion;
 
         const name = document.createElement("span");
         name.classList.add("name");

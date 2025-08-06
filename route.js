@@ -92,7 +92,8 @@ function Route(Server)
                         "activeuser.username": account[0].username,
                         "activeuser.role": account[0].role,
                         "activeuser.role.display": Language.Data[req.session.language]["roles"][account[0].role],
-                        "activeuser.url": account[0].url
+                        "activeuser.url": account[0].url,
+                        "activeuser.avatarversion": account[0].avatarversion
                     }
                 );
             }
@@ -152,7 +153,9 @@ function Route(Server)
 
     Server.get("/avatar/*", async function(req, res)
     {
-        res.header("Cache-Control", "public, max-age=3600");
+        // Set cache of avatar to 1 year, because it can be refreshed with banner version query
+        res.header("Cache-Control", "public, max-age=31536000");
+        res.header("Content-Type", "image/webp");
         
         const paths = req.path.split("/").filter(o => o != "");
         const avatarPath = "./src/avatars/" + paths[1];
@@ -165,7 +168,9 @@ function Route(Server)
 
     Server.get("/banner/*", async function(req, res)
     {
-        res.header("Cache-Control", "public, max-age=3600");
+        // Set cache of banner to 1 year, because it can be refreshed with banner version query
+        res.header("Cache-Control", "public, max-age=31536000");
+        res.header("Content-Type", "image/png");
 
         const paths = req.path.split("/").filter(o => o != "");
         const bannerPath = "./src/banners/" + paths[1];
@@ -342,6 +347,7 @@ function Route(Server)
                         "course.description": course[0].description,
                         "course.sks": course[0].sks,
                         "course.semester": course[0].semester,
+                        "course.bannerversion": course[0].bannerversion
                     }
                 );
             }
@@ -402,6 +408,7 @@ function Route(Server)
                     "course.description": course[0].description,
                     "course.sks": course[0].sks,
                     "course.semester": course[0].semester,
+                    "course.bannerversion": course[0].bannerversion,
                 }
             );
 
@@ -534,7 +541,7 @@ function Route(Server)
         if (buffer.length > 2000000)
             return res.status(400).send("Maximum file size is 2MB.");
         
-        const success = Courses.Banners.Save(id, buffer);
+        const success = await Courses.Banners.Save(id, buffer);
         
         if (success)
             res.send();
@@ -545,7 +552,7 @@ function Route(Server)
     Server.post("/admin/courses/clearbanner", async function(req, res)
     {
         const id = req.body.id;
-        const success = Courses.Banners.Delete(id);
+        const success = await Courses.Banners.Delete(id);
 
         if (success)
             res.send();

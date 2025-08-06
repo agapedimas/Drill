@@ -175,7 +175,7 @@
         window.addEventListener("DOMContentLoaded", async function()
         {
             Grid_CourseCard.classList.remove("hasBanner");
-            const url = await Courses.FetchBanner("<#? course.id ?#>");
+            const url = await Courses.FetchBanner("<#? course.id ?#>?v=<#? course.bannerversion ?#>");
             Grid_CourseCard.style.setProperty("--image", "url(" + url + ")");
             Grid_CourseCard.classList.add("hasBanner");
         });

@@ -144,4 +144,41 @@
         padding: 1em;
         line-height: 1.35em;
     }
-    
+
+#Grid_CourseProblems .group .problem:after 
+{
+    content: "";
+    display: block;
+    position: absolute;
+    top: -0.5em;
+    left: -50px;
+    right: -50px;
+    bottom: -0.5em;
+    background: transparent;
+    z-index: -1;
+    transition: 0.1s background;
+}
+#Grid_CourseProblems .group .problem:hover::after,
+#Grid_CourseProblems .group .problem:active::after
+{
+    background: var(--background-list-hover);
+}
+    #Grid_CourseProblems .group .problem .menu
+    {
+        font-size: 0.7em;
+        padding: 0;
+        width: 1.8rem;
+        height: 1.8rem;
+        border-radius: 100%;
+        align-content: center;
+        font-weight: bold;
+        justify-content: center;
+        color: var(--foreground-description);
+        opacity: 0;
+        transition: 0.1s opacity;
+    }
+    #Grid_CourseProblems .group .problem:hover .menu,
+    #Grid_CourseProblems .group .problem:active .menu
+    {
+        opacity: 1;
+    }

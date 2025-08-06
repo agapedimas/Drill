@@ -11,6 +11,10 @@
     "empty_problems_subtitle": "追加された問題はここに表示されます。",
     "notfound_topic_title": "トピックが見つかりません",
     "notfound_topic_subtitle": "移動または削除された可能性があります。",
+    "offline_topic_title": "オフラインです",
+    "offline_topic_subtitle": "インターネットに接続してください。",
+    "unknownerror_topic_title": "エラーが発生しました",
+    "unknownerror_topic_subtitle": "現在、サーバーで問題が発生しています。",
     "error_generic": "何か問題が発生しました。",
     "sources": "[ \"\", \"クイズ\", \"中間試験\", \"期末試験\" ]"
 }

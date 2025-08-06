@@ -12,7 +12,11 @@
     "empty_problems_title": "Belum Ada Soal",
     "empty_problems_subtitle": "Soal yang ditambahkan akan muncul di sini.",
     "notfound_topic_title": "Topik Tidak Ditemukan",
-    "notfound_topic_subtitle": "Mungkin sudah dipindahkan atau dihapus.",
+    "notfound_topic_subtitle": "Mungkin udah dipindah atau dihapus.",
+    "offline_topic_title": "Kamu Offline",
+    "offline_topic_subtitle": "Coba hubungkan ke internet.",
+    "unknownerror_topic_title": "Ada yang Salah",
+    "unknownerror_topic_subtitle": "Sepertinya lagi ada masalah di server kami.",
 
     "error_generic": "Ada yang salah.",
 

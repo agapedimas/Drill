@@ -18,9 +18,7 @@
 
 <div class="content">
     <h3 id="Text_TopicName"><#? topic.name ?#></h3>
-    <div id="Grid_CourseProblems">
-        <div class="progressring"></div>
-    </div>
+    <div id="Grid_CourseProblems"> </div>
 </div>
 
 <div id="PopOver_Problem" class="popover" preventDefault>
@@ -106,7 +104,17 @@
         const a = Problems.Render;
         Problems.Render = async function(problem)
         {
+            const menu = document.createElement("button");
+            menu.classList.add("menu");
+            menu.classList.add("icon");
+            menu.append("\uf153");
+            menu.onclick = function(event)
+            {
+                Components.ContextMenu.Open("Problem_Admin", box, event);
+            }
+
             const box = await a(problem);
+            box.append(menu);
             box.oncontextmenu = function(event)
             {
                 Components.ContextMenu.Open("Problem_Admin", box, event);
@@ -334,17 +342,6 @@
         {
             Pivot_ProblemEdit.tabs.selected = 0;
         }
-
-        $.ajax(
-        {
-            type: "get",
-            url: "/problems/get?id=<#? topic.id ?#>&type=topic",
-            success: function(problems)
-            {
-                Grid_CourseProblems.innerHTML = "";
-                Problems.Append(problems, Grid_CourseProblems);
-            }
-        });
     }
     async function UpdateTopicDetails()
     {
@@ -355,6 +352,7 @@
 
         const topic = await $.get("/topics/get?id=" + item.data.id + "&type=topic");
         const box = Topics.Render(topic[0]);
+        box.classList.add("active");
 
         item.parentNode.replaceChild(box, item); 
     }

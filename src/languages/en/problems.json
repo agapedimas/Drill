@@ -13,6 +13,11 @@
     "empty_problems_subtitle": "Added problems will appear here.",
     "notfound_topic_title": "Topic Not Found",
     "notfound_topic_subtitle": "It may have been moved or deleted.",
+    "offline_topic_title": "You're Offline",
+    "offline_topic_subtitle": "Please connect to internet.",
+    "unknownerror_topic_title": "Something Went Wrong",
+    "unknownerror_topic_subtitle": "We're currently experiencing an issue with our server.",
+    
 
     "error_generic": "Something went wrong.",
 

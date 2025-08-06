@@ -22,6 +22,7 @@ CREATE TABLE IF NOT EXISTS `accounts`
         `password` varchar(255) CHARACTER SET ascii COLLATE ascii_bin NOT NULL, 
         `created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP, 
         `role` varchar(10) CHARACTER SET ascii COLLATE ascii_bin NOT NULL, 
+        `avatarversion` int UNSIGNED NOT NULL DEFAULT 1,
             PRIMARY KEY (`id`), 
             UNIQUE KEY `username` (`username`),
             CONSTRAINT `fk_role_user` 
@@ -75,6 +76,7 @@ CREATE TABLE IF NOT EXISTS `courses`
         `description` varchar(1000) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin, 
         `semester` int NOT NULL, 
         `sks` int NOT NULL,
+        `bannerversion` int UNSIGNED NOT NULL DEFAULT 1,
             PRIMARY KEY (`id`)
     ) 
 ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;

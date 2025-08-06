@@ -46,7 +46,7 @@ const Courses =
 
         const banner = document.createElement("img");
         banner.classList.add("banner");
-        banner.src = "/banner/" + course.id;
+        banner.src = "/banner/" + course.id + "?v=" + course.bannerversion;
 
         const id = document.createElement("span");
         id.classList.add("id");
@@ -282,67 +282,78 @@ const Topics =
     {
         return window['Activity_Topic'] != null;
     },
-    Back: function(ignorePopState = false)
+    Timeout: null,
+    Back: function(ignorePopState = false, isLoading = false)
     {
-        if (Topics.IsOpened())
+        if (Topics.IsOpened() && Topics.Active)
         {
-            Activity_Topic.remove();
-
+            if (isLoading == false)
+                Activity_Topic.remove();
+            
             if (ignorePopState == false)
                 window.history.back();
         }
 
-        for (const box of [...Grid_CourseTopics.children])
-            box.classList.remove("active");
-        
-        Topics.Active = null;
+        if (Topics.Active)
+        {
+            for (const box of [...Grid_CourseTopics.children])
+                box.classList.remove("active");
+            
+            Topics.Active = null;
+        }
     },
-    Loading: function(topic)
+    Template: function()
     {
-        if (Topics.IsOpened())
-            Activity_Topic.remove();
-
-        const title = document.createElement("div");
-        title.classList.add("title");
-        title.classList.add("hide");
-
         const back = document.createElement("button");
         back.classList.add("back");
         back.innerHTML = "<$ topics back />";
         back.onclick = Topics.Back;
-
-        const buttons = document.createElement("buttons");
+        
+        const buttons = document.createElement("div");
         buttons.classList.add("buttons");
         buttons.append(back);
 
         const header = document.createElement("div");
-        header.classList.add("header");
-        header.classList.add("cascaded");
-        header.appendChild(buttons);
-        header.appendChild(title);
+        header.classList.add("header");  
+        header.classList.add("cascaded");  
+        header.append(buttons);
 
-        const h3 = document.createElement("h3");
-        h3.innerText = topic.name;
-
-        const progressring = document.createElement("div");
-        progressring.classList.add("progressring");
+        const title = document.createElement("h3");
+        title.setAttribute("id", "Text_TopicName");
 
         const problems = document.createElement("div");
         problems.setAttribute("id", "Grid_CourseProblems");
-        problems.appendChild(progressring);
 
         const content = document.createElement("div");
         content.classList.add("content");
-        content.appendChild(h3);
-        content.appendChild(problems);
+        content.append(title);
+        content.append(problems);
 
-        const activity = document.createElement("div");
-        activity.classList.add("activity"); 
-        activity.setAttribute("id", "Activity_Topic");
-        activity.appendChild(header);
-        activity.appendChild(content);
+        const container = new DocumentFragment();
+        container.append(header);
+        container.append(content);
 
-        $(".root > .main").append(activity);
+        return container;
+    },
+    Loading: function(topic)
+    {
+        clearTimeout(Topics.Timeout);
+        Topics.Back(false, true);
+
+        Topics.Timeout = setTimeout(function()
+        {
+            const progressring = document.createElement("div");
+            progressring.classList.add("progressring");
+
+            if (window["Text_TopicName"])
+                Text_TopicName.innerText = topic.name;
+
+            if (window["Grid_CourseProblems"])
+            {
+                Grid_CourseProblems.innerHTML = "";
+                Grid_CourseProblems.append(progressring);
+            }
+        }, 500);
     },
     Open: function(topic, ignorePopState = false)
     {
@@ -350,18 +361,14 @@ const Topics =
         let path = url.pathname;
         path = path.substring(0, path.indexOf("courses")) + "courses/" + topic.course;
 
-        Topics.Back();
-        // Topics.Loading(topic);
+        Topics.Loading(topic);
 
         const box = [...Grid_CourseTopics.children].find(o => o.data.id == topic.id);
         box?.classList.add("active");
 
-        const activity = document.createElement("div");
-        activity.classList.add("activity"); 
-        activity.setAttribute("id", "Activity_Topic");
-
-        const output = function(page)
+        const output = function(result)
         {
+            clearTimeout(Topics.Timeout);
             Topics.Active = topic;
             url.searchParams.set("name", topic.name);
             const name = url.search.replace("?name=", "").replaceAll("+", "-").replaceAll("---", "-").toLowerCase();
@@ -369,8 +376,39 @@ const Topics =
             if (ignorePopState == false)
                 window.history.pushState({ page: "problems", topic: topic }, null, path + "/" + name);
 
-            activity.innerHTML = page;
-            $(".root > .main").append(activity);
+            if (Topics.IsOpened() == false)
+            {
+                const activity = document.createElement("div");
+                activity.classList.add("activity"); 
+                activity.setAttribute("id", "Activity_Topic");
+
+                if (result.data)
+                    activity.innerHTML = result.data;
+                else
+                    activity.append(Topics.Template());
+
+                $(".root > .main").append(activity);
+            }
+                
+            Text_TopicName.innerText = topic.name;
+            Grid_CourseProblems.innerHTML = "";
+
+            if (result.success == false)
+            {
+                Text_TopicName.style.display = "none";
+
+                if (result.status == 404)
+                    Grid_CourseProblems.setAttribute("class", "notfound");
+                else if (result.status == 0)
+                    Grid_CourseProblems.setAttribute("class", "offline");
+                else
+                    Grid_CourseProblems.setAttribute("class", "unknownerror");
+            }
+            else
+            {
+                Text_TopicName.style.display = "block";
+                Grid_CourseProblems.removeAttribute("class");
+            }
         }
 
         $.ajax({
@@ -378,11 +416,21 @@ const Topics =
             url: path + "/" + topic.id,
             success: function(page)
             {
-                output(page);
+                $.ajax(
+                {
+                    type: "get",
+                    url: "/problems/get?id=" + topic.id+ "&type=topic",
+                    success: function(problems)
+                    {
+                        output({ success: true, data: page });
+                        Problems.Append(problems, Grid_CourseProblems);
+                        Grid_CourseProblems.scrollTop = 0;
+                    }
+                });
             },
-            error: function(page)
+            error: function(data)
             {
-                output(page.responseText);
+                output({ success: false, status: data.status });
             }
         });
     },

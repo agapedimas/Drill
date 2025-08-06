@@ -70,7 +70,7 @@ async function Configure()
     		fonts: /\.(?:ttf|woff2)$/i,
     		scripts: /\.(?:js)$/i,
     		styles: /\.(?:css)$/i,
-    		images:/\.(?:png|webp|jpg|jpeg|bmp)$/i
+    		images:/\.(?:png|webp|jpg|jpeg|bmp|svg)$/i
     	}
     	
     	for (const [key, value] of Object.entries(file)) 

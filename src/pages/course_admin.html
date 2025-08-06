@@ -98,7 +98,7 @@
         <div class="content">
             <div id="List_Banner" class="list" ad-header="<$ courses banner_label />" ad-action="<$ courses clear />">
                 <div class="banner">
-                    <img id="Image_Banner" src="/banner/<#? course.id ?#>"/>
+                    <img id="Image_Banner" src="/banner/<#? course.id ?#>?v=<#? course.bannerversion ?#>"/>
                     <input type="file" id="Input_File" accept=".jpg, .jpeg, .png, .webp"/>
                 </div>
             </div>
@@ -535,7 +535,6 @@
                 processData: false,
                 success: async function()
                 {
-                    
                     Grid_CourseCard.classList.remove("hasBanner");
                     const url = await Courses.FetchBanner("<#? course.id ?#>", true);
                     Grid_CourseCard.style.setProperty("--image", "url(" + url + ")");
@@ -586,6 +585,7 @@
                     Text_Error.classList.remove("hidden");
                     $("#PopOver_EditCourse :where(input, textarea)").removeAttr("disabled");
 
+                    PopOver_EditCourse.close(true);
                     Components.Notification.Send({ Id: "banner_success", Title: "<$ courses banner_clear_success_title />", Message: "<$ courses banner_clear_success_message />", Icon: "\uf873"});
                 },
                 error: function()
@@ -604,7 +604,7 @@
         window.addEventListener("DOMContentLoaded", async function()
         {
             Grid_CourseCard.classList.remove("hasBanner");
-            const url = await Courses.FetchBanner("<#? course.id ?#>");
+            const url = await Courses.FetchBanner("<#? course.id ?#>?v=<#? course.bannerversion ?#>");
             Grid_CourseCard.style.setProperty("--image", "url(" + url + ")");
             Grid_CourseCard.classList.add("hasBanner");
         });
