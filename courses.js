@@ -230,7 +230,7 @@ const Courses =
                 SELECT sort, course INTO @old_sort, @course FROM topics WHERE id = @id;
 
                 UPDATE topics
-                SET sort = -1
+                SET sort = 0
                 WHERE id = @id;
 
                 UPDATE topics

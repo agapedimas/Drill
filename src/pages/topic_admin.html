@@ -104,6 +104,7 @@
         const a = Problems.Render;
         Problems.Render = async function(problem)
         {
+            Object.defineProperty(Problems, "Render", { configurable: false, writable: false });
             const menu = document.createElement("button");
             menu.classList.add("menu");
             menu.classList.add("icon");

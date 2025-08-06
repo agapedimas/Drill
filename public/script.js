@@ -282,6 +282,7 @@ const Topics =
     {
         return window['Activity_Topic'] != null;
     },
+    Request: null,
     Timeout: null,
     Back: function(ignorePopState = false, isLoading = false)
     {
@@ -338,30 +339,49 @@ const Topics =
     Loading: function(topic)
     {
         clearTimeout(Topics.Timeout);
-        Topics.Back(false, true);
+        Topics.Back(true, true);
 
         Topics.Timeout = setTimeout(function()
         {
             const progressring = document.createElement("div");
             progressring.classList.add("progressring");
 
-            if (window["Text_TopicName"])
-                Text_TopicName.innerText = topic.name;
-
-            if (window["Grid_CourseProblems"])
+            if (Topics.IsOpened() == false)
             {
-                Grid_CourseProblems.innerHTML = "";
-                Grid_CourseProblems.append(progressring);
+                const activity = document.createElement("div");
+                activity.classList.add("activity"); 
+                activity.setAttribute("id", "Activity_Topic");
+                activity.append(Topics.Template());
+
+                $(".root > .main").append(activity);
             }
+
+            Text_TopicName.innerText = topic.name;
+            Grid_CourseProblems.innerHTML = "";
+            Grid_CourseProblems.append(progressring);
         }, 500);
     },
     Open: function(topic, ignorePopState = false)
     {
+        if (Topics.Request != null)
+            Topics.Request.abort();
+        
+        Topics.Loading(topic);
+        Topics.Active = topic;
+        
         const url = new URL(window.location.href);
         let path = url.pathname;
         path = path.substring(0, path.indexOf("courses")) + "courses/" + topic.course;
+        url.searchParams.set("name", topic.name);
+        const name = url.search.replace("?name=", "").replaceAll("+", "-").replaceAll("---", "-").toLowerCase();
 
-        Topics.Loading(topic);
+        if (ignorePopState == false)
+        {
+            if (Topics.IsOpened())
+                window.history.replaceState({ page: "problems", topic: topic }, null, path + "/" + name);
+            else
+                window.history.pushState({ page: "problems", topic: topic }, null, path + "/" + name);
+        }
 
         const box = [...Grid_CourseTopics.children].find(o => o.data.id == topic.id);
         box?.classList.add("active");
@@ -369,15 +389,12 @@ const Topics =
         const output = function(result)
         {
             clearTimeout(Topics.Timeout);
-            Topics.Active = topic;
-            url.searchParams.set("name", topic.name);
-            const name = url.search.replace("?name=", "").replaceAll("+", "-").replaceAll("---", "-").toLowerCase();
 
-            if (ignorePopState == false)
-                window.history.pushState({ page: "problems", topic: topic }, null, path + "/" + name);
-
-            if (Topics.IsOpened() == false)
+            if (Topics.IsOpened() == false || Topics.IsLoaded == false)
             {
+                if (Topics.IsOpened())
+                    Activity_Topic.remove();
+
                 const activity = document.createElement("div");
                 activity.classList.add("activity"); 
                 activity.setAttribute("id", "Activity_Topic");
@@ -411,25 +428,40 @@ const Topics =
             }
         }
 
-        $.ajax({
+        Topics.Request = $.ajax({
             type: "post",
             url: path + "/" + topic.id,
             success: function(page)
             {
-                $.ajax(
+                Topics.Request = $.ajax(
                 {
                     type: "get",
                     url: "/problems/get?id=" + topic.id+ "&type=topic",
                     success: function(problems)
                     {
+                        Topics.Request = null;
                         output({ success: true, data: page });
                         Problems.Append(problems, Grid_CourseProblems);
                         Grid_CourseProblems.scrollTop = 0;
+                    },
+                    error: function(data)
+                    {
+                        Topics.Request = null;
+
+                        if (data.statusText == "abort")
+                            return;
+                        
+                        output({ success: false, status: data.status});
                     }
                 });
             },
             error: function(data)
             {
+                Topics.Request = null;
+
+                if (data.statusText == "abort")
+                    return;
+
                 output({ success: false, status: data.status });
             }
         });

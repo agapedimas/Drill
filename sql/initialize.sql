@@ -90,7 +90,7 @@ CREATE TABLE IF NOT EXISTS `topics`
         `course` varchar(16) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,
         `problemcount` int UNSIGNED DEFAULT 0 NOT NULL,
         `lastedited` bigint UNSIGNED DEFAULT 0 NOT NULL,
-        `sort` int NOT NULL,
+        `sort` int UNSIGNED NOT NULL,
             PRIMARY KEY (`id`), 
             CONSTRAINT `fk_topic_id` 
                 FOREIGN KEY (`course`) REFERENCES `courses`(`id`) 
