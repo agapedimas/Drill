@@ -1,17 +1,3 @@
-let PendingId = null;
-
-{
-    const url = new URL(window.location.href);
-    const id = url.searchParams.get("id");
-    
-    if (id)
-    {
-        PendingId = id;
-        url.searchParams.delete("id");
-        window.history.replaceState(null, null, url.href);
-    }
-}
-
 const Courses = 
 {
     Active: null,
@@ -195,7 +181,7 @@ const Courses =
 
         for (const topic of topics)
         {
-            const problems = await $.get("/problems/get?id=" + topic.id + "&type=topic", "/problems/get");
+            const problems = await $.get("/problems/get/" + topic.id + "?type=topic", "/problems/get");
             
             const section = document.createElement("section");
 
@@ -228,11 +214,39 @@ const Courses =
 
         if (response.ok == false || blob == null)
             return "";
+
+        const blur = await Image_Blur("/banner/" + id + (disableCache ? "?cache=false" : ""));
         
-        return URL.createObjectURL(blob);
+        return [URL.createObjectURL(blob), blur];
     }
 }
 
+Components.ContextMenu.Add("Courses",  [
+        "separator",
+        {
+            Title: "<$ courses filter_sortby />",
+            Icon: "eb8b",
+            Submenu: 
+            [
+                {
+                    value: "default",
+                    Title: "<$ courses filter_default />",
+                    Checked: true,
+                    Action: o => Sort_Change("default")
+                },
+                {
+                    value: "name",
+                    Title: "<$ courses name_label />",
+                    Action: o => Sort_Change("name")
+                },
+                {
+                    value: "sks",
+                    Title: "<$ courses sks_label />",
+                    Action: o => Sort_Change("sks")
+                }
+            ]
+        }
+    ]);
 Components.ContextMenu.Add("Course", 
     [
         {
@@ -272,7 +286,7 @@ Components.ContextMenu.Add("Course_More",
             { 
                 PopOver_PrintAll.open(element); 
             }
-        }
+        }	
     ]);
 
 const Topics = 
@@ -436,7 +450,7 @@ const Topics =
                 Topics.Request = $.ajax(
                 {
                     type: "get",
-                    url: "/problems/get?id=" + topic.id+ "&type=topic",
+                    url: "/problems/get/" + topic.id+ "?type=topic",
                     success: function(problems)
                     {
                         Topics.Request = null;
@@ -513,7 +527,7 @@ const Topics =
 
         if (topic.id == PendingId)
         {   
-            Topics.Open(topic);
+            Topics.Open(topic, true);
             box.classList.add("active");
             PendingId = null;
         }
@@ -840,3 +854,33 @@ else if (document.documentElement.lang == "jp")
     moment.locale("ja");
 else
     moment.locale(document.documentElement.lang);
+
+
+async function Image_Blur(src, blur = 20, width = 256, height = 256)
+{
+	return new Promise(resolve => 
+	{
+		let canvas = document.createElement("canvas");
+		let ctx = canvas.getContext("2d");
+	
+			let draw = () => 
+			{
+				canvas.width = width;
+				canvas.height = height;
+	
+				ctx.fillRect(0, 0, img.width, img.height);
+				ctx.filter = "blur(" + blur + "px)";
+				ctx.drawImage(img, 0, 0, img.width, img.height, 0, 0, canvas.width, canvas.height); 
+	
+				canvas.toBlob(blob => 
+				{
+					let url = URL.createObjectURL(blob);
+					resolve(url);
+				}, "image/png"); 
+			}
+	
+		let img = new Image();
+		img.src = src;
+		img.onload = draw;
+	});
+}

@@ -1,8 +1,15 @@
 <ad-title><$ courses title /></ad-title>
 
-<style>@import url("/<#? applang ?#>/courses.css");</style>
+<style>
+    @import url("/<#? applang ?#>/courses.css");
+    label:has(#Select_Semesters), #Select_Semesters { display: none; }    
+</style>
 
 <div class="header">
+    <div class="buttons">
+        <span></span>
+        <button class="icon" id="Button_Filter" ad-tooltip="<$ courses tooltip_filter />">&#xf5bf;</button>
+    </div>
     <div class="title"><$ courses title /></div>
 </div>
 
@@ -16,14 +23,136 @@
 </div>
 
 <script>
-    $.ajax({
-        type: "get",
-        url: "/courses/get?cache=false",
-        data: null,
-        success: function(courses)
+    {
+        $.ajax({
+            type: "get",
+            url: "/courses/get",
+            data: null,
+            success: function(courses)
+            {
+                Courses.Sort = ["default", "asc"];
+                Courses.List = courses;
+                Grid_Courses.innerHTML = "";
+                Courses.Append(courses, Grid_Courses);
+
+                const semesters = [...["<$ courses filter_all />"],...new Set(courses.map(o => o.semester))];
+                const context = Components.ContextMenu.List.find(o => o.id == "Courses");
+
+                for (const semester of semesters.reverse())
+                {
+                    context.commands.unshift(
+                        {
+                            value: semester,
+                            Checked: false,
+                            Title: semester == "<$ courses filter_all />" ? semester : "<$ courses filter_semester />".format(semester),
+                            Action: o => Filter_Change(semester)
+                        }
+                    );
+                }
+
+                Filter_Change("<$ courses filter_all />");
+            }
+        });
+                
+        function Filter_Change(value)
         {
-            Grid_Courses.innerHTML = "";
-            Courses.Append(courses, Grid_Courses);
+            const context = Components.ContextMenu.List.find(o => o.id == "Courses");
+            for (const item of context.commands)
+            {
+                if (item.value == value)
+                    item.Checked = true;
+                else
+                    item.Checked = false;
+            }
+            
+            for (const child of [...Grid_Courses.children])
+            {
+                if (child.data.semester != value && value != "<$ courses filter_all />")
+                    child.style.display = "none";
+                else
+                    child.style.display = "";
+            }
+            
+            Activity_Main.scrollTop = 0;
         }
-    });
+
+        function Sort_Change(value)
+        {
+            if (Courses.Sort[0] == value)
+            {
+                if (Courses.Sort[1] == "asc")
+                    Courses.Sort[1] = "desc";
+                else
+                    Courses.Sort[1] = "asc";
+            }
+            else
+            {
+                Courses.Sort[0] = value;
+                Courses.Sort[1] = "asc";
+            }
+
+            const context = Components.ContextMenu.List.find(o => o.id == "Courses");
+            for (const item of context.commands[context.commands.length - 1].Submenu)
+            {
+                if (item.value == value)
+                {
+                    item.Checked = true;
+                    item.Icon = value == "default" ? null : Courses.Sort[1] == "asc" ? "ebd7" : "eb26";
+                }
+                else
+                {
+                    item.Checked = false;
+                    item.Icon = null;
+                }
+            }
+
+            let children = [...Grid_Courses.children];
+            
+            if (value == "default")
+            {
+                const orderMap = new Map();
+                Courses.List.forEach((course, index) => 
+                {
+                    orderMap.set(course.name, index);
+                });
+
+                children.sort((a, b) => 
+                {
+                    const aIndex = orderMap.get(a.data.name) ?? Infinity;
+                    const bIndex = orderMap.get(b.data.name) ?? Infinity;
+
+                    return aIndex - bIndex;
+                });
+            }
+            else
+            {
+                children = children.sort(function(a,b)
+                {
+                    const aVal = a.data[value];
+                    const bVal = b.data[value];
+
+                    if (typeof aVal === "string" && typeof bVal === "string")
+                    {
+                        if (Courses.Sort[1] == "asc")
+                            return aVal.localeCompare(bVal);
+                        else
+                            return bVal.localeCompare(aVal);
+                    }
+
+                    if (Courses.Sort[1] == "asc")
+                        return aVal - bVal;
+                    else
+                        return bVal - aVal;
+                });
+            }
+
+            children.forEach(o => Grid_Courses.append(o));
+            Activity_Main.scrollTop = 0;
+        }
+
+        Button_Filter.onclick = function(event)
+        {
+            Components.ContextMenu.Open("Courses", this, event);
+        };
+    }
 </script>

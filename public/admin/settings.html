@@ -178,7 +178,7 @@
         </div>
         <div class="details">
             <div class="name"><#? activeuser.nickname ?#></div>
-            <div class="description">@<#? activeuser.username ?#> • <#? activeuser.role.display ?#></div>
+            <div class="description">@<#? activeuser.username ?#> • <#? activeuser.role.name ?#></div>
             <button id="Button_SignOut" class="critical plain"><$ settings signout /></button>
         </div>
     </div> 
@@ -404,7 +404,7 @@
 
         const role = document.createElement("span");
         role.classList.add("role");
-        role.innerHTML = "@" + account.username + " • " + account.role;
+        role.innerHTML = "@" + account.username + " • " + account.role.name;
 
         const details = document.createElement("div");
         details.classList.add("details");

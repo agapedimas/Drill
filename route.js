@@ -52,20 +52,19 @@ function Route(Server)
         Server.get("/admin*", async function(req, res, next)
         {
             const path = req.url;
-            const isHTML = FileIO.existsSync("./public/" + path + ".html") || FileIO.existsSync("./public/" + path + "/index.html");
             const hasAccess = await Authentication.HasAccess(req.session.account, ["editor", "admin"]);
 
             if (hasAccess == false && path != "/admin/signin" && path != "/admin/manifest.json")
             {
-                if (isHTML)
-                {
-                    req.session.redirect = req.url;
-                    return res.redirect("/admin/signin");
-                }
-                else
+                if (path.endsWith(".js") || path.endsWith(".css"))
                 {
                     res.setHeader("Cache-Control", "no-store");
                     return res.status(403).send();
+                }
+                else
+                {
+                    req.session.redirect = req.url;
+                    return res.redirect("/admin/signin");
                 }
             }
             else if (hasAccess == true)
@@ -91,7 +90,7 @@ function Route(Server)
                         "activeuser.nickname": account[0].nickname || account[0].username,
                         "activeuser.username": account[0].username,
                         "activeuser.role": account[0].role,
-                        "activeuser.role.display": Language.Data[req.session.language]["roles"][account[0].role],
+                        "activeuser.role.name": Language.Data[req.session.language]["roles"][account[0].role],
                         "activeuser.url": account[0].url,
                         "activeuser.avatarversion": account[0].avatarversion
                     }
@@ -198,7 +197,7 @@ function Route(Server)
 
     Server.get("/accounts/get", async function(req, res)
     {
-        if (await Authentication.HasAccess(req.session.account, ["editor", "admin"]) == true)
+        if (await Authentication.HasAccess(req.session.account, ["editor", "admin"]) == false)
             res.header("Cache-Control", "public, max-age=60");
         
         const type = req.query.type;
@@ -218,6 +217,16 @@ function Route(Server)
         {
             accounts = await Accounts.Get();
         }
+
+        accounts = accounts.map(function(o)
+        {
+            o.role = 
+            {
+                name: Language.Data[req.session.language]["roles"][o.role],
+                value: o.role
+            }
+            return o;
+        });
 
         res.send(accounts);
     });
@@ -310,7 +319,7 @@ function Route(Server)
         if (await Authentication.HasAccess(req.session.account, ["editor", "admin"]) == false)
             res.header("Cache-Control", "public, max-age=30");
 
-        const courses = await Courses.Get(req.query.id);
+        const courses = await Courses.Get();
         res.send(courses);
     });
 
@@ -322,7 +331,7 @@ function Route(Server)
         if (isAdmin)
             paths = paths.slice(1);
 
-        if (paths.length == 2)
+        if (paths.length == 2 || paths.length == 3)
         {
             const course = await Courses.Get(paths[1]);
 
@@ -333,6 +342,29 @@ function Route(Server)
             }
             else
             {
+                const url = new URL("http://127.0.0.0/?name=" + paths[2]);
+                const name = url.searchParams.get("name").replaceAll("-", " ");
+                
+                if (paths.length == 3)
+                {
+                    const topic = await Courses.Topics.Find(course[0].id, name);
+
+                    if (topic == null)
+                        return res.redirect(path);
+                
+                    Object.assign(req.variables, 
+                    {
+                        "topic.pending.id": topic
+                    });
+                }
+                else
+                {
+                    Object.assign(req.variables, 
+                    {
+                        "topic.pending.id": ""
+                    });
+                }
+
                 if (isAdmin)
                     req.filepath = "./src/pages/course_admin";
                 else    
@@ -351,28 +383,6 @@ function Route(Server)
                     }
                 );
             }
-        }
-        
-        if (paths.length == 3)
-        {        
-            const course = await Courses.Get(paths[1]);
-            let path = (isAdmin ? "/admin/" : "/") + paths[0] + "/" + paths[1];
-
-            if (course.length == 0)
-            {
-                req.filepath = "./src/pages/course_404";
-            }
-            else
-            {
-                const url = new URL("http://127.0.0.0/?name=" + paths[2]);
-                const name = url.searchParams.get("name").replaceAll("-", " ");
-                const topic = await Courses.Topics.Find(course[0].id, name);
-            
-                if (topic)
-                    path += "?id=" + topic;
-            }
-
-            return res.redirect(path);
         }
 
         req.isAdmin = isAdmin;
@@ -560,13 +570,13 @@ function Route(Server)
             res.status(500).send();
     });
     
-    Server.get("/topics/get", async function(req, res)
+    Server.get("/topics/get/:id", async function(req, res)
     {
         if (await Authentication.HasAccess(req.session.account, ["editor", "admin"]) == false)
             res.header("Cache-Control", "public, max-age=30");
 
         const type = req.query.type; 
-        const topic = await Courses.Topics.Get(type == "topic" ? { topic: req.query.id } : { course: req.query.id });
+        const topic = await Courses.Topics.Get(type == "topic" ? { topic: req.params.id } : { course: req.params.id });
         res.send(topic);
     });
 
@@ -640,7 +650,7 @@ function Route(Server)
         res.send(result);
     });
     
-    Server.get("/problems/get", async function(req, res)
+    Server.get("/problems/get/:id", async function(req, res)
     {
         if (await Authentication.HasAccess(req.session.account, ["editor", "admin"]) == false)
             res.header("Cache-Control", "public, max-age=30");
@@ -649,11 +659,11 @@ function Route(Server)
         let problems = [];
 
         if (type == "problem")
-            problems = await Courses.Problems.Get({ problem: req.query.id });
+            problems = await Courses.Problems.Get({ problem: req.params.id });
         else if (type == "course")
-            problems = await Courses.Problems.Get({ course: req.query.id });
+            problems = await Courses.Problems.Get({ course: req.params.id });
         else if (type == "topic")
-            problems = await Courses.Problems.Get({ topic: req.query.id });
+            problems = await Courses.Problems.Get({ topic: req.params.id });
 
         res.send(problems);
     });
@@ -719,10 +729,7 @@ function Route(Server)
     });
 
     Server.delete("/admin/problems/delete", async function(req, res)
-    {
-        if (await Authentication.HasAccess(req.session.account, ["admin", "editor"]) == false)
-            return res.status(403).send("You don't have permission to delete a course.");
-        
+    {        
         const id = req.body.id?.trim();
         
         if (!id)

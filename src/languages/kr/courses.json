@@ -11,6 +11,12 @@
     "tooltip_new_course": "새 강의 만들기",
     "tooltip_edit_course": "강의 수정",
     "tooltip_new_topic": "새 주제 만들기",
+    "tooltip_filter": "필터",
+    
+    "filter_all": "전체",
+    "filter_sortby": "정렬 기준",
+    "filter_semester": "{0}학기",
+    "filter_default": "기본",
 
     "pinned": "고정된 강의",
     "pinned_all": "모든 고정 항목",

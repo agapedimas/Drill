@@ -11,6 +11,12 @@
     "tooltip_new_course": "Buat Mata Kuliah Baru",
     "tooltip_edit_course": "Edit Mata Kuliah",
     "tooltip_new_topic": "Buat Topik Baru",
+    "tooltip_filter": "Saring",
+
+    "filter_all": "Semua",
+    "filter_sortby": "Urutkan",
+    "filter_semester": "Semester {0}",
+    "filter_default": "Default",
 
     "pinned": "Mata Kuliah Disematkan",
     "pinned_all": "Semua Sematan",

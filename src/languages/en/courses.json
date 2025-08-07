@@ -11,6 +11,12 @@
     "tooltip_new_course": "Create New Course",
     "tooltip_edit_course": "Edit Course",
     "tooltip_new_topic": "Create New Topic",
+    "tooltip_filter": "Filter",
+
+    "filter_all": "All",
+    "filter_sortby": "Sort by",
+    "filter_semester": "Semester {0}",
+    "filter_default": "Default",
 
     "pinned": "Pinned Courses",
     "pinned_all": "All Pins",

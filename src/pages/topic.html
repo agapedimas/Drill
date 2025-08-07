@@ -33,7 +33,7 @@
         $.ajax(
         {
             type: "get",
-            url: "/problems/get?id=<#? topic.id ?#>&type=topic",
+            url: "/problems/get/<#? topic.id ?#>?type=topic",
             success: function(problems)
             {
                 Grid_CourseProblems.innerHTML = "";
