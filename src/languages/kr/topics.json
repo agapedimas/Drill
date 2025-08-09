@@ -18,6 +18,9 @@
     "tooltip_new_problem": "새 문제",
     "new_problem_title": "새 문제",
     "edit_problem_title": "문제 수정",
+
+    "select_topic_title": "주제 선택",
+    "change_topic_title": "주제 변경",
     
     "source_header": "문제 출처",
     "type_label": "유형",

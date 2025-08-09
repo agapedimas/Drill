@@ -1,2 +1,93 @@
 @import url("https://assets.agapedimas.com/fonts/SFProDisplayKR.css");
 @import url("https://assets.agapedimas.com/fonts/SFProDisplayJP.css");
+
+@keyframes BackgroundIn
+{
+    0%, 10%
+    { 
+        opacity: 0;
+        transform: scale(1.05);
+    }
+}
+
+.markdown
+{
+    display: grid;
+    grid-auto-rows: max-content;
+    gap: 0.5em;
+
+    *
+    {
+        user-select: text;
+    }
+
+    img
+    {
+        max-width: 100%;
+    }
+
+    ul, ol
+    {
+        display: grid;
+        grid-auto-rows: max-content;
+        padding-inline-start: 1em;
+        gap: 0.5em;
+        
+        li
+        {
+            margin: 0;
+        }
+    }
+    table
+    {
+        display: block;
+        overflow-x: auto;
+        white-space: nowrap;
+        margin: 0 -70px;
+        padding: 0 70px;
+        border-collapse: collapse;
+        scrollbar-width: none;
+
+        th, td
+        {
+            border: 1px solid var(--foreground-page);
+            padding: 0.15em 0.5em;
+            width: max-content;
+        }
+    }
+    th
+    {
+        background: var(--gray-5);
+    }
+
+    pre:has(code)
+    {
+        display: block;
+        overflow: auto;
+        background: var(--gray-6);
+        border-radius: 10px;
+        padding: 1em;
+        scrollbar-width: thin;
+        font-family: var(--font-mono);
+        font-weight: 600;
+        font-size: 0.8em;
+        line-height: 1.2;
+    }
+
+    > *,
+    > *:not(mjx-container) *
+    {
+        margin: 0;
+    }
+
+    mjx-container,
+    mjx-container[jax][display]
+    {
+        display: inline;
+        margin: 0 -50px;
+        padding: 0.5ch 50px;
+        overflow-x: auto;
+        overflow-y: hidden;
+        scrollbar-width: none;
+    }
+}

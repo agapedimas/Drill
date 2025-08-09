@@ -14,6 +14,8 @@
     "tooltip_new_problem": "新規問題",
     "new_problem_title": "新規問題",
     "edit_problem_title": "問題を編集",
+    "select_topic_title": "トピックを選択",
+    "change_topic_title": "トピックを変更",
     "source_header": "問題の出典",
     "type_label": "タイプ",
     "academic_year_label": "年度",

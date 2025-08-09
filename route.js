@@ -317,7 +317,7 @@ function Route(Server)
     Server.get("/courses/get", async function(req, res)
     {
         if (await Authentication.HasAccess(req.session.account, ["editor", "admin"]) == false)
-            res.header("Cache-Control", "public, max-age=30");
+            res.header("Cache-Control", "public, max-age=60");
 
         const courses = await Courses.Get();
         res.send(courses);
@@ -573,11 +573,68 @@ function Route(Server)
     Server.get("/topics/get/:id", async function(req, res)
     {
         if (await Authentication.HasAccess(req.session.account, ["editor", "admin"]) == false)
-            res.header("Cache-Control", "public, max-age=30");
+            res.header("Cache-Control", "public, max-age=60");
 
         const type = req.query.type; 
         const topic = await Courses.Topics.Get(type == "topic" ? { topic: req.params.id } : { course: req.params.id });
         res.send(topic);
+    });
+    
+    Server.get("/topics/quiz/get/:id", async function(req, res)
+    {
+        const id = req.params.id;
+        let quiz = await Courses.Topics.Quiz.Get(id);
+        
+        if (quiz.status == "notavailable" || quiz.status == "error" || (quiz.status == "available" && Date.now() - quiz.created > 86400000) || (quiz.status == "generating" && Date.now() - quiz.created > 600000))
+        {
+            const success = await Courses.Topics.Quiz.Create(id, req.session.language);
+            quiz = await Courses.Topics.Quiz.Get(id);
+            
+            if (success == false)
+                res.status(500);
+        }
+        
+        if (quiz.problems)
+            quiz.problems = quiz.problems.map(function(o)
+            { 
+                return {
+                    question: o.question, 
+                    choices: o.choices 
+                } 
+            });
+
+        res.send(quiz);
+    });
+ 
+    Server.post("/topics/quiz/submit/:id", async function(req, res)
+    {
+        const answers = req.body.answers || [];
+        const id = req.params.id;
+        const quiz = await Courses.Topics.Quiz.Get(id);
+        
+        if (quiz == null)
+            return res.status(404).send();
+    
+        let index = 0;
+
+        if (quiz.problems)
+            quiz.problems = quiz.problems.map(function(problem)
+            {
+                let isCorrect = false;
+                if (problem.answer == answers[index])
+                    isCorrect = true;
+                
+                index++;
+
+                return {
+                    question: problem.question,
+                    choices: problem.choices,
+                    isCorrect: isCorrect,
+                    reason: problem.reason
+                }
+            });
+
+        res.send(quiz.problems);
     });
 
     Server.post("/admin/topics/create", async function(req, res)
@@ -653,7 +710,7 @@ function Route(Server)
     Server.get("/problems/get/:id", async function(req, res)
     {
         if (await Authentication.HasAccess(req.session.account, ["editor", "admin"]) == false)
-            res.header("Cache-Control", "public, max-age=30");
+            res.header("Cache-Control", "public, max-age=60");
 
         const type = req.query.type; 
         let problems = [];
@@ -742,6 +799,38 @@ function Route(Server)
         else
             return res.status(500).send("Something wen't wrong.");
     });
+
+    Server.get("/mentor/:course/:topic", async function(req, res, next)
+    {
+        const courseId = req.params.course;
+        const topicName = req.params.topic.replaceAll("-", " ");
+        const topicId = await Courses.Topics.Find(courseId, topicName);
+
+        if (topicId == null)
+            return res.redirect("/mentor");
+        
+        const course = await Courses.Get(courseId);
+        const topic = await Courses.Topics.Get({ topic: topicId });
+
+        if (topic.length == 0 || course.length == 0)
+            return res.redirect("/mentor");
+        
+        req.filepath = "./src/pages/quiz";
+        
+        Object.assign(req.variables, 
+            {
+                "course": JSON.stringify(course[0]),
+                "course.id": course[0].id,
+                "course.name": course[0].name,
+                "course.alias": course[0].alias,
+                "topic": JSON.stringify(topic[0]),
+                "topic.id": topic[0].id,
+                "topic.name": topic[0].name,
+            }
+        );
+
+        next();
+    })
 
     Map(Server);
 }

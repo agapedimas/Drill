@@ -346,6 +346,20 @@
                     background: var(--gray-5);
                 }
 
+                pre:has(code)
+                {
+                    display: block;
+                    overflow: auto;
+                    background: var(--gray-6);
+                    border-radius: 10px;
+                    padding: 1em;
+                    scrollbar-width: thin;
+                    font-family: var(--font-mono);
+                    font-weight: 600;
+                    font-size: 0.8em;
+                    line-height: 1.2;
+                }
+
                 > *,
                 > *:not(mjx-container) *
                 {

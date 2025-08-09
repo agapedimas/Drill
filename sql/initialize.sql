@@ -88,6 +88,7 @@ CREATE TABLE IF NOT EXISTS `topics`
         `id` int UNSIGNED NOT NULL AUTO_INCREMENT, 
         `name` varchar(128) CHARACTER SET ascii COLLATE ascii_bin NOT NULL, 
         `course` varchar(16) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,
+        `quiz` JSON NULL,
         `problemcount` int UNSIGNED DEFAULT 0 NOT NULL,
         `lastedited` bigint UNSIGNED DEFAULT 0 NOT NULL,
         `sort` int UNSIGNED NOT NULL,

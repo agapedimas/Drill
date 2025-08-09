@@ -1,0 +1,224 @@
+<ad-title><$ mentor title /></ad-title>
+
+<style>
+    @import url("/quiz.css");
+
+    #PopOver_Introduction .content
+    {
+        display: grid;
+        grid-auto-rows: max-content max-content max-content auto max-content;
+        justify-content: center;
+        align-content: center;
+        padding: 50px 30px;
+        text-align: center;
+        gap: 1em;
+        max-width: unset;
+    }
+        #PopOver_Introduction .content .features
+        {
+            display: grid;
+            grid-auto-rows: max-content;
+            gap: 1.5em;
+            margin: 1.5em 0;
+        }
+            #PopOver_Introduction .content .features .feature
+            {
+                display: grid;
+                grid-auto-flow: column;
+                gap: 1.5em;
+                text-align: left;    
+                align-items: center;
+            }
+                #PopOver_Introduction .content .features .icon
+                {
+                    color: var(--accent);
+                    font-size: 2em;
+                }
+                #PopOver_Introduction .content .features .description
+                {
+                    display: grid;
+                    grid-auto-rows: max-content;
+                }
+        #PopOver_Introduction .content button
+        {
+            padding: 10px;
+        }
+
+    @media screen and (max-width: 425px) 
+    {
+        #PopOver_Introduction .content
+        {
+            grid-auto-rows: max-content max-content max-content 150px max-content;
+        }   
+    }
+
+    #Activity_Main
+    {
+        background: #3c2814;
+    }
+        #Activity_Main.hasBackground::before,
+        #Activity_Main.hasBackground::after
+        {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0em;
+            display: block;
+            background-size: cover;
+            background-position: center;
+            z-index: -1;
+        }
+        #Activity_Main.hasBackground::before
+        {
+            background-image: var(--blur);
+            transform: scale(1.3);
+            filter: brightness(0.5);
+        }
+        #Activity_Main.hasBackground::after
+        {
+            background-image: var(--image);
+            animation: 0.8s var(--key-animation) BackgroundIn;    
+            bottom: 8em;
+            mask-image: linear-gradient(black calc(100% - 8em), transparent);
+            -webkit-mask-image: linear-gradient(black calc(100% - 8em), transparent);
+        }
+
+    .readyfor
+    {
+        position: absolute;
+        display: grid;
+        grid-auto-flow: column;
+        grid-auto-columns: auto max-content;
+        left: var(--padding);
+        right: var(--padding);
+        bottom: var(--padding);    
+        align-items: end;    
+        gap: 1.5em;
+    }
+        .readyfor div
+        {
+            display: grid;
+            font-size: 2em;
+            font-family: var(--font-bold);
+        }
+            .readyfor div span:last-child
+            {
+                opacity: 0.4;
+            }
+        .readyfor button
+        {
+            background: white;
+            color: black;
+            border-radius: 50px;    
+            font-size: 1.25em;
+            padding: 10px 20px;
+            font-family: var(--font-bold);
+        }
+
+    @media screen and (max-width: 650px) 
+    {
+        .readyfor
+        {
+            grid-auto-flow: row;
+        }
+    }
+</style>
+
+<div class="header" theme="dark"></div>
+
+<div class="content" theme="dark">
+    <div class="readyfor">
+        <div>
+            <span><$ mentor readyfor_title /></span>
+            <span><$ mentor readyfor_description /></span>
+        </div>
+        <button class="accent" id="Button_Select">
+            <$ topics select_topic_title />
+        </button>
+    </div>
+</div>
+
+<div class="popover" id="PopOver_Introduction">
+    <h4><$ mentor welcome_title /></h4>
+    <span><$ mentor welcome_description /></span>
+    
+    <div class="features">
+        <div class="feature">
+            <div class="icon">&#xed7e;</div>
+            <div class="description">
+                <b><$ mentor features_topic_title /></b>
+                <span><$ mentor features_topic_description /></span>
+            </div>
+        </div>
+        <div class="feature">
+            <div class="icon">&#xfcd0;</div>
+            <div class="description">
+                <b><$ mentor features_problem_title /></b>
+                <span><$ mentor features_problem_description /></span>
+            </div>
+        </div>
+        <div class="feature">
+            <div class="icon">&#xefc8;</div>
+            <div class="description">
+                <b><$ mentor features_update_title /></b>
+                <span><$ mentor features_update_description /></span>
+            </div>
+        </div>
+    </div>
+    
+    <div></div>
+    
+    <button class="accent" id="Button_Continue"><$ generic continue/></button>
+</div>
+
+<div class="popover" id="PopOver_SelectTopics">
+    <div class="activity" id="Activity_SelectTopics">
+        <section>
+            <div class="header cascaded">
+                <div class="buttons">
+                    <button id="Button_Cancel"><$ generic cancel /></button>
+                    <button class="icon" id="Button_Filter" ad-tooltip="<$ courses tooltip_filter />">&#xf5bf;</button>
+                </div>
+                <div class="title"><$ topics select_topic_title /></div>
+            </div>
+            <div class="content">
+                <div id="Grid_Courses"></div>
+            </div>
+        </section>
+        <section>
+            <div class="header cascaded"></div>
+            <div class="content">
+                <h3 id="Text_CourseName"></h3>
+                <div id="Grid_CourseTopics"></div>
+            </div>
+        </section>
+    </div>
+</div>
+
+<script src="/quiz.js"></script>
+<script>
+    {
+        if (localStorage.getItem("assistant_introduction") != "true")
+        {
+            window.onload = o => PopOver_Introduction.open();
+            Button_Continue.onclick = o => PopOver_Introduction.close();
+            localStorage.setItem("assistant_introduction", "true");
+        }
+
+        async function Background_Fetch()
+        {
+            const url = await Image_Blur("/assets/mentor.webp");
+            Activity_Main.style.setProperty("--image", "url(assets/mentor.webp)");
+            Activity_Main.style.setProperty("--blur", "url(" + url + ")");
+            Activity_Main.classList.add("hasBackground");
+        }
+        Background_Fetch();
+    }
+
+    Button_Select.onclick = function()
+    {
+        PopOver_SelectTopics.open(Button_Select);
+    }
+</script>

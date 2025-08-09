@@ -221,7 +221,8 @@ const Courses =
     }
 }
 
-Components.ContextMenu.Add("Courses",  [
+Components.ContextMenu.Add("Courses",  
+    [
         "separator",
         {
             Title: "<$ courses filter_sortby />",
@@ -298,8 +299,15 @@ const Topics =
     },
     Request: null,
     Timeout: null,
+    IsLoaded: false,
     Back: function(ignorePopState = false, isLoading = false)
     {
+        if (Topics.Request)
+        {
+            Topics.Request.abort();
+            Topics.Request = null;
+        }
+
         if (Topics.IsOpened() && Topics.Active)
         {
             if (isLoading == false)
@@ -366,7 +374,8 @@ const Topics =
                 activity.classList.add("activity"); 
                 activity.setAttribute("id", "Activity_Topic");
                 activity.append(Topics.Template());
-
+                
+                Topics.IsLoaded = false;
                 $(".root > .main").append(activity);
             }
 
@@ -419,6 +428,7 @@ const Topics =
                     activity.append(Topics.Template());
 
                 $(".root > .main").append(activity);
+                Topics.IsLoaded = true;
             }
                 
             Text_TopicName.innerText = topic.name;
@@ -512,6 +522,7 @@ const Topics =
         box.append(details);
         box.find = function(child)
         {
+            if (child == "details")         return details;
             if (child == "name")            return name;
             if (child == "problemcount")    return problemcount;
             if (child == "lastedited")      return lastedited;
@@ -767,7 +778,7 @@ const mathBlockExtension =
     },
     tokenizer(src, tokens) 
     {
-        const match = src.match(/^\$\$\s*([\s\S]+?)\s*\$\$/);
+        const match = src.match(/^\$\$\s*([\s\S]+?)\s*\$\$/) || src.match(/^\$\s*([\s\S]+?)\s*\$/);
         if (!match) return;
         return {
             type: "mathblock",

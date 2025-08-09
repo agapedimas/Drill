@@ -149,20 +149,21 @@
     {   
         background-image: var(--image);
         filter: brightness(0.7);
-        mask-image: linear-gradient(0, transparent 15%, black 50%);
-        -webkit-mask-image: linear-gradient(0, transparent 15%, black 50%);
+        mask-image: linear-gradient(0, transparent 0%, black 45%);
+        -webkit-mask-image: linear-gradient(0, transparent 0%, black 45%);
+        bottom: 7em;
+    }
+    #Grid_CourseCard:has(> span:not(:empty))::after
+    {       
+        bottom: 10em;
+    }
+    #Grid_CourseCard:has(> span.expanded)::after
+    {   
+        visibility: hidden;
     }
     #Grid_CourseCard.hasBanner::after
     {   
         animation: 0.8s var(--key-animation) BackgroundIn;
-    }
-    @keyframes BackgroundIn
-    {
-        0%, 10%
-        { 
-            opacity: 0;
-            transform: scale(1.05);
-        }
     }
     #Grid_CourseCard > h3
     {
@@ -284,6 +285,7 @@
     }
     :where(#Grid_CourseTopics, #Grid_PrintCourseTopics) .progressring
     {
+        margin: var(--padding) 0 0;
         place-self: center;
         width: 20px;
     }

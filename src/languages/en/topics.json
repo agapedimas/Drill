@@ -18,6 +18,9 @@
     "tooltip_new_problem": "New Problem",
     "new_problem_title": "New Problem",
     "edit_problem_title": "Edit Problem",
+
+    "select_topic_title": "Choose Topic",
+    "change_topic_title": "Change Topic",
     
     "source_header": "Problem Source",
     "type_label": "Type",

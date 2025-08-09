@@ -75,7 +75,7 @@ async function Configure()
     	
     	for (const [key, value] of Object.entries(file)) 
     	{
-    		if (value.test(req.url) && req.query.cache != "false")
+    		if (value.test(req.url) && req.query.cache != "false" && Variables.Production)
 			{
     			res.header("Cache-Control", "public, max-age=604800"); // 7 days
 			}

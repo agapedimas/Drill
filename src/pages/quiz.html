@@ -1,0 +1,133 @@
+<ad-title><#? topic.name ?#> - <$ mentor title /></ad-title>
+
+<style>
+    @import url("/quiz.css");
+    #Activity_Main
+    {
+        background: var(--background-page);
+    }
+</style>
+
+<section>
+    <div class="header">
+        <div class="title"><$ mentor title /></div>
+    </div>
+
+    <div class="content" id="Content_Ready">
+        <div class="about">
+            <div class="name">
+                <span><#? topic.name ?#></span>
+                <span><#? course.name ?#></span>
+            </div>
+            <button class="plain" id="Button_ChangeTopic"><$ topics change_topic_title/></button>
+        </div>
+        <div class="metadata">
+
+        </div>
+        <span></span>
+        <div id="Grid_Status" class="status">
+            <span id="Text_Status"></span>
+            <div class="progressbar"></div>
+        </div>
+        <button id="Button_Start" class="accent hidden"><$ generic start /></button>
+    </div>
+</section>
+
+<section>
+    <div class="header cascaded"></div>
+
+    <div class="content" id="Content_Quiz">
+        <h3><#? topic.name ?#></h3>
+        <div id="Grid_QuizContainer">
+            <div id="Text_Question" class="markdown"></div>
+            <div id="Grid_Choices"></div>
+        </div>
+        <div id="Grid_Navigation">
+            <button id="Button_Prev" class="plain accent">
+                <span class="icon">&#xef38;</span>
+                <span>Back</span>
+            </button>
+            <div></div>
+            <button id="Button_Next" class="plain accent">
+                <span>Next</span>
+                <span class="icon">&#xef4a;</span>
+            </button>
+            <button id="Button_Submit" class="accent">
+                <span>Submit</span>
+            </button>
+        </div>
+    </div>
+</section>
+
+<div class="popover" id="PopOver_SelectTopics">
+    <div class="activity" id="Activity_SelectTopics">
+        <section>
+            <div class="header cascaded">
+                <div class="buttons">
+                    <button id="Button_Cancel"><$ generic cancel /></button>
+                    <button class="icon" id="Button_Filter" ad-tooltip="<$ courses tooltip_filter />">&#xf5bf;</button>
+                </div>
+                <div class="title"><$ topics change_topic_title /></div>
+            </div>
+            <div class="content">
+                <div id="Grid_Courses"></div>
+            </div>
+        </section>
+        <section>
+            <div class="header cascaded"></div>
+            <div class="content">
+                <h3 id="Text_CourseName"></h3>
+                <div id="Grid_CourseTopics"></div>
+            </div>
+        </section>
+    </div>
+</div>
+
+<script src="/quiz.js"></script>
+<script>
+    Button_Start.onclick = function()
+    {
+        Quiz.Open(0);
+        Activity_Main.navigateTo(1);
+    }
+    Button_ChangeTopic.onclick = function()
+    {
+        PopOver_SelectTopics.open(Button_ChangeTopic);
+    }
+
+    $.ajax(
+    {
+        type: "get",
+        url: "/topics/quiz/get/<#? topic.id ?#>",
+        success: function(data)
+        {
+            Quiz.Status = data.status;
+            Quiz.Problems = data.problems;
+            Quiz.Created = data.created;
+
+            if (data.status == "available")
+            {
+                Button_Start.classList.remove("hidden"); 
+                Grid_Status.classList.add("hidden"); 
+            }
+            else if (data.status == "generating")
+            {
+                Text_Status.innerText = "<$ mentor generating />";
+            }
+        }
+    });
+
+    Button_Prev.onclick = function()
+    {
+        Quiz.Open(Quiz.Active.Number - 1);
+    }
+    Button_Next.onclick = function()
+    {
+        Quiz.Open(Quiz.Active.Number + 1);
+    }
+    Button_Submit.onclick = async function()
+    {
+        const result = await $.post("/topics/quiz/submit/<#? topic.id ?#>", { answers: Quiz.Problems.map(o => o.chosen) });
+        console.log(result);
+    }
+</script>

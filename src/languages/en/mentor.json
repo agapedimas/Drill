@@ -1,0 +1,18 @@
+{
+    "title": "Mentor",
+
+    "welcome_title": "Welcome to Mentor",
+    "welcome_description": "Your lecturer is super busy lately, but you need extra practice. That's where Mentor comes in, ready to help you study—just like a TA.",
+
+    "readyfor_title": "Ready for the Exam?",
+    "readyfor_description": "Prepare for your exams with Mentor.",
+
+    "features_topic_title": "Choose your topic",
+    "features_topic_description": "You can request practice questions based on the topic you want.",
+    "features_problem_title": "Varied questions",
+    "features_problem_description": "Practice questions are randomized so you can get a wider range of problems.",
+    "features_update_title": "Updated daily",
+    "features_update_description": "You can request new practice questions every day to sharpen your skills.",
+
+    "generating": "Generating questions... This usually takes 5-7 minutes."
+}

@@ -71,7 +71,7 @@ const Accounts =
         const result1 = await Accounts.Avatars.Delete(id);
         const result2 = await SQL.Query("DELETE FROM accounts WHERE id=?", [id]);
         
-        return result1.success && result2;
+        return result1 && result2.success;
     },
     Avatars: 
     {

@@ -18,6 +18,9 @@
     "tooltip_new_problem": "Soal Baru",
     "new_problem_title": "Soal Baru",
     "edit_problem_title": "Edit Soal",
+
+    "select_topic_title": "Pilih Topik",
+    "change_topic_title": "Ganti Topik",
     
     "source_header": "Sumber Soal",
     "type_label": "Tipe",

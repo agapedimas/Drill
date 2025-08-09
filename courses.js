@@ -1,4 +1,5 @@
 const SQL = require("./sql");
+const Gemini = require("./gemini");
 const FileIO = require("fs");
 
 const Courses = 
@@ -128,7 +129,7 @@ const Courses =
         const result1 = await Courses.Banners.Delete(id);
         const result2 = await SQL.Query("DELETE FROM courses WHERE id=?", id);
 
-        return result1.success && result2;
+        return result1 && result2.success;
     },
     Topics:
     {
@@ -262,6 +263,112 @@ const Courses =
 
             const result = await SQL.Query("DELETE FROM topics WHERE id=?", id);
             return result.success;
+        },
+        Quiz: 
+        {
+            /**
+             * Get quiz drill from Gemini API
+             * @param { string } id Id of topic
+             * @returns { Promise<{
+             *      created: number?,
+             *      status: "available" | "generating" | "error",
+             *      problems: Array<{
+             *          question: string,
+             *          choices: Array<string>,
+             *          answer: number,
+             *          reason: string
+             *      }>
+             * }>} 
+             */
+            Get: function(id)
+            {
+                return new Promise(async function(resolve)
+                {
+                    const result = await SQL.Query("SELECT IFNULL(topics.quiz, JSON_OBJECT('status', 'notavailable')) AS quiz FROM topics WHERE id=?", [id]);
+                    
+                    if (result.data == null)
+                        return resolve({ created: 0, status: "error", problems: [] });
+                    
+                    const quiz = result.data[0].quiz;
+                    resolve(quiz);
+                });
+            },
+            /**
+             * Generate quiz drill from Gemini API
+             * @param { string } id Id of topic 
+             * @param { string } language Code of language 
+             * @returns { Promise<boolean> } @true if successfully to begin creating, otherwise @false
+             */
+            Create: function(id, language = "id")
+            {
+                return new Promise(async function(resolve)
+                {
+                    const result = await SQL.Query("SELECT topics.id, topics.name, courses.name AS course FROM topics JOIN courses ON topics.course = courses.id WHERE topics.id=?", [id]);
+                    
+                    if (result.data == null)
+                        return resolve(false);
+
+                    const problems = await SQL.Query("SELECT question FROM problems WHERE topic=?", [id]);
+    
+                    if (problems.success == false || problems.data == null)
+                        return resolve(false);
+
+                    const returned = {
+                        created: Date.now(),
+                        status: "generating",
+                        problems: []
+                    }
+
+                    await SQL.Query("UPDATE topics SET quiz=? WHERE id=?", [JSON.stringify(returned), id]);
+                   
+                    resolve(true);
+
+                    const gemini = await Gemini.Send(language, result.data[0].course, result.data[0].name, problems.data.map(o => o.question) || []);
+                    
+                    if (gemini.status != 200)
+                    {
+                        returned.status = "error";
+                        returned.error = gemini.status;
+                        await SQL.Query("UPDATE topics SET quiz=? WHERE id=?", [JSON.stringify(returned), id]);
+                        return;
+                    }
+                    
+                    const success = await Courses.Topics.Quiz.Save(id, gemini.data);
+
+                    if (success == false)
+                    {
+                        returned.status = "error";
+                        returned.error = 400;
+                        await SQL.Query("UPDATE topics SET quiz=? WHERE id=?", [JSON.stringify(returned), id]);
+                    }
+                });
+            },
+            /**
+             * Save quiz to database
+             * @param { string } id Id of topic
+             * @param { Array<> } quiz List of problems of quiz 
+             * @returns { Promise<boolean> } @true if operation completed successfully, otherwise @false
+             */
+            Save: async function(id, quiz)
+            {
+                try
+                {
+                    quiz = {
+                        created: Date.now(),
+                        status: "available",
+                        problems: JSON.parse(quiz).problems
+                    }
+                    const result = await SQL.Query("UPDATE topics SET quiz=? WHERE id=?", [JSON.stringify(quiz), id]);
+    
+                    return result.success;
+                }
+                catch(error)
+                {
+                    console.log(quiz);
+                    console.error(error);
+                    return false;
+                }
+            }
         }
     },
     Problems: 
@@ -497,7 +604,7 @@ const Courses =
                 return false;
             }
         }
-    }
+    },
 }
 
 module.exports = Courses;
