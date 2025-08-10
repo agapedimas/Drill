@@ -582,12 +582,14 @@ function Route(Server)
     
     Server.get("/topics/quiz/get/:id", async function(req, res)
     {
+        res.header("Cache-Control", "public, max-age=60");
+
         const id = req.params.id;
         let quiz = await Courses.Topics.Quiz.Get(id);
         
         if (quiz.status == "notavailable" || quiz.status == "error" || (quiz.status == "available" && Date.now() - quiz.created > 86400000) || (quiz.status == "generating" && Date.now() - quiz.created > 600000))
         {
-            const success = await Courses.Topics.Quiz.Create(id, req.session.language);
+            const success = await Courses.Topics.Quiz.Create(id);
             quiz = await Courses.Topics.Quiz.Get(id);
             
             if (success == false)
@@ -608,6 +610,8 @@ function Route(Server)
  
     Server.post("/topics/quiz/submit/:id", async function(req, res)
     {
+        res.header("Cache-Control", "public, max-age=60");
+
         const answers = req.body.answers || [];
         const id = req.params.id;
         const quiz = await Courses.Topics.Quiz.Get(id);
@@ -623,12 +627,12 @@ function Route(Server)
                 let isCorrect = false;
                 if (problem.answer == answers[index])
                     isCorrect = true;
-                
-                index++;
 
                 return {
                     question: problem.question,
+                    answer: problem.answer,
                     choices: problem.choices,
+                    chosen: answers[index++],
                     isCorrect: isCorrect,
                     reason: problem.reason
                 }

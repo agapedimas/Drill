@@ -778,7 +778,7 @@ const mathBlockExtension =
     },
     tokenizer(src, tokens) 
     {
-        const match = src.match(/^\$\$\s*([\s\S]+?)\s*\$\$/) || src.match(/^\$\s*([\s\S]+?)\s*\$/);
+        const match = src.match(/^\$\$\s*([\s\S]+?)\s*\$\$/);
         if (!match) return;
         return {
             type: "mathblock",

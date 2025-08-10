@@ -6,5 +6,9 @@
     "dismiss": "Tutup",
     "discard": "Buang",
     "continue": "Lanjut",
-    "start": "Mulai"
+    "start": "Mulai",
+    "next": "Selanjutnya",
+    "prev": "Sebelumnya",
+    "done": "Selesai",
+    "submit": "Kumpulkan"
 }

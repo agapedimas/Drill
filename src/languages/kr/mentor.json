@@ -2,9 +2,9 @@
     "title": "멘토",
 
     "welcome_title": "멘토에 오신 것을 환영합니다",
-    "welcome_description": "요즘 교수님들이 너무 바쁘신데, 추가 연습이 필요하다고요? 멘토가 여기 있어요. 마치 조교처럼 학습을 도와드릴게요.",
+    "welcome_description": "요즘 교수님은 너무 바쁘신데, 추가 연습이 필요하다고요? 멘토가 여기 있어요. 마치 조교처럼 학습을 도와드릴게요.",
 
-    "readyfor_title": "시험 준비 완료?",
+    "readyfor_title": "시험 준비 되셨나요?",
     "readyfor_description": "멘토와 함께 시험을 준비하세요.",
 
     "features_topic_title": "주제 선택",
@@ -14,5 +14,12 @@
     "features_update_title": "매일 업데이트",
     "features_update_description": "매일 새로운 연습 문제를 요청해서 실력을 키워보세요.",
 
-    "generating": "문제를 생성 중입니다. 보통 5~7분 정도 소요됩니다."
+    "generating": "문제를 생성 중입니다. 보통 5~7분 정도 소요됩니다.",
+
+    "metadata_updated": "{0} 업데이트됨",
+    "metadata_problems": "객관식 {0}문제",
+    "metadata_aigenerated": "AI가 생성함",
+    "metadata_score": "{0}점을 받았습니다",
+
+    "results_view": "결과 보기"
 }

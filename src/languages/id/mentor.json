@@ -14,5 +14,12 @@
     "features_update_title": "Di-update setiap hari",
     "features_update_description": "Kamu bisa minta latihan soal baru setiap hari biar kamu bisa makin jago.",
 
-    "generating": "Soal sedang dibuat. Biasanya memakan waktu 5-7 menit."
+    "generating": "Soal sedang dibuat. Biasanya memakan waktu 5-7 menit.",
+    
+    "metadata_updated": "Di-update {0}",
+    "metadata_problems": "{0} soal pilihan ganda",
+    "metadata_aigenerated": "Dibuat oleh AI",
+    "metadata_score": "Kamu mendapat nilai {0}",
+
+    "results_view": "Lihat Hasil"
 }

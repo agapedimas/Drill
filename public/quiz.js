@@ -3,6 +3,7 @@ const Quiz =
     Created: 0,
     Status: "",
     Problems: [],
+    Done: false,
     Active: 
     {
         Number: -1,
@@ -26,12 +27,20 @@ const Quiz =
 
         if (number == Quiz.Problems.length - 1)
         {
-            Button_Submit.classList.remove("hidden");
+            if (Quiz.Done)
+                Button_Done.classList.remove("hidden");
+            else
+                Button_Submit.classList.remove("hidden");
+
             Button_Next.classList.add("hidden");
         }
         else
         {
-            Button_Submit.classList.add("hidden");
+            if (Quiz.Done)
+                Button_Done.classList.add("hidden");
+            else
+                Button_Submit.classList.add("hidden");
+
             Button_Next.classList.remove("hidden");
         }
 
@@ -47,12 +56,33 @@ const Quiz =
             box.classList.add("markdown");
             box.append(text);  
 
-            box.onclick = function()
+            if (Quiz.Done)
             {
-                if (box.classList.contains("active"))
-                    Answer_Choose(-1);
-                else
-                    Answer_Choose(i);
+                if (Quiz.Problems[number].chosen == i)
+                {
+                    if (Quiz.Problems[number].isCorrect == false)
+                        box.classList.add("wrong");
+                }
+
+                if (Quiz.Problems[number].answer == i)
+                {
+                    box.classList.add("correct");
+
+                    const reason = document.createElement("div");
+                    reason.classList.add("reason");
+                    reason.innerHTML = await Problems.ParseMarkdownLatex(Quiz.Problems[number].reason);
+                    box.appendChild(reason);
+                }
+            }
+            else
+            {
+                box.onclick = function()
+                {
+                    if (box.classList.contains("active"))
+                        Answer_Choose(-1);
+                    else
+                        Answer_Choose(i);
+                }
             }
             Grid_Choices.append(box);
         }
@@ -69,6 +99,37 @@ const Quiz =
                 else
                     Grid_Choices.children[i].classList.remove("active");
         }
+
+        Content_Quiz.parentNode.scrollTop = 0;
+    }
+}
+
+const Data = 
+{
+    Get: function(id)
+    {   
+        if (localStorage.getItem("quizzes") == null)
+            localStorage.setItem("quizzes", "[]");
+
+        let data = localStorage.getItem("quizzes");
+        data = JSON.parse(data);
+
+        if (id)
+            return data.find(o => o.id == id);
+        else
+            return data;
+    },
+    Set: function(id, value)
+    {   
+        const data = Data.Get();
+        const row = data.find(o => o.id == id);
+
+        if (row)
+            row.value = value;
+        else
+            data.push({ id, value });
+
+        localStorage.setItem("quizzes", JSON.stringify(data));
     }
 }
 
