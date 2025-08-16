@@ -211,8 +211,21 @@
         const course = JSON.parse(`<#? course ?#>`);
         course.oldId = course.id;
 
+        Input_CourseName.oninput = 
+        Input_CourseAlias.oninput =
+        Input_CourseDescription.oninput =
+        Input_CourseId.oninput = 
+        Input_CourseSKS.oninput = 
+        Input_CourseSemester.oninput = function()
+        {
+            Inputs_Check();
+        }
+
         PopOver_EditCourse.onbeforeclose = function()
         {
+            if (PopOver_EditCourse.isunsaved == false)
+                return PopOver_EditCourse.close(true);
+
             Components.ActionSheet.Open(
             {
                 Title: "<$ courses discard_edit_confirm_title />",
@@ -241,6 +254,7 @@
             Input_CourseSKS.value = course.sks;
             PopOver_EditCourse.open(this);
             Text_Error.classList.add("hidden");
+            Inputs_Check();
         }
         Button_SaveEdit.onclick = function()
         {
@@ -549,21 +563,19 @@
                     Image_Banner.src = url[0];
                     Grid_CourseCard.classList.add("hasBanner");
 
+                    Inputs_Check();
                     Button_CancelEdit.disabled = false;
-                    Button_SaveEdit.disabled = false;
                     PopOver_EditCourse.isloading = false;
                     Text_Error.classList.remove("hidden");
                     $("#PopOver_EditCourse :where(input, textarea)").removeAttr("disabled");
 
                     Components.Notification.Remove({ Id: "banner_failed" });
                     Components.Notification.Send({ Id: "banner_success", Title: "<$ courses banner_upload_success_title />", Message: "<$ courses banner_upload_success_message />", Icon: "\uf873"});
-
-                    PopOver_EditCourse.close(true);
                 },
                 error: function(error)
                 {                   
+                    Inputs_Check();
                     Button_CancelEdit.disabled = false;
-                    Button_SaveEdit.disabled = false;
                     PopOver_EditCourse.isloading = false;
                     Text_Error.classList.remove("hidden");
                     $("#PopOver_EditCourse :where(input, textarea)").removeAttr("disabled");
@@ -588,19 +600,18 @@
                     Image_Banner.src = url[0];
                     Grid_CourseCard.classList.add("hasBanner");
 
+                    Inputs_Check();
                     Button_CancelEdit.disabled = false;
-                    Button_SaveEdit.disabled = false;
                     PopOver_EditCourse.isloading = false;
                     Text_Error.classList.remove("hidden");
                     $("#PopOver_EditCourse :where(input, textarea)").removeAttr("disabled");
 
-                    PopOver_EditCourse.close(true);
                     Components.Notification.Send({ Id: "banner_success", Title: "<$ courses banner_clear_success_title />", Message: "<$ courses banner_clear_success_message />", Icon: "\uf873"});
                 },
                 error: function()
                 {
+                    Inputs_Check();
                     Button_CancelEdit.disabled = false;
-                    Button_SaveEdit.disabled = false;
                     PopOver_EditCourse.isloading = false;
                     Text_Error.classList.remove("hidden");
                     $("#PopOver_EditCourse :where(input, textarea)").removeAttr("disabled");
@@ -621,5 +632,27 @@
 
         if ("<#? activeuser.role ?#>" != "admin")
             Button_DeleteCourse.disabled = true;
+
+        const Inputs_Check = function()
+        {
+            const data = Courses.Active;
+            if (
+                Input_CourseName.value.trim() == data.name &&
+                Input_CourseAlias.value.trim() == (data.alias || "") &&
+                Input_CourseDescription.value.trim() == (data.description || "") &&
+                Input_CourseId.value.trim() == data.id &&
+                Input_CourseSemester.value.trim() == data.semester &&
+                Input_CourseSKS.value.trim() == data.sks
+            )
+            {
+                Button_SaveEdit.disabled = true;
+                PopOver_EditCourse.isunsaved = false;
+            }
+            else
+            {
+                Button_SaveEdit.disabled = false;
+                PopOver_EditCourse.isunsaved = true;
+            }
+        }
     }
 </script>

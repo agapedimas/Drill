@@ -211,8 +211,21 @@
             Components.ContextMenu.Open("Courses", this, event);
         };
 
+        Input_CourseName.oninput = 
+        Input_CourseAlias.oninput =
+        Input_CourseDescription.oninput =
+        Input_CourseId.oninput = 
+        Input_CourseSKS.oninput = 
+        Input_CourseSemester.oninput = function()
+        {
+            Inputs_Check();
+        }
+
         PopOver_NewCourse.onbeforeclose = function()
         {
+            if (PopOver_NewCourse.isunsaved == false)
+                return PopOver_NewCourse.close(true);
+
             Components.ActionSheet.Open(
             {
                 Title: "<$ courses discard_create_confirm_title />",
@@ -236,6 +249,7 @@
             $("#PopOver_NewCourse :where(input, textarea)").val("");
             Text_Error.classList.add("hidden");
             PopOver_NewCourse.open(this);
+            Inputs_Check();
         }
         Button_SubmitNew.onclick = function()
         {
@@ -263,8 +277,8 @@
                 success: function()
                 {
                     window.location.href = "/admin/courses/" + course.id; 
+                    Inputs_Check();
                     Button_CancelNew.disabled = false;
-                    Button_SubmitNew.disabled = false;
                     PopOver_NewCourse.isloading = false;
                     PopOver_NewCourse.close(true);
                     $("#PopOver_NewCourse :where(input, textarea)").removeAttr("disabled");
@@ -273,8 +287,8 @@
                 {
                     Text_Error.innerText = error.responseText;
                     Text_Error.classList.remove("hidden");
+                    Inputs_Check();
                     Button_CancelNew.disabled = false;
-                    Button_SubmitNew.disabled = false;
                     PopOver_NewCourse.isloading = false;
                     $("#PopOver_NewCourse :where(input, textarea)").removeAttr("disabled");
                 }
@@ -283,6 +297,27 @@
         Button_CancelNew.onclick = function()
         {
             PopOver_NewCourse.close();
+        }
+
+        const Inputs_Check = function()
+        {
+            if (
+                (
+                    Input_CourseName.value.trim() == "" &&
+                    Input_CourseId.value.trim() == "" &&
+                    Input_CourseSemester.value.trim() == "" &&
+                    Input_CourseSKS.value.trim() == ""
+                )
+            )
+            {
+                Button_SubmitNew.disabled = true;
+                PopOver_NewCourse.isunsaved = false;
+            }
+            else
+            {
+                Button_SubmitNew.disabled = false;
+                PopOver_NewCourse.isunsaved = true;
+            }
         }
     }
 </script>

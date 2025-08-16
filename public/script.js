@@ -107,6 +107,14 @@ const Courses =
         {
             const box = Courses.Render(course);
             container.append(box);
+
+            {
+                const description = box.find("description");    
+                const lineHeight = parseFloat(getComputedStyle(description).lineHeight);
+                const maxHeight = description.clientHeight;
+                const lines = Math.floor(maxHeight / lineHeight);
+                description.style.webkitLineClamp = lines;
+            }
         }
     },
     Pins: 

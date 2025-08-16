@@ -68,8 +68,6 @@ async function Configure()
     	{
     		icons: /\.(?:ico)$/i,
     		fonts: /\.(?:ttf|woff2)$/i,
-    		scripts: /\.(?:js)$/i,
-    		styles: /\.(?:css)$/i,
     		images:/\.(?:png|webp|jpg|jpeg|bmp|svg)$/i
     	}
     	

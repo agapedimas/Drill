@@ -807,6 +807,22 @@ function Route(Server)
             return res.status(500).send();
     });
 
+    Server.patch("/admin/problems/move", async function(req, res)
+    {
+        const id = req.body.id?.trim();
+        const topic = req.body.topic?.trim();
+        
+        if (!id || !topic)
+            return res.status(400).send("Problems's id or topic can't be empty.");
+
+        const success = await Courses.Problems.Move(id, topic);
+
+        if (success)
+            return res.status(200).send();
+        else
+            return res.status(500).send("Something wen't wrong.");
+    });
+
     Server.delete("/admin/problems/delete", async function(req, res)
     {        
         const id = req.body.id?.trim();

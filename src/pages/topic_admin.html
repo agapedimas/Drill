@@ -99,6 +99,20 @@
     </div>
 </div>
 
+<div id="PopOver_MoveProblem" class="popover">
+    <div class="activity">
+        <div class="header cascaded">
+            <div class="buttons">
+                <button id="Button_CancelMove"><$ problems cancel /></button>
+            </div>
+            <div class="title"><$ problems move_title /></div>
+        </div>
+        <div class="content">
+            <div id="Grid_MoveCourseTopics"></div>
+        </div>
+    </div>
+</div>
+
 <script>
     {
         const a = Problems.Render;
@@ -122,10 +136,18 @@
             }
             return box;
         }
-
+        Input_ProblemYear.oninput = function()
+        {
+            Inputs_CheckNew();
+        }
+        Input_ProblemYearEdit.oninput = function()
+        {
+            Inputs_CheckEdit();
+        }
         let typeTimeout;
         Input_ProblemText.oninput = function()
         {
+            Inputs_CheckNew();
             clearTimeout(typeTimeout);
             typeTimeout = setTimeout(async function()
             {
@@ -134,6 +156,7 @@
         }
         Input_ProblemTextEdit.oninput = function()
         {
+            Inputs_CheckEdit();
             clearTimeout(typeTimeout);
             typeTimeout = setTimeout(async function()
             {
@@ -142,6 +165,8 @@
         }
         Input_ProblemText.onpaste = function()
         {
+            Inputs_CheckNew();
+            Inputs_CheckEdit();
             const textarea = this;
             const items = event.clipboardData.items;
 
@@ -171,8 +196,17 @@
             }
         }
         Input_ProblemTextEdit.onpaste = Input_ProblemText.onpaste;
+
+        Select_ProblemSourceEdit.onchange = function()
+        {
+            Inputs_CheckEdit();
+        }
+
         PopOver_Problem.onbeforeclose = function()
         {
+            if (PopOver_Problem.isunsaved == false)
+                return PopOver_Problem.close(true);
+
             Components.ActionSheet.Open(
             {
                 Title: "<$ topics discard_create_problem_title />",
@@ -193,6 +227,9 @@
         }
         PopOver_EditProblem.onbeforeclose = function()
         {
+            if (PopOver_EditProblem.isunsaved == false)
+                return PopOver_EditProblem.close(true);
+
             Components.ActionSheet.Open(
             {
                 Title: "<$ topics discard_edit_problem_title />",
@@ -220,6 +257,7 @@
             PopOver_Problem.open();
             Select_Fetch();
             Select_ProblemSource.value = Select_ProblemSource.options[0]?.value;
+            Inputs_CheckNew();
         }
         Button_SubmitNewProblem.onclick = function()
         {
@@ -245,7 +283,7 @@
                     const box = await Problems.Render(problem);
                     const group = Problems.AddToGroup(box, Grid_CourseProblems);
 
-                    Button_SubmitNewProblem.disabled = false;
+                    Inputs_CheckNew();
                     Button_CancelNewProblem.disabled = false;
                     PopOver_Problem.isloading = false;
                     PopOver_Problem.close(true);
@@ -301,7 +339,7 @@
                 data: editedProblem,
                 success: async function()
                 {
-                    Button_DoneEditProblem.disabled = false;
+                    Inputs_CheckEdit();
                     Button_CancelEditProblem.disabled = false;
                     PopOver_EditProblem.isloading = false;
                     PopOver_EditProblem.close(true);
@@ -335,6 +373,10 @@
         {
             PopOver_EditProblem.onbeforeclose();
         }
+        Button_CancelMove.onclick = function()
+        {
+            PopOver_MoveProblem.close();
+        }
         PopOver_Problem.onclosed = function()
         {
             Pivot_Problem.tabs.selected = 0;
@@ -356,5 +398,43 @@
         box.classList.add("active");
 
         item.parentNode.replaceChild(box, item); 
+    }
+    const Inputs_CheckNew = function()
+    {
+        if (
+            (Input_ProblemText.value.trim() == "" && Input_ProblemYear.value == "") ||
+            Select_ProblemSource.value == ""
+        )
+        {
+            Button_SubmitNewProblem.disabled = true;
+            PopOver_Problem.isunsaved = false;
+        }
+        else
+        {
+            Button_SubmitNewProblem.disabled = false;
+            PopOver_Problem.isunsaved = true;
+        }
+    }
+    const Inputs_CheckEdit = function()
+    {
+        const data = PopOver_EditProblem.element?.data;
+        
+        if (data == null)
+            return;
+
+        if (
+            data.question.trim() == Input_ProblemTextEdit.value.trim() &&
+            data.source.id == Select_ProblemSourceEdit.value &&
+            data.year == Input_ProblemYearEdit.value
+        )
+        {
+            Button_DoneEditProblem.disabled = true;
+            PopOver_EditProblem.isunsaved = false;
+        }
+        else
+        {
+            Button_DoneEditProblem.disabled = false;
+            PopOver_EditProblem.isunsaved = true;
+        }
     }
 </script>

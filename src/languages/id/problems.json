@@ -1,9 +1,13 @@
 {
     "context_edit": "Edit",
     "context_delete": "Hapus",
+    "context_moveto": "Pindahkan ke...",
     "delete": "Hapus",
     "cancel": "Batal",
     "dismiss": "Tutup",
+    
+    "move_title": "Pindahkan ke...",
+    "move_error_title": "Gagal Memindahkan",
     
     "delete_problem_confirm_title": "Yakin mau hapus soal ini?",
     "delete_problem_confirm_desc": "Jawabannya juga bakal ikut kehapus. Aksi ini gak bisa dibatalin.",

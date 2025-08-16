@@ -532,6 +532,18 @@ const Courses =
             return result.success;
         },
         /**
+         * Move existing problem to another topic
+         * @param { string } id Id of problem
+         * @param { int } topic Id of topic
+         * @returns { Promise<boolean> } @true if operation completed successfully, otherwise @false
+         */
+        Move: async function(id, topic)
+        {
+            const result = await SQL.Query("UPDATE problems SET topic=? WHERE id=?", [topic, id]);
+
+            return result.success;
+        },
+        /**
          * Delete problem
          * @param { int } Id Id of problem
          * @returns { Promise<boolean> } @true if operation completed successfully, otherwise @false

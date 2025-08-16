@@ -1,9 +1,12 @@
 {
     "context_edit": "編集",
     "context_delete": "削除",
+    "context_moveto": "移動...",
     "delete": "削除",
     "cancel": "キャンセル",
     "dismiss": "閉じる",
+    "move_title": "移動...",
+    "move_error_title": "移動に失敗しました",
     "delete_problem_confirm_title": "この問題を本当に削除しますか？",
     "delete_problem_confirm_desc": "解答も削除されます。この操作は元に戻せません。",
     "delete_error_title": "削除に失敗しました",

@@ -42,7 +42,7 @@
         display: grid;
         grid-auto-columns: 100%;
         grid-auto-rows: 150px max-content max-content auto;
-        height: 350px;
+        height: calc(150px + 11.435rem);
         background: #f3f3f3;
         border-radius: 10px;
         overflow: hidden;
@@ -76,10 +76,14 @@
         }
         #Grid_Courses .course .description
         {
-            line-height: 1.35em;
+            display: inline-block;
+            display: -webkit-inline-box;
             overflow: hidden;
-            margin: 10px calc(1.85rem - 10px) calc(1.85rem - 10px);
+            margin: 10px calc(1.85rem - 10px) calc(1.85rem - 15px);
             white-space: pre-line;
+            text-overflow: ellipsis;
+            -webkit-line-clamp: 5;
+            -webkit-box-orient: vertical;
         }
         #Grid_Courses .course .hover
         {   
@@ -248,7 +252,7 @@
         min-height: 350px;
     }
 }
-#Grid_CourseTopics, #Grid_PrintCourseTopics
+#Grid_CourseTopics, #Grid_PrintCourseTopics, #Grid_MoveCourseTopics
 {
     display: grid;
     gap: 10px;
@@ -286,13 +290,13 @@
     {
         content: "<$ courses notfound_subtitle />";
     }
-    :where(#Grid_CourseTopics, #Grid_PrintCourseTopics) .progressring
+    :where(#Grid_CourseTopics, #Grid_PrintCourseTopics, #Grid_MoveCourseTopics) .progressring
     {
         margin: var(--padding) 0 0;
         place-self: center;
         width: 20px;
     }
-    :where(#Grid_CourseTopics, #Grid_PrintCourseTopics) .topic
+    :where(#Grid_CourseTopics, #Grid_PrintCourseTopics, #Grid_MoveCourseTopics) .topic
     {
         position: relative;
         display: grid;
@@ -310,7 +314,7 @@
     {
         background: transparent !important;
     }
-    #Grid_PrintCourseTopics .topic
+    :where(#Grid_CourseTopics, #Grid_PrintCourseTopics, #Grid_MoveCourseTopics):has(.InputContainer_Checkbox) .topic
     {
         padding-left: calc(var(--padding) * 2 + 18px);
     }
@@ -326,7 +330,7 @@
             {
                 border-radius: 100%;
             }
-        :where(#Grid_CourseTopics, #Grid_PrintCourseTopics) .topic:not(:last-child)::before
+        :where(#Grid_CourseTopics, #Grid_PrintCourseTopics, #Grid_MoveCourseTopics) .topic:not(:last-child)::before
         {
             content: "";
             display: block;
@@ -337,7 +341,7 @@
             height: 1px;
             background: var(--overlay-6);
         }
-        #Grid_PrintCourseTopics .topic:not(:last-child)::before
+        :where(#Grid_CourseTopics, #Grid_PrintCourseTopics, #Grid_MoveCourseTopics):has(.InputContainer_Checkbox) .topic:not(:last-child)::before
         {
             left: calc(var(--padding) * 2 + 18px);
         }
@@ -345,18 +349,18 @@
     {
         background-image: linear-gradient(var(--background-input-hover));
     }
-    :where(#Grid_CourseTopics, #Grid_PrintCourseTopics) .topic:hover
+    :where(#Grid_CourseTopics, #Grid_PrintCourseTopics, #Grid_MoveCourseTopics) .topic:hover
     {
         background-color: var(--background-input-hover);
     }
-    :where(#Grid_CourseTopics, #Grid_PrintCourseTopics) .topic:active
+    :where(#Grid_CourseTopics, #Grid_PrintCourseTopics, #Grid_MoveCourseTopics) .topic:active
     {
         background-color: var(--background-input-active);
     }
-        :where(#Grid_CourseTopics, #Grid_PrintCourseTopics) .topic .name
+        :where(#Grid_CourseTopics, #Grid_PrintCourseTopics, #Grid_MoveCourseTopics) .topic .name
         {
         }
-        :where(#Grid_CourseTopics, #Grid_PrintCourseTopics) .topic .details
+        :where(#Grid_CourseTopics, #Grid_PrintCourseTopics, #Grid_MoveCourseTopics) .topic .details
         {
             display: grid;
             grid-auto-flow: column;
