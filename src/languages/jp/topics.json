@@ -40,5 +40,7 @@
     "edit_failed_title": "保存に失敗しました",
     "error_generic": "何か問題が発生しました。",
     "questionbank": "問題バンク",
-    "questionbank_disclaimer": "この文書をUniversitas Katolik Parahyanganの範囲外で配布しないでください。\nこの文書を適切に使用してください。"
+    "questionbank_disclaimer": "この文書をUniversitas Katolik Parahyanganの範囲外で配布しないでください。\nこの文書を適切に使用してください。",
+    "tooltip_quizmentor": "メンターで練習",
+    "recently_updated_title": "最近の更新"
 }

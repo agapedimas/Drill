@@ -1,5 +1,4 @@
 <section class="desktop">
-	<input type="search" placeholder="Search"/>
 	<div class="navigation">
 		<a goto="/home">
 			<span class='icon'>&#xfe8a;</span>
@@ -9,22 +8,10 @@
 			<span class='icon'>&#xed8a;</span>
 			<span><$ courses title /></span>
 		</a>
-		<a goto="/mentor">
-			<span class='icon'>&#xfb41;</span>
-			<span><$ mentor title /></span>
-		</a>
-		<div class="separator"><$ courses pinned /></div>
-		<a goto="/pins">
-			<span class='icon'>&#xf892;</span>
-			<span><$ courses pinned_all /></span>
-		</a>
+		<div class="separator" id="Separator_PinnedCourses"><$ courses pinned /></div>
 		<div id="Grid_PinnedCourses"></div>
 	</div> 
 	<div class="footer">
-		<a goto="/help">
-			<span class='icon'>&#xf95f;</span>
-			<span><$ help title /></span>
-		</a>
 		<a goto="/settings">
 			<span class='icon'>&#xf337;</span>
 			<span><$ settings title /></span>
@@ -42,17 +29,9 @@
 			<span class='icon'>&#xed89;</span>
 			<span><$ courses title /></span>
 		</a>
-		<a goto="/mentor">
-			<span class='icon'>&#xfb41;</span>
-			<span><$ mentor title /></span>
-		</a>
-		<a goto="/help">
-			<span class='icon'>&#xf95e;</span>
-			<span><$ help title /></span>
-		</a>
 		<a goto="/settings">
 			<span class='icon'>&#xf337;</span>
-			<span><$ home title /></span>
+			<span><$ settings title /></span>
 		</a>
 	</span> 
 </section>

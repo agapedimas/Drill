@@ -54,5 +54,9 @@
     "error_generic": "Ada yang salah.",
 
     "questionbank": "Kumpulan Soal",
-    "questionbank_disclaimer": "Mohon untuk tidak mendistribusikan naskah soal di luar lingkup Universitas Katolik Parahyangan.\nPergunakan naskah soal sebagaimana mestinya."
+    "questionbank_disclaimer": "Mohon untuk tidak mendistribusikan naskah soal di luar lingkup Universitas Katolik Parahyangan.\nPergunakan naskah soal sebagaimana mestinya.",
+
+    "tooltip_quizmentor": "Latihan dengan Mentor",
+
+    "recently_updated_title": "Baru Di-update"
 }

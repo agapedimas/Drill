@@ -12,6 +12,54 @@
         display: grid;
     }
 
+#PopOver_Introduction .content
+{
+    display: grid;
+    grid-auto-rows: max-content max-content max-content auto max-content;
+    justify-content: center;
+    align-content: center;
+    padding: 50px 30px;
+    text-align: center;
+    gap: 1em;
+    max-width: unset;
+}
+    #PopOver_Introduction .content .features
+    {
+        display: grid;
+        grid-auto-rows: max-content;
+        gap: 1.5em;
+        margin: 1.5em 0;
+    }
+        #PopOver_Introduction .content .features .feature
+        {
+            display: grid;
+            grid-auto-flow: column;
+            gap: 1.5em;
+            text-align: left;    
+            align-items: center;
+        }
+            #PopOver_Introduction .content .features .icon
+            {
+                color: var(--accent);
+                font-size: 2em;
+            }
+            #PopOver_Introduction .content .features .description
+            {
+                display: grid;
+                grid-auto-rows: max-content;
+            }
+    #PopOver_Introduction .content button
+    {
+        padding: 10px;
+    }
+
+@media screen and (max-width: 425px) 
+{
+    #PopOver_Introduction .content
+    {
+        grid-auto-rows: max-content max-content max-content 150px max-content;
+    }   
+}
 
 #Grid_Courses,
 #Grid_CourseTopics
@@ -214,11 +262,13 @@
     grid-auto-rows: max-content;
     gap: 1.5em;
     padding-bottom: 1em;
+    max-width: 800px;
+    margin: 0 auto;
 }
 
 #Text_Question
 {
-    font-size: 1.25em;
+    font-size: 1.1em;
     line-height: 1.5em;
     align-items: baseline;
 }
@@ -232,14 +282,14 @@
     display: grid;
     grid-auto-rows: max-content;
     gap: 10px;
-    font-size: 1.15em;
+    font-size: 1.1em;
     counter-reset: choice;
 }
     #Grid_Choices .choice
     {
         display: grid;
         grid-template-areas: "number text";
-        grid-auto-columns: max-content auto;
+        grid-auto-columns: 30px auto;
         background: var(--background-input);
         border-radius: 10px;
         overflow: hidden;
@@ -253,7 +303,7 @@
     {
         grid-template-areas: 
             "number text"
-            "x reason";
+            "reason reason";
     }
         #Grid_Choices .choice::before
         {
@@ -346,7 +396,7 @@
 {
     display: grid;
     grid-auto-flow: column;
-    grid-auto-columns: max-content auto max-content;
+    grid-auto-columns: max-content minmax(auto, 550px) max-content;
     grid-auto-rows: max-content;
     padding: 0.5em 0 var(--padding);
     margin-bottom: calc(var(--padding) * -1);
@@ -355,6 +405,7 @@
     position: sticky;
     bottom: 0;
     background: var(--background-page);
+    justify-content: center;
 }
     #Grid_Navigation button
     {

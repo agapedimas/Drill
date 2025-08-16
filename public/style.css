@@ -91,3 +91,8 @@
         scrollbar-width: none;
     }
 }
+
+.root > nav:has(#Grid_PinnedCourses:empty) #Separator_PinnedCourses
+{
+    display: none;
+}

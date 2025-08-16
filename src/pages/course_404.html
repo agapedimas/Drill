@@ -48,7 +48,7 @@
 
 <div class="header cascaded">
     <div class="buttons dynamic" theme="dark">
-        <button class="back" onclick="Courses.Back()"><$ courses title /></button>
+        <button class="back" onclick="Courses.Back()" id="Button_BackCourses"></button>
     </div>
     <div class="title hide"></div>
 </div>
@@ -57,3 +57,7 @@
     <div id="Grid_CourseCard" theme="dark"></div>
     <div id="Grid_CourseTopics" class="notfound"></div>
 </div>
+
+<script>
+    Courses.Label(Button_BackCourses);
+</script>

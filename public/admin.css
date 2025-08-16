@@ -110,7 +110,7 @@
     {
         display: grid;
         grid-auto-rows: max-content auto;
-        min-height: 600px;
+        min-height: 580px;
     }
     :where(#PopOver_Problem, #PopOver_EditProblem) .pivot
     {

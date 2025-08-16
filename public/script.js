@@ -8,22 +8,38 @@ const Courses =
             const urlPrev = new URL(document.referrer);
             const urlNow = new URL(location.href);
 
-            if (urlPrev.origin == urlNow.origin && urlPrev.pathname == origin + "/courses")
+            if (urlPrev.origin == urlNow.origin)
             {
-                if (Topics.IsOpened())
-                    window.history.back();
+                if (urlPrev.pathname == origin + "/courses" || urlPrev.pathname == origin + "/home" || urlPrev.pathname == origin + "/pins")
+                {
+                    if (Topics.IsOpened() && window['PendingId'] != -1)
+                        window.history.back();
 
-                window.history.back();
-            }
-            else
-            {
-                window.location.href = origin + "/courses/";
+                    return window.history.back();
+                }
             }
         }
-        else
+
+        window.location.href = origin + "/courses/";
+    },
+    Label: function(element, origin = "")
+    {
+        if (document.referrer)
         {
-            window.location.href = origin + "/courses/";
+            const urlPrev = new URL(document.referrer);
+            const urlNow = new URL(location.href);
+
+            if (urlPrev.origin == urlNow.origin)
+            {
+                if (urlPrev.pathname == origin + "/home")
+                    return element.innerText = "<$ home title />";
+                
+                if (urlPrev.pathname == origin + "/pins")
+                    return element.innerText = "<$ courses pinned />";
+            }
         }
+            
+        element.innerText = "<$ courses title />";
     },
     Render: function(course)
     {
@@ -536,11 +552,11 @@ const Topics =
             Topics.Open(topic);
         }
 
-        if (topic.id == PendingId)
+        if (window['PendingId'] && topic.id == PendingId)
         {   
             Topics.Open(topic, true);
             box.classList.add("active");
-            PendingId = null;
+            PendingId = -1;
         }
 
         return box;

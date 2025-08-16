@@ -6,7 +6,7 @@ const Courses =
 {
     /**
      * Get courses details
-     * @param { string? } id Id of course
+     * @param { string? | Array<string>? } id Id or list of id of course
      * @returns { Promise<Array<{
      *      id: string,
      *      name: string,
@@ -24,8 +24,24 @@ const Courses =
 
         if (id)
         {
-            query += " WHERE id=?";
-            params.push(id);
+            if (Array.isArray(id))
+            {
+                query += " WHERE ";
+
+                for (let i = 0; i < id.length; i++)
+                {
+                    query += "id=? ";
+                    params.push(id[i]);
+
+                    if (i < id.length - 1)
+                        query += "OR ";
+                }
+            }
+            else
+            {
+                query += " WHERE id=?";
+                params.push(id);
+            }
         }
 
         query += " ORDER BY semester ASC, name ASC"
@@ -178,6 +194,21 @@ const Courses =
         {
             const result = await SQL.Query("SELECT id FROM topics WHERE LOWER(name) LIKE LOWER(?) AND course=?", [query.replaceAll(" ", "%"), course]);
             return result.data[0]?.id;
+        },
+        /**
+         * Get recently updated topics
+         * @returns { Promise<Array<{
+         *      id: string,
+         *      name: string,
+         *      course: string,
+         *      problemcount: number,
+         *      lastedited: number
+         * }>>} List of topics
+         */
+        Recent: async function()
+        {
+            const result = await SQL.Query("SELECT t.id, t.name, t.course, c.name AS coursename, t.problemcount, t.lastedited FROM topics t JOIN courses c ON c.id = t.course ORDER BY t.lastedited DESC LIMIT 10");
+            return result.data || [];
         },
         /**
          * Add new topic along its details

@@ -3,7 +3,7 @@ const isProduction = (process.env.NODE_ENV == "production");
 const Variables = 
 {
     Production: isProduction,
-	Version: "1.1.0",
+	Version: "1.1.2",
 
 	AppIcon: "https://assets.agapedimas.com/icon_logo.ico",
 	AppTitle: "Drill",

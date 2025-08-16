@@ -53,7 +53,7 @@
 
 <div class="header cascaded">
     <div class="buttons dynamic" theme="dark">
-        <button class="back" onclick="Courses.Back('/admin')"><$ courses title /></button>
+        <button class="back" onclick="Courses.Back('/admin')" id="Button_BackCourses"></button>
         <button id="Button_Edit" class="icon" ad-tooltip="<$ courses tooltip_edit_course />">&#xf7cf;</button>
         <button id="Button_New" class="icon" ad-tooltip="<$ courses tooltip_new_topic />">&#xf8dd;</button>
     </div>
@@ -191,6 +191,7 @@
 
 <script>
     PendingId = "<#? topic.pending.id ?#>";
+    Courses.Label(Button_BackCourses, "/admin");
     {
         Courses.Active = JSON.parse(`<#? course ?#>`);
 

@@ -54,5 +54,9 @@
     "error_generic": "문제가 발생했습니다.",
 
     "questionbank": "문제 은행",
-    "questionbank_disclaimer": "이 문서를 Universitas Katolik Parahyangan의 범위를 벗어나 배포하지 마십시오.\n이 문서를 적절하게 사용하십시오."
+    "questionbank_disclaimer": "이 문서를 Universitas Katolik Parahyangan의 범위를 벗어나 배포하지 마십시오.\n이 문서를 적절하게 사용하십시오.",
+
+    "tooltip_quizmentor": "멘토와 함께 연습하기",
+    
+    "recently_updated_title": "최근 업데이트"
 }

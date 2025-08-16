@@ -323,6 +323,15 @@ function Route(Server)
         res.send(courses);
     });
 
+    Server.post("/courses/get/", async function(req, res)
+    {
+        if (await Authentication.HasAccess(req.session.account, ["editor", "admin"]) == false)
+            res.header("Cache-Control", "public, max-age=60");
+
+        const courses = await Courses.Get(req.body.id);
+        res.send(courses);
+    });
+
     Server.get("*/courses/*", async function(req, res, next)
     {
         let paths = req.path.split("/").filter(o => o);
@@ -350,7 +359,7 @@ function Route(Server)
                     const topic = await Courses.Topics.Find(course[0].id, name);
 
                     if (topic == null)
-                        return res.redirect(path);
+                        return res.redirect("/" + paths[0] + "/" + paths[1]);
                 
                     Object.assign(req.variables, 
                     {
@@ -579,10 +588,19 @@ function Route(Server)
         const topic = await Courses.Topics.Get(type == "topic" ? { topic: req.params.id } : { course: req.params.id });
         res.send(topic);
     });
+
+    Server.get("/topics/recent", async function(req, res)
+    {
+        if (await Authentication.HasAccess(req.session.account, ["editor", "admin"]) == false)
+            res.header("Cache-Control", "public, max-age=60");
+        
+        const result = await Courses.Topics.Recent();
+        res.send(result);
+    });
     
     Server.get("/topics/quiz/get/:id", async function(req, res)
     {
-        res.header("Cache-Control", "public, max-age=60");
+        res.header("Cache-Control", "public, max-age=15");
 
         const id = req.params.id;
         let quiz = await Courses.Topics.Quiz.Get(id);
@@ -811,13 +829,13 @@ function Route(Server)
         const topicId = await Courses.Topics.Find(courseId, topicName);
 
         if (topicId == null)
-            return res.redirect("/mentor");
+            return res.redirect("/courses/" + req.params.course);
         
         const course = await Courses.Get(courseId);
         const topic = await Courses.Topics.Get({ topic: topicId });
 
         if (topic.length == 0 || course.length == 0)
-            return res.redirect("/mentor");
+            return res.redirect("/courses/" + req.params/course + "/" + req.params.topic);
         
         req.filepath = "./src/pages/quiz";
         

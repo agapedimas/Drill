@@ -144,6 +144,7 @@ Courses.Render = function(course)
     box.find("banner").remove();
     box.find("description").remove();
     box.removeAttribute("goto");
+    box.oncontextmenu = null;
     box.onclick = async function()
     {
         if (Topics.Request)

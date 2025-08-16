@@ -1,9 +1,12 @@
-<ad-title><$ courses pins /></ad-title>
+<ad-title><$ courses pinned /></ad-title>
 
 <style>@import url("/<#? applang ?#>/courses.css");</style>
 
 <div class="header">
-    <div class="title"><$ courses pins /></div>
+    <div class="buttons">
+        <button class="back" id="Button_Back"><$ home title /></button>
+    </div>
+    <div class="title"><$ courses pinned /></div>
 </div>
 
 <div class="content">
@@ -16,7 +19,6 @@
 </div>
 
 <script>
-
     $.ajax({
         type: "get",
         url: "/courses/get",
@@ -43,4 +45,20 @@
             Courses.Pins.AppendSidebar();
         }
     });
+
+    Button_Back.onclick = function()
+    {
+        if (document.referrer)
+        {
+            const urlPrev = new URL(document.referrer);
+            const urlNow = new URL(location.href);
+
+            if (urlPrev.origin == urlNow.origin && urlPrev.pathname == "/home")
+            {
+                return window.history.back();
+            }
+        }
+
+        window.location.href = "/home/";
+    }
 </script>

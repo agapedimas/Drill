@@ -54,5 +54,9 @@
     "error_generic": "Something went wrong.",
 
     "questionbank": "Question Bank",
-    "questionbank_disclaimer": "Do not distribute this document outside the scope of Universitas Katolik Parahyangan.\nUse this document appropriately."
+    "questionbank_disclaimer": "Do not distribute this document outside the scope of Universitas Katolik Parahyangan.\nUse this document appropriately.",
+
+    "tooltip_quizmentor": "Practice with Mentor",
+
+    "recently_updated_title": "Recently Updated"
 }

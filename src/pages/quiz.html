@@ -80,6 +80,39 @@
     </div>
 </section>
 
+<div class="popover" id="PopOver_Introduction">
+    <h4><$ mentor welcome_title /></h4>
+    <span><$ mentor welcome_description /></span>
+    
+    <div class="features">
+        <div class="feature">
+            <div class="icon">&#xed7e;</div>
+            <div class="description">
+                <b><$ mentor features_topic_title /></b>
+                <span><$ mentor features_topic_description /></span>
+            </div>
+        </div>
+        <div class="feature">
+            <div class="icon">&#xfcd0;</div>
+            <div class="description">
+                <b><$ mentor features_problem_title /></b>
+                <span><$ mentor features_problem_description /></span>
+            </div>
+        </div>
+        <div class="feature">
+            <div class="icon">&#xefc8;</div>
+            <div class="description">
+                <b><$ mentor features_update_title /></b>
+                <span><$ mentor features_update_description /></span>
+            </div>
+        </div>
+    </div>
+    
+    <div></div>
+    
+    <button class="accent" id="Button_Continue"><$ generic continue/></button>
+</div>
+
 <div class="popover" id="PopOver_SelectTopics">
     <div class="activity" id="Activity_SelectTopics">
         <section>
@@ -106,6 +139,13 @@
 
 <script src="/quiz.js"></script>
 <script>
+    if (localStorage.getItem("assistant_introduction") != "true")
+    {
+        window.onload = o => PopOver_Introduction.open();
+        Button_Continue.onclick = o => PopOver_Introduction.close();
+        localStorage.setItem("assistant_introduction", "true");
+    }
+
     Button_Start.onclick = function()
     {
         Quiz.Open(0);
