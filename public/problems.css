@@ -191,6 +191,10 @@
     margin: var(--padding) 0 0;
     counter-reset: problem;
 }
+#Grid_CourseProblems:not(:has(> .group))
+{
+    gap: 1em;
+}
 #Grid_PrintContent
 {
     display: block;
@@ -278,101 +282,101 @@
         {
             margin-top: 1.5em;
         }
-        :where(#Grid_CourseProblems, #Grid_PrintContent) .group .problem
-        {
-            position: relative;
-            break-inside: avoid-page;
-            display: grid;
-            grid-auto-flow: column;
-            grid-auto-columns: max-content auto;
-            gap: 0.5em;
-            font-size: 1.1em;
-            line-height: 1.5em;
-            align-items: baseline;
-        }
-            :where(#Grid_CourseProblems, #Grid_PrintContent) .group .problem::before
+            :where(#Grid_CourseProblems, #Grid_PrintContent) .problem
             {
-                counter-increment: problem;
-                content: counter(problem) ".";
-            }
-            .pivot:has(.section > textarea) .section .preview,
-            :where(#Grid_CourseProblems, #Grid_PrintContent) .group .problem .text
-            {
+                position: relative;
+                break-inside: avoid-page;
                 display: grid;
-                grid-auto-rows: max-content;
+                grid-auto-flow: column;
+                grid-auto-columns: max-content auto;
                 gap: 0.5em;
-
-                *
+                font-size: 1.1em;
+                line-height: 1.5em;
+                align-items: baseline;
+            }
+                :where(#Grid_CourseProblems, #Grid_PrintContent) .problem::before
                 {
-                    user-select: text;
+                    counter-increment: problem;
+                    content: counter(problem) ".";
                 }
-
-                img
-                {
-                    max-width: 100%;
-                }
-
-                ul, ol
+                .pivot:has(.section > textarea) .section .preview,
+                :where(#Grid_CourseProblems, #Grid_PrintContent) .problem .text
                 {
                     display: grid;
                     grid-auto-rows: max-content;
-                    padding-inline-start: 1em;
                     gap: 0.5em;
-                    
-                    li
+
+                    *
+                    {
+                        user-select: text;
+                    }
+
+                    img
+                    {
+                        max-width: 100%;
+                    }
+
+                    ul, ol
+                    {
+                        display: grid;
+                        grid-auto-rows: max-content;
+                        padding-inline-start: 1em;
+                        gap: 0.5em;
+                        
+                        li
+                        {
+                            margin: 0;
+                        }
+                    }
+                    table
+                    {
+                        display: block;
+                        overflow-x: auto;
+                        white-space: nowrap;
+                        margin: 0 -70px;
+                        padding: 0 70px;
+                        border-collapse: collapse;
+                        scrollbar-width: none;
+
+                        th, td
+                        {
+                            border: 1px solid var(--foreground-page);
+                            padding: 0.15em 0.5em;
+                            width: max-content;
+                        }
+                    }
+                    th
+                    {
+                        background: var(--gray-5);
+                    }
+
+                    pre:has(code)
+                    {
+                        display: block;
+                        overflow: auto;
+                        background: var(--gray-6);
+                        border-radius: 10px;
+                        padding: 1em;
+                        scrollbar-width: thin;
+                        font-family: var(--font-mono);
+                        font-weight: 600;
+                        font-size: 0.8em;
+                        line-height: 1.2;
+                    }
+
+                    > *,
+                    > *:not(mjx-container) *
                     {
                         margin: 0;
                     }
-                }
-                table
-                {
-                    display: block;
-                    overflow-x: auto;
-                    white-space: nowrap;
-                    margin: 0 -70px;
-                    padding: 0 70px;
-                    border-collapse: collapse;
-                    scrollbar-width: none;
 
-                    th, td
+                    mjx-container 
                     {
-                        border: 1px solid var(--foreground-page);
-                        padding: 0.15em 0.5em;
-                        width: max-content;
+                        display: inline;
+                        margin: 0 -50px;
+                        padding: 0.5ch 50px;
+                        overflow-x: auto;
+                        overflow-y: hidden;
+                        scrollbar-width: none;
                     }
                 }
-                th
-                {
-                    background: var(--gray-5);
-                }
-
-                pre:has(code)
-                {
-                    display: block;
-                    overflow: auto;
-                    background: var(--gray-6);
-                    border-radius: 10px;
-                    padding: 1em;
-                    scrollbar-width: thin;
-                    font-family: var(--font-mono);
-                    font-weight: 600;
-                    font-size: 0.8em;
-                    line-height: 1.2;
-                }
-
-                > *,
-                > *:not(mjx-container) *
-                {
-                    margin: 0;
-                }
-
-                mjx-container 
-                {
-                    display: inline;
-                    margin: 0 -50px;
-                    padding: 0.5ch 50px;
-                    overflow-x: auto;
-                    overflow-y: hidden;
-                    scrollbar-width: none;
-                }
-            }

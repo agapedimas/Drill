@@ -1,0 +1,9 @@
+{
+    "title": "検索",
+
+    "showing_results": "「{0}」の検索結果",
+    "searchbar_placeholder": "コース、トピック、問題",
+    
+    "no_results_title": "検索結果がありません",
+    "no_results_description": "新しい検索をお試しください"
+}

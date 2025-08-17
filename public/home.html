@@ -2,185 +2,7 @@
 
 <style>
     @import url("/<#? applang ?#>/courses.css");
-    
-    section[ad-header]
-    {
-        position: relative;
-    }
-
-    .arrow
-    {
-        display: grid;
-        width: 1ch;
-        justify-content: center;
-        position: absolute;
-        left: -20px;
-        bottom: calc(50% - 1em);
-        font-size: 2em;
-        font-family: var(--font-icon);
-        z-index: 1;
-        color: var(--foreground-description);
-        transition: 0.1s opacity;
-    }
-    .arrow.next
-    {
-        left: unset;
-        right: -20px;
-    }
-    .arrow:hover
-    {
-        opacity: 0.7;
-    }
-    .arrow:active
-    {
-        opacity: 0.5;
-    }
-    
-    section[ad-header]:has(> :empty)
-    {
-        display: none;
-    }
-    #Grid_Courses
-    {    
-        display: grid;
-        grid-auto-flow: column;
-        grid-auto-columns: 275px;
-        grid-template-columns: unset;
-        gap: 16px;
-        overflow-x: auto;
-        scrollbar-width: none;
-        scroll-behavior: smooth;
-        scroll-snap-type: x proximity;    
-        scroll-padding: 10px;
-        padding: 10px;
-        margin: -10px;
-        mask-image: linear-gradient(90deg, transparent, black 10px, black calc(100% - 10px), transparent);
-        -webkit-mask-image: linear-gradient(90deg, transparent, black 10px, black calc(100% - 10px), transparent);
-    }
-        #Grid_Courses .course
-        {    
-            scroll-snap-align: start;
-        }
-
-    section[ad-header]:has(#Grid_CourseTopics) .arrow
-    {
-        bottom: 1.8em;
-    }
-    section[ad-header]:has(.arrow.prev.hidden):has(.arrow.next:not(.hidden)) #Grid_CourseTopics
-    {
-        mask-image: linear-gradient(90deg, transparent, black 0, black calc(100% - 0.75em), transparent);
-        -webkit-mask-image: linear-gradient(90deg, transparent, black 0, black calc(100% - 0.75em), transparent);
-    }
-    section[ad-header]:has(.arrow.next.hidden):has(.arrow.prev:not(.hidden)) #Grid_CourseTopics
-    {
-        mask-image: linear-gradient(90deg, transparent, black 0.75em, black calc(100%), transparent);
-        -webkit-mask-image: linear-gradient(90deg, transparent, black 0.75em, black calc(100%), transparent);
-    }
-    section[ad-header]:has(.arrow.prev:not(.hidden)):has(.arrow.next:not(.hidden)) #Grid_CourseTopics
-    {
-        mask-image: linear-gradient(90deg, transparent, black 0.75em, black calc(100% - 0.75em), transparent);
-        -webkit-mask-image: linear-gradient(90deg, transparent, black 0.75em, black calc(100% - 0.75em), transparent);
-    }
-    #Grid_CourseTopics
-    {    
-        display: grid;
-        grid-auto-flow: column;
-        grid-auto-columns: 275px;
-        grid-template-rows: repeat(2, max-content);
-        gap: 10px 2em;
-        overflow-x: auto;
-        scrollbar-width: none;
-        scroll-behavior: smooth;
-        scroll-padding: 0.75em;
-        padding: 10px 0.75em;
-        margin: -10px -0.75em;
-        scroll-snap-type: x proximity;
-    }
-        #Grid_CourseTopics .topic
-        {    
-            padding: 0.75em;
-            margin: 0 -0.75em;
-            scroll-snap-align: start;
-            grid-auto-rows: max-content;
-        }
-            #Grid_CourseTopics .topic:nth-child(even)::before
-            {
-                height: 0;
-            }
-                #Grid_CourseTopics .topic .details .course
-                {        
-                    white-space: nowrap;
-                    overflow: hidden;
-                    text-overflow: ellipsis;
-                }
-                #Grid_CourseTopics .topic .details::after 
-                {
-                    content: "\ef59";
-                    font-size: 0.95em;
-                    color: var(--foreground-description);
-                    font-family: var(--font-icon);
-                    transform: translateX(20%);
-                }
-
-    #Grid_Events
-    {
-        display: grid;
-        grid-auto-flow: column;
-        grid-auto-columns: 275px;
-        overflow-x: auto;
-        scrollbar-width: none;
-        scroll-behavior: smooth;
-        padding: 10px;
-        margin: -10px;
-        mask-image: linear-gradient(90deg, transparent, black 10px, black calc(100% - 10px), transparent);
-        -webkit-mask-image: linear-gradient(90deg, transparent, black 10px, black calc(100% - 10px), transparent);
-    }
-
-    #Grid_Editors
-    {
-        display: grid;
-        grid-auto-flow: column;
-        grid-auto-columns: 125px;
-        gap: 20px;
-        overflow-x: auto;
-        scrollbar-width: none;
-        scroll-behavior: smooth;
-        padding: 10px;
-        margin: -10px;
-        mask-image: linear-gradient(90deg, transparent, black 10px, black calc(100% - 10px), transparent);
-        -webkit-mask-image: linear-gradient(90deg, transparent, black 10px, black calc(100% - 10px), transparent);
-    }
-        #Grid_Editors .editor
-        {
-            display: grid;    
-            gap: 0.5em;
-        }
-            #Grid_Editors .editor img
-            {
-                display: block;
-                width: 100%;
-                height: auto;
-                aspect-ratio: 1;
-                border-radius: 100%;
-            }
-            #Grid_Editors .editor .details
-            {
-                display: grid;
-                text-align: center;
-                font-weight: 500;
-            }
-                #Grid_Editors .editor .details .role
-                {
-                    color: var(--foreground-description);
-                }
-
-    @media screen and (max-width: 1040px) 
-    {
-        #Grid_Courses
-        {    
-            grid-auto-columns: 235px;
-        }
-    }
+    @import url("/<#? applang ?#>/collections.css");
 </style>
 
 <div class="header">
@@ -233,71 +55,37 @@
             {
                 Grid_Courses.innerHTML = null;
                 Courses.Append(courses, Grid_Courses);
-                Arrow_Check(Grid_Courses);
+                Arrow.Check(Grid_Courses);
             });
         }
         Courses.Pins.AppendSidebar();
 
-        Grid_Courses.onscroll = o => Arrow_Check(Grid_Courses);
+        Grid_Courses.onscroll = o => Arrow.Check(Grid_Courses);
         Grid_Courses.parentNode.onheaderclick = function()
         {
             window.location.href = "/pins";
         }
-        Grid_CourseTopics.onscroll = o => Arrow_Check(Grid_CourseTopics);
+        Grid_CourseTopics.onscroll = o => Arrow.Check(Grid_CourseTopics);
         Grid_Events.parentNode.onheaderclick = function()
         {
         }
-        Grid_Editors.onscroll = o => Arrow_Check(Grid_Editors);
+        Grid_Editors.onscroll = o => Arrow.Check(Grid_Editors);
 
-        Arrow_PrevPins.onclick = o => Arrow_Click(Grid_Courses, "backward");
-        Arrow_NextPins.onclick = o => Arrow_Click(Grid_Courses, "forward");
-        Arrow_PrevRecents.onclick = o => Arrow_Click(Grid_CourseTopics, "backward");
-        Arrow_NextRecents.onclick = o => Arrow_Click(Grid_CourseTopics, "forward");
-        Arrow_PrevEvents.onclick = o => Arrow_Click(Grid_Events, "backward");
-        Arrow_NextEvents.onclick = o => Arrow_Click(Grid_Events, "forward");
-        Arrow_PrevEditors.onclick = o => Arrow_Click(Grid_Editors, "backward");
-        Arrow_NextEditors.onclick = o => Arrow_Click(Grid_Editors, "forward");
-
-        function Arrow_Check(container)
-        {
-            const prev = [...container.parentNode.children].find(o => o.classList.contains("prev"));
-            const next = [...container.parentNode.children].find(o => o.classList.contains("next"));
-
-            if (container.scrollWidth > container.offsetWidth)
-            {
-                if (container.scrollLeft > 30)
-                    prev.classList.remove("hidden");
-                else
-                    prev.classList.add("hidden");
-
-                if (container.scrollLeft < container.scrollWidth - container.offsetWidth - 30)
-                    next.classList.remove("hidden");
-                else
-                    next.classList.add("hidden");
-
-                return;
-            }
-
-            prev.classList.add("hidden");
-            next.classList.add("hidden");
-        }
-
-        function Arrow_Click(container, direction = "forward")
-        {
-            let scroll = container.offsetWidth;
-
-            if (direction == "backward")
-                scroll = scroll * -1;
-
-            container.scrollLeft += scroll;
-        }
+        Arrow_PrevPins.onclick = o => Arrow.Click(Grid_Courses, "backward");
+        Arrow_NextPins.onclick = o => Arrow.Click(Grid_Courses, "forward");
+        Arrow_PrevRecents.onclick = o => Arrow.Click(Grid_CourseTopics, "backward");
+        Arrow_NextRecents.onclick = o => Arrow.Click(Grid_CourseTopics, "forward");
+        Arrow_PrevEvents.onclick = o => Arrow.Click(Grid_Events, "backward");
+        Arrow_NextEvents.onclick = o => Arrow.Click(Grid_Events, "forward");
+        Arrow_PrevEditors.onclick = o => Arrow.Click(Grid_Editors, "backward");
+        Arrow_NextEditors.onclick = o => Arrow.Click(Grid_Editors, "forward");
 
         window.addEventListener("resize", function()
         {
-            Arrow_Check(Grid_Courses);
-            Arrow_Check(Grid_CourseTopics);
-            Arrow_Check(Grid_Events);
-            Arrow_Check(Grid_Editors);
+            Arrow.Check(Grid_Courses);
+            Arrow.Check(Grid_CourseTopics);
+            Arrow.Check(Grid_Events);
+            Arrow.Check(Grid_Editors);
         });
 
         const b = Topics.Render;
@@ -327,7 +115,7 @@
         {
             Grid_CourseTopics.innerHTML = null;
             Topics.Append(topics, Grid_CourseTopics);
-            Arrow_Check(Grid_CourseTopics);
+            Arrow.Check(Grid_CourseTopics);
         })
 
         $.get("/accounts/get?type=editor", null, function(accounts)
@@ -362,7 +150,7 @@
 
                 Grid_Editors.append(box);
             }
-            Arrow_Check(Grid_Editors);
+            Arrow.Check(Grid_Editors);
         });
     }
 </script>

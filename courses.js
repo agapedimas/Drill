@@ -50,6 +50,81 @@ const Courses =
         return results.data || [];
     },
     /**
+     * Search courses by query
+     * @param { string } query 
+     * @returns { Promise<Array<{
+     *      id: string,
+     *      name: string,
+     *      alias: string,
+     *      description: string,
+     *      semester: number,
+     *      sks: number,
+     *      bannerversion: number
+     * }>>} List of courses
+     */
+    Search: async function(query)
+    {
+        const params = 
+        [
+            query,
+            "%" + query,
+            query + "%",
+            "%" + query + "%",
+            "%" + query.replaceAll(" ", "%"),
+            query.replaceAll(" ", "%") + "%",
+            "%" + query.replaceAll(" ", "%") + "%"
+        ];
+
+        const results = await SQL.Query
+        (
+            `
+                SELECT * FROM courses 
+                    WHERE
+                        LOWER(id) LIKE LOWER(?) OR
+                        --
+                        LOWER(name) LIKE LOWER(?) OR
+                        LOWER(name) LIKE LOWER(?) OR
+                        LOWER(name) LIKE LOWER(?) OR
+                        --
+                        LOWER(alias) LIKE LOWER(?) OR
+                        LOWER(alias) LIKE LOWER(?) OR
+                        LOWER(alias) LIKE LOWER(?)
+                    ORDER BY
+                        CASE
+                            WHEN LOWER(id) LIKE LOWER(?) THEN 0
+                            --
+                            WHEN LOWER(name) LIKE LOWER(?) THEN 0
+                            WHEN LOWER(name) LIKE LOWER(?) THEN 1
+                            WHEN LOWER(name) LIKE LOWER(?) THEN 1
+                            WHEN LOWER(name) LIKE LOWER(?) THEN 2
+                            WHEN LOWER(name) LIKE LOWER(?) THEN 3
+                            WHEN LOWER(name) LIKE LOWER(?) THEN 3
+                            WHEN LOWER(name) LIKE LOWER(?) THEN 4
+                            --
+                            WHEN LOWER(alias) LIKE LOWER(?) THEN 0
+                            WHEN LOWER(alias) LIKE LOWER(?) THEN 1
+                            WHEN LOWER(alias) LIKE LOWER(?) THEN 1
+                            WHEN LOWER(alias) LIKE LOWER(?) THEN 2
+                            WHEN LOWER(alias) LIKE LOWER(?) THEN 3
+                            WHEN LOWER(alias) LIKE LOWER(?) THEN 3
+                            WHEN LOWER(alias) LIKE LOWER(?) THEN 4
+                            ELSE 5
+                        END
+                    LIMIT 50
+            `,
+            [
+                params[0],
+                params[0], params[3], params[6],
+                params[0], params[3], params[6],
+                    params[0],
+                    params[0], params[1], params[2], params[3], params[4], params[5], params[6],
+                    params[0], params[1], params[2], params[3], params[4], params[5], params[6],
+
+            ]
+        );
+        return results.data || [];
+    },
+    /**
      * Add new course along its details
      * @param { string } id Id of course
      * @param { string } name Name of course
@@ -192,8 +267,65 @@ const Courses =
          */
         Find: async function(course, query)
         {
-            const result = await SQL.Query("SELECT id FROM topics WHERE LOWER(name) LIKE LOWER(?) AND course=?", [query.replaceAll(" ", "%"), course]);
+            const result = await SQL.Query("SELECT id FROM topics WHERE (LOWER(name) LIKE LOWER(?) OR id=? ) AND course=?", [query.replaceAll(" ", "%"), query, course]);
             return result.data[0]?.id;
+        },
+        /** Search topics by query
+         * @param { string } query
+         * @returns { Promise<Array<{
+         *      id: string,
+         *      name: string,
+         *      course: string,
+         *      problemcount: number,
+         *      lastedited: number
+         * }>>} List of topics
+         */
+        Search: async function(query)
+        {
+            const params = 
+            [
+                query,
+                "%" + query,
+                query + "%",
+                "%" + query + "%",
+                "%" + query.replaceAll(" ", "%"),
+                query.replaceAll(" ", "%") + "%",
+                "%" + query.replaceAll(" ", "%") + "%"
+            ];
+        
+            const results = await SQL.Query
+            (
+                `
+                    SELECT 
+                        t.id, t.name, t.course, 
+                        c.name AS coursename, 
+                        t.problemcount, 
+                        t.lastedited 
+                    FROM topics t  JOIN courses c ON c.id = t.course
+                        WHERE
+                            LOWER(t.name) LIKE LOWER(?) OR
+                            LOWER(t.name) LIKE LOWER(?) OR
+                            LOWER(t.name) LIKE LOWER(?)
+                        ORDER BY
+                            CASE
+                                WHEN LOWER(t.name) LIKE LOWER(?) THEN 0
+                                WHEN LOWER(t.name) LIKE LOWER(?) THEN 1
+                                WHEN LOWER(t.name) LIKE LOWER(?) THEN 1
+                                WHEN LOWER(t.name) LIKE LOWER(?) THEN 2
+                                WHEN LOWER(t.name) LIKE LOWER(?) THEN 3
+                                WHEN LOWER(t.name) LIKE LOWER(?) THEN 3
+                                WHEN LOWER(t.name) LIKE LOWER(?) THEN 4
+                                ELSE 5
+                            END
+                        LIMIT 60
+                `,
+                [
+                    params[0], params[3], params[6],
+                    params[0], params[1], params[2], params[3], params[4], params[5], params[6]
+        
+                ]
+            );
+            return results.data || [];
         },
         /**
          * Get recently updated topics
@@ -465,6 +597,77 @@ const Courses =
             query += " ORDER BY p.year DESC, s.id DESC";
 
             const results = await SQL.Query(query, params);
+            return results.data || [];
+        },
+        /**
+         * Search problems by query
+         * @param { string } query 
+         * @returns { Promise<Array<{
+         *      id: string,
+         *      question: string,
+         *      solution?: string,
+         *      source: {
+         *          id: number,
+         *          name: string
+         *      },
+         *      year: number,
+         *      course: string,
+         *      topic: string,
+         *      timeadded: string,
+         *      lastedited: string,
+         * }>>} List of problems
+         */
+        Search: async function(query)
+        {
+            const params = 
+            [
+                query,
+                "%" + query,
+                query + "%",
+                "%" + query + "%",
+                "%" + query.replaceAll(" ", "%"),
+                query.replaceAll(" ", "%") + "%",
+                "%" + query.replaceAll(" ", "%") + "%"
+            ];
+        
+            const results = await SQL.Query
+            (
+                `
+                    SELECT 
+                        p.id, 
+                        p.question, 
+                        p.solution, 
+                        JSON_OBJECT('id', s.id, 'name', s.name) AS source, 
+                        p.year, 
+                        p.course, 
+                        p.topic, 
+                        p.timeadded, 
+                        p.lastedited
+                    FROM problems p
+                    LEFT JOIN problem_sources s ON p.source = s.id
+                        WHERE
+                            LOWER(p.question) LIKE LOWER(?) OR
+                            LOWER(p.question) LIKE LOWER(?) OR
+                            LOWER(p.question) LIKE LOWER(?)
+                        ORDER BY
+                            CASE
+                                WHEN LOWER(p.question) LIKE LOWER(?) THEN 0
+                                WHEN LOWER(p.question) LIKE LOWER(?) THEN 1
+                                WHEN LOWER(p.question) LIKE LOWER(?) THEN 1
+                                WHEN LOWER(p.question) LIKE LOWER(?) THEN 2
+                                WHEN LOWER(p.question) LIKE LOWER(?) THEN 3
+                                WHEN LOWER(p.question) LIKE LOWER(?) THEN 3
+                                WHEN LOWER(p.question) LIKE LOWER(?) THEN 4
+                                ELSE 5
+                            END
+                        LIMIT 20
+                `,
+                [
+                    params[0], params[3], params[6],
+                    params[0], params[1], params[2], params[3], params[4], params[5], params[6]
+        
+                ]
+            );
             return results.data || [];
         },
         /**

@@ -10,7 +10,7 @@ const Courses =
 
             if (urlPrev.origin == urlNow.origin)
             {
-                if (urlPrev.pathname == origin + "/courses" || urlPrev.pathname == origin + "/home" || urlPrev.pathname == origin + "/pins")
+                if (urlPrev.pathname == origin + "/courses" || urlPrev.pathname == origin + "/home" || urlPrev.pathname == origin + "/pins" || urlPrev.pathname == origin + "/search")
                 {
                     if (Topics.IsOpened() && window['PendingId'] != -1)
                         window.history.back();
@@ -33,6 +33,9 @@ const Courses =
             {
                 if (urlPrev.pathname == origin + "/home")
                     return element.innerText = "<$ home title />";
+
+                if (urlPrev.pathname == origin + "/search")
+                    return element.innerText = "<$ search title />";
                 
                 if (urlPrev.pathname == origin + "/pins")
                     return element.innerText = "<$ courses pinned />";
@@ -918,4 +921,40 @@ async function Image_Blur(src, blur = 20, width = 256, height = 256)
 		img.src = src;
 		img.onload = draw;
 	});
+}
+
+const Arrow = 
+{
+    Check: function(container)
+    {
+        const prev = [...container.parentNode.children].find(o => o.classList.contains("prev"));
+        const next = [...container.parentNode.children].find(o => o.classList.contains("next"));
+
+        if (container.scrollWidth > container.offsetWidth)
+        {
+            if (container.scrollLeft > 30)
+                prev.classList.remove("hidden");
+            else
+                prev.classList.add("hidden");
+
+            if (container.scrollLeft < container.scrollWidth - container.offsetWidth - 30)
+                next.classList.remove("hidden");
+            else
+                next.classList.add("hidden");
+
+            return;
+        }
+
+        prev.classList.add("hidden");
+        next.classList.add("hidden");
+    },
+    Click: function(container, direction = "forward")
+    {
+        let scroll = container.offsetWidth;
+
+        if (direction == "backward")
+            scroll = scroll * -1;
+
+        container.scrollLeft += scroll;
+    }
 }

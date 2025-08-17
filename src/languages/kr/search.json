@@ -1,0 +1,9 @@
+{
+    "title": "검색",
+    
+    "showing_results": "“{0}” 검색 결과",
+    "searchbar_placeholder": "강의, 주제, 문제",
+    
+    "no_results_title": "검색 결과가 없습니다",
+    "no_results_description": "새로운 검색을 시도해 보세요"
+}

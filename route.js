@@ -332,7 +332,7 @@ function Route(Server)
         res.send(courses);
     });
 
-    Server.get("*/courses/*", async function(req, res, next)
+    Server.get(["/courses/*", "/admin/courses/*"], async function(req, res, next)
     {
         let paths = req.path.split("/").filter(o => o);
         const isAdmin = paths[0] == "admin";
@@ -398,7 +398,7 @@ function Route(Server)
         next();
     });
 
-    Server.post("*/courses/*", async function(req, res, next)
+    Server.post(["/courses/*", "/admin/courses/*"], async function(req, res, next)
     {
         let paths = req.path.split("/").filter(o => o);
         const isAdmin = paths[0] == "admin";
@@ -868,7 +868,24 @@ function Route(Server)
         );
 
         next();
-    })
+    });
+
+    Server.get(["/search", "/admin/search"], async function(req, res, next)
+    {
+        req.filepath = "./src/pages/search";
+        next();
+    });
+
+    Server.post("/search", async function(req, res)
+    {
+        if (req.query.q == null || req.query.q.trim() == "")
+            return res.send({});
+
+        const courses = await Courses.Search(req.query.q);
+        const topics = await Courses.Topics.Search(req.query.q);
+        const problems = [] || await Courses.Problems.Search(req.query.q);
+        res.send({ courses: courses, topics: topics, problems: problems });
+    });
 
     Map(Server);
 }

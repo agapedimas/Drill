@@ -1,0 +1,9 @@
+{
+    "title": "Search",
+
+    "showing_results": "Showing results for “{0}”",
+    "searchbar_placeholder": "Courses, topics, or problems",
+
+    "no_results_title": "No Results",
+    "no_results_description": "Try a new search."
+}

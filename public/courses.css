@@ -82,6 +82,7 @@
             margin: 10px calc(1.85rem - 10px) calc(1.85rem - 15px);
             white-space: pre-line;
             text-overflow: ellipsis;
+            line-clamp: 5;
             -webkit-line-clamp: 5;
             -webkit-box-orient: vertical;
         }
@@ -186,6 +187,7 @@
         cursor: pointer;
         display: none;
         -webkit-box-orient: vertical;
+        line-clamp: 2;
         -webkit-line-clamp: 2;
         margin: -0.2em -0.5em;
         padding: 0.2em 0.5em;
@@ -214,6 +216,7 @@
         cursor: text;
         display: inline-block;
         -webkit-box-orient: unset;
+        line-clamp: unset;
         -webkit-line-clamp: unset;
     }
     #Grid_CourseCard > .details
@@ -359,6 +362,7 @@
     }
         :where(#Grid_CourseTopics, #Grid_PrintCourseTopics, #Grid_MoveCourseTopics) .topic .name
         {
+            display: block;
         }
         :where(#Grid_CourseTopics, #Grid_PrintCourseTopics, #Grid_MoveCourseTopics) .topic .details
         {
