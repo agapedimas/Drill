@@ -7,6 +7,10 @@
     position: relative;
     overflow: hidden;
 }
+    #Activity_Main > section
+    {
+        grid-auto-rows: max-content auto;
+    }
     #Activity_Main > .content
     {
         display: grid;
@@ -66,7 +70,6 @@
 {
     display: grid;
     gap: 10px;
-    margin: -0.75em 0 0;
 }
     #Grid_Courses .course,
     #Grid_CourseTopics .topic
@@ -117,12 +120,6 @@
             right: 0.75em;
             transform: translateY(-50%);
         }
-
-        
-#Grid_CourseTopics
-{
-    margin-top: var(--padding);
-}
     #Grid_CourseTopics .progressring
     {
         position: absolute;
@@ -131,10 +128,6 @@
         width: 25px;
         transform: translate(-50%, -50%);
     }    
-    #Grid_CourseTopics
-    {
-        margin-top: var(--padding);
-    }
 #Grid_CourseTopics:empty
 {
     all: unset;

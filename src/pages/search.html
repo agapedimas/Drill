@@ -35,7 +35,7 @@
         opacity: 0;
         margin: 0 calc(var(--padding) * -1) var(--padding);
         padding: var(--padding);
-        top: calc(var(--padding) * -3 - 0.5em);
+        top: var(--searchtransform);
         z-index: 50;
         text-align: center;
     }
@@ -66,13 +66,10 @@
             height: 0 !important;
         }
 
-    #Activity_Main
-    {
-        grid-auto-rows: auto;
-    }
     #Activity_Main:has(.notfound),
     #Activity_Main:has(#Grid_Courses:empty):has(#Grid_CourseTopics:empty):has(#Grid_CourseProblems:empty)
     {
+        grid-auto-rows: auto;
         overflow: hidden;
     }
         #Activity_Main > .header
@@ -96,7 +93,8 @@
         {
             top: 0;
         }
-        #Activity_Main
+        #Activity_Main:has(.notfound),
+        #Activity_Main:has(#Grid_Courses:empty):has(#Grid_CourseTopics:empty):has(#Grid_CourseProblems:empty)
         {
             grid-auto-rows: max-content auto;
         }

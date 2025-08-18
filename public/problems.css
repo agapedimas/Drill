@@ -177,10 +177,6 @@
 #Activity_Topic > .content
 {
     display: grid;
-    grid-auto-rows: max-content auto;
-}
-#Activity_Topic > .content:has(.notfound, .offline, .unknownerror)
-{
     grid-auto-rows: auto;
 }
 #Grid_CourseProblems, #Grid_PrintContent
@@ -188,7 +184,6 @@
     display: grid;
     grid-auto-rows: max-content;
     gap: 10px;
-    margin: var(--padding) 0 0;
     counter-reset: problem;
 }
 #Grid_CourseProblems:not(:has(> .group))

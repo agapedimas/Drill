@@ -363,20 +363,20 @@ const Topics =
         buttons.classList.add("buttons");
         buttons.append(back);
 
-        const header = document.createElement("div");
-        header.classList.add("header");  
-        header.classList.add("cascaded");  
-        header.append(buttons);
-
-        const title = document.createElement("h3");
+        const title = document.createElement("div");
+        title.classList.add("title");
         title.setAttribute("id", "Text_TopicName");
+
+        const header = document.createElement("div");
+        header.classList.add("header");   
+        header.append(buttons);
+        header.append(title);
 
         const problems = document.createElement("div");
         problems.setAttribute("id", "Grid_CourseProblems");
 
         const content = document.createElement("div");
         content.classList.add("content");
-        content.append(title);
         content.append(problems);
 
         const container = new DocumentFragment();
@@ -406,7 +406,7 @@ const Topics =
                 $(".root > .main").append(activity);
             }
 
-            Text_TopicName.innerText = topic.name;
+            Text_TopicName.innerHTML = topic.name;
             Grid_CourseProblems.innerHTML = "";
             Grid_CourseProblems.append(progressring);
         }, 500);
@@ -458,12 +458,12 @@ const Topics =
                 Topics.IsLoaded = true;
             }
                 
-            Text_TopicName.innerText = topic.name;
+            Activity_Topic.name = topic.name;
             Grid_CourseProblems.innerHTML = "";
 
             if (result.success == false)
             {
-                Text_TopicName.style.display = "none";
+                Activity_Topic.name = "";
 
                 if (result.status == 404)
                     Grid_CourseProblems.setAttribute("class", "notfound");
@@ -474,7 +474,6 @@ const Topics =
             }
             else
             {
-                Text_TopicName.style.display = "block";
                 Grid_CourseProblems.removeAttribute("class");
             }
         }

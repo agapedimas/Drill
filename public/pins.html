@@ -19,32 +19,25 @@
 </div>
 
 <script>
-    $.ajax({
-        type: "get",
-        url: "/courses/get",
-        success: function(data)
+    const a = Courses.Pins.AppendSidebar;
+    Courses.Pins.AppendSidebar = function()
+    {
+        a();
+        const ids = Courses.Pins.Get().map(o => o.id).slice(0, 10);
+
+        if (ids.length == 0)
         {
-            Grid_Courses.innerHTML = "";
-            Courses.Append(Courses.Pins.Get(), Grid_Courses);
-            
-            for (const item of [...Grid_Courses.children])
-            {
-                const course = data.find(o => o.id == item.data.id);
-                if (course == null)
-                {
-                    item.remove();
-                    continue;
-                }
-                
-                item.data.name = course.name;
-                item.find("name").innerText = course.name;
-                item.find("description").innerText = course.description;
-            }
-            
-            localStorage.setItem("courses_pins", JSON.stringify([...Grid_Courses.children].map(o => o.data)));
-            Courses.Pins.AppendSidebar();
+            Grid_Courses.innerHTML = null;
+            return;
         }
-    });
+    
+        $.post("/courses/get", { id: ids }, function(courses)
+        {
+            Grid_Courses.innerHTML = null;
+            Courses.Append(courses, Grid_Courses);
+        });
+    }
+    Courses.Pins.AppendSidebar();
 
     Button_Back.onclick = function()
     {

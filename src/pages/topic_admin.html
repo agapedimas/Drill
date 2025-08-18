@@ -8,16 +8,15 @@
     }
 </style>
 
-<div class="header cascaded">
+<div class="header">
     <div class="buttons">
         <button class="back" onclick="Topics.Back()"><$ topics back /></button>
         <button id="Button_NewProblem" class="icon" ad-tooltip="<$ topics tooltip_new_problem />">&#xf8dd;</button>
     </div>
-    <div class="title hide"></div>
+    <div class="title"><#? topic.name ?#></div>
 </div>
 
 <div class="content">
-    <h3 id="Text_TopicName"><#? topic.name ?#></h3>
     <div id="Grid_CourseProblems"> </div>
 </div>
 

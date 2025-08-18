@@ -150,7 +150,7 @@ Courses.Render = function(course)
         if (Topics.Request)
             Topics.Request.abort();
 
-        Text_CourseName.innerText = course.name;
+        Activity_SelectTopics.sections[1].name = course.name;
         Activity_SelectTopics.navigateTo(1);
         PendingId = null;
         Grid_CourseTopics.innerHTML = "<div class='progressring'></div";

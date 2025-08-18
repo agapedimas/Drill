@@ -259,7 +259,7 @@
 {
     display: grid;
     gap: 10px;
-    margin: -0.75em 0 0;
+    margin: -0.75em 0;
 }
 #Grid_CourseTopics:empty
 {
