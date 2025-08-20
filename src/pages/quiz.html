@@ -17,7 +17,7 @@
                 <span><#? topic.name ?#></span>
                 <span><#? course.name ?#></span>
             </div>
-            <button class="plain" id="Button_ChangeTopic"><$ topics change_topic_title/></button>
+            <button class="plain" id="Button_ChangeTopic"><$ topics change_title/></button>
         </div>
         <div class="metadata hidden" id="Grid_Metadata">
             <div>
@@ -119,9 +119,9 @@
             <div class="header cascaded">
                 <div class="buttons">
                     <button id="Button_Cancel"><$ generic cancel /></button>
-                    <button class="icon" id="Button_Filter" ad-tooltip="<$ courses tooltip_filter />">&#xf5bf;</button>
+                    <button class="icon" id="Button_Filter" ad-tooltip="<$ courses filter_title />">&#xf5bf;</button>
                 </div>
-                <div class="title"><$ topics change_topic_title /></div>
+                <div class="title"><$ topics change_title /></div>
             </div>
             <div class="content">
                 <div id="Grid_Courses"></div>
@@ -223,7 +223,7 @@
                         result: null
                     });
 
-                    Text_Status.innerText = "<$ mentor generating />";
+                    Text_Status.innerText = "<$ mentor generating_message />";
                     setTimeout(Status_Check, 15000);
                 }
             }

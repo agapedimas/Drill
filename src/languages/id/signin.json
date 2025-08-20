@@ -1,11 +1,10 @@
 {
     "title": "Masuk",
-    "description": "Akses sebagai administrator dan kumpulkan soal latihan untuk mahasiswa.",
-    "username": "Nama pengguna",
-    "password": "Kata sandi",
-
+    "description": "Akses sebagai admin dan post soal latihan untuk mahasiswa.",
+    
+    "error_generic": "Ada yang salah",
     "error_incorrect": "Nama pengguna atau kata sandi salah",
     "error_nointernet": "Hubungkan ke internet",
-    "error_server": "Server lagi ada masalah. Coba sebentar lagi.",
-    "error_generic": "Ada yang salah"
+    "error_server": "Kami sedang ada masalah. Coba lagi nanti.",
+    "error_signin": "Mohon masuk untuk melanjutkan"
 }

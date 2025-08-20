@@ -143,13 +143,13 @@
 }
     #Grid_CourseTopics:empty::before
     {
-        content: "<$ courses empty_topics_title />";
+        content: "<$ topics empty_title />";
         font-family: var(--font-bold);
         font-size: 1.5em;
     }
     #Grid_CourseTopics:empty::after
     {
-        content: "<$ courses empty_topics_subtitle />";
+        content: "<$ topics empty_message />";
         font-size: 1.12em;
         color: var(--foreground-description);
     }

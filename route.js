@@ -7,6 +7,7 @@ const Language = require("./language");
 const Courses = require("./courses");
 const FileIO = require("fs");
 const path = require("path");
+const language = require("./language");
 
 /**
  * @param { import("express").Application } Server Express instance
@@ -105,7 +106,46 @@ function Route(Server)
             const path = req.url;
             if (await Authentication.HasAccess(req.session.account, ["editor", "admin"]) == false && path != "/admin/signin")
             {
-                res.status(403).send();
+                res.status(403).send(language.Data[req.session.language]["signin"]["error_signin"]);
+            }
+            else
+            {
+                next();
+            }
+        });
+
+        Server.put("/admin*", async function(req, res, next)
+        {
+            const path = req.url;
+            if (await Authentication.HasAccess(req.session.account, ["editor", "admin"]) == false && path != "/admin/signin")
+            {
+                res.status(403).send(language.Data[req.session.language]["signin"]["error_signin"]);
+            }
+            else
+            {
+                next();
+            }
+        });
+
+        Server.patch("/admin*", async function(req, res, next)
+        {
+            const path = req.url;
+            if (await Authentication.HasAccess(req.session.account, ["editor", "admin"]) == false && path != "/admin/signin")
+            {
+                res.status(403).send(language.Data[req.session.language]["signin"]["error_signin"]);
+            }
+            else
+            {
+                next();
+            }
+        });
+
+        Server.delete("/admin*", async function(req, res, next)
+        {
+            const path = req.url;
+            if (await Authentication.HasAccess(req.session.account, ["editor", "admin"]) == false && path != "/admin/signin")
+            {
+                res.status(403).send(language.Data[req.session.language]["signin"]["error_signin"]);
             }
             else
             {
@@ -234,7 +274,7 @@ function Route(Server)
     Server.post("/accounts/create", async function(req, res)
     {
         if (await Authentication.HasAccess(req.session.account, "admin") == false)
-            return res.status(403).send("You don't have permission to create an account.");
+            return res.status(403).send(language.Data[req.session.language]["accounts"]["error_create_nopermission"]);
         
         const details = 
         {
@@ -248,7 +288,10 @@ function Route(Server)
         for (const key of Object.keys(details))
         {
             if ((details[key] == null || details[key].trim() == "") && key != "url")
-                return res.status(400).send(key + " can't be empty");
+            {
+                const keyLabel = language.Data[req.session.language]["generic"][key];
+                return res.status(400).send(language.Data[req.session.language]["accounts"]["error_parameter_missing"].format(keyLabel));
+            }
             else
                 details[key] = details[key].trim();
         }
@@ -256,19 +299,29 @@ function Route(Server)
         const id = await Accounts.Add(details.username, details.nickname, details.url, details.password, details.role);
         const account = await Accounts.Get({ id: id });
 
-        if (id)
+        if (id && account.length)
+        {
+            account[0].role = 
+            {
+                name: Language.Data[req.session.language]["roles"][account[0].role],
+                value: account[0].role
+            };
             res.send(account[0]);
+        }
         else
-            res.status(500).send();
+            res.status(500).send(language.Data[req.session.language]["accounts"]["error_generic"]);
     });
 
     Server.delete("/accounts/delete", async function(req, res)
     {
         if (await Authentication.HasAccess(req.session.account, "admin") == false)
-            return res.status(403).send("You don't have permission to delete an account.");
+            return res.status(403).send(language.Data[req.session.language]["accounts"]["error_delete_nopermission"]);
 
         if (req.body.id == null || req.body.id.trim() == "")
-            return res.status(400).send("Id can't be empty.");
+        {
+            const keyLabel = language.Data[req.session.language]["generic"]["id"];
+            return res.status(400).send(language.Data[req.session.language]["accounts"]["id"].format(keyLabel));
+        }
 
         const success = await Accounts.Remove(req.body.id);
 
@@ -289,7 +342,7 @@ function Route(Server)
         const buffer = req.files.file.data;
 
         if (buffer.length > 2000000)
-            return res.status(400).send("Maximum file size is 2MB.");
+            return res.status(400).send(language.Data[req.session.language]["accounts"]["error_avatar_toobig"]);
         
         const success = await Accounts.Avatars.Save(account, buffer);
         
@@ -472,23 +525,35 @@ function Route(Server)
         if (data.semester)
             data.semester = parseInt(data.semester);
 
-        if (data.id == null || data.name == null || data.semester == null || data.sks == null)
-            return res.status(400).send("Id, name, semester, or SKS can't be empty.");
+        for (const key of ["id", "name", "semester", "sks"])
+        {
+            if (data[key] != null)
+                continue;
+            
+            const keyLabel = language.Data[req.session.language]["generic"][key];
+            return res.status(400).send(language.Data[req.session.language]["courses"]["error_parameter_missing"].format(keyLabel));
+        }
 
-        if (isNaN(data.sks) || isNaN(data.semester))
-            return res.status(400).send("Semester or SKS must be a number.");
+        for (const key of ["sks", "semester"])
+        {
+            if (isNaN(data[key]) == false)
+                continue;
+            
+            const keyLabel = language.Data[req.session.language]["generic"][key];
+            return res.status(400).send(language.Data[req.session.language]["courses"]["error_parameter_isnan"].format(keyLabel));
+        }
 
         const existingCourse = await Courses.Get(data.id);
 
         if (existingCourse.length > 0)
-            return res.status(400).send("Course '" + data.id + "' is already exists.");
+            return res.status(400).send(language.Data[req.session.language]["courses"]["error_parameter_idexists"].format(data.id));
 
         const success = await Courses.Add(data.id?.trim(), data.name?.trim(), data.alias?.trim(), data.description?.trim(), data.semester, data.sks);
 
         if (success)
             return res.send();
         else
-            return res.status(500).send("Something wen't wrong.");
+            return res.status(500).send(language.Data[req.session.language]["courses"]["error_generic"]);
     });
 
     Server.patch("/admin/courses/update", async function(req, res)
@@ -503,11 +568,17 @@ function Route(Server)
         if (data.semester)
             data.semester = parseInt(data.semester);
 
-        if (isNaN(data.sks) || isNaN(data.semester))
-            return res.status(400).send("Semester or SKS must be a number.");
+        for (const key of ["sks", "semester"])
+        {
+            if (isNaN(data[key]) == false)
+                continue;
+            
+            const keyLabel = language.Data[req.session.language]["generic"][key];
+            return res.status(400).send(language.Data[req.session.language]["courses"]["error_parameter_isnan"].format(keyLabel));
+        }
 
         if (oldCourse.length == 0)
-            return res.status(400).send("Course '" + oldCourse[0].oldId + "' was not found.");
+            return res.status(404).send(language.Data[req.session.language]["courses"]["error_parameter_idnotfound"].format(oldCourse[0].oldId));
 
         const changes = {};
 
@@ -524,8 +595,14 @@ function Route(Server)
             }
         }
 
-        if (changes.id == "@null" || changes.name == "@null" || changes.semester == "@null" || changes.sks == "@null")
-            return res.status(400).send("Id, name, semester, and SKS can't be empty.");
+        for (const key of ["id", "name", "semester", "sks"])
+        {
+            if (changes[key] != "@null")
+                continue;
+            
+            const keyLabel = language.Data[req.session.language]["generic"][key];
+            return res.status(400).send(language.Data[req.session.language]["courses"]["error_parameter_missing"].format(keyLabel));
+        }
         
         const success = await Courses.Update(data.oldId, changes.id, changes.name, changes.alias, changes.description, changes.semester, changes.sks);
 
@@ -536,20 +613,20 @@ function Route(Server)
         if (success)
             return res.send(changes);
         else
-            return res.status(500).send("Something wen't wrong.");
+            return res.status(500).send(language.Data[req.session.language]["courses"]["error_generic"]);
     });
 
     Server.delete("/admin/courses/delete", async function(req, res)
     {
         if (await Authentication.HasAccess(req.session.account, "admin") == false)
-            return res.status(403).send("You don't have permission to delete a course.");
+            return res.status(403).send(language.Data[req.session.language]["courses"]["error_delete_nopermission"]);
 
         const success = await Courses.Remove(req.body.id);
 
         if (success)
             return res.send();
         else
-            return res.status(500).send();
+            return res.status(500).send(language.Data[req.session.language]["courses"]["error_generic"]);
     });
 
     Server.post("/admin/courses/setbanner", async function(req, res)
@@ -558,14 +635,14 @@ function Route(Server)
         const buffer = req.files.file.data;
 
         if (buffer.length > 2000000)
-            return res.status(400).send("Maximum file size is 2MB.");
+            return res.status(400).send(language.Data[req.session.language]["courses"]["banner_upload_error_message"]);
         
         const success = await Courses.Banners.Save(id, buffer);
         
         if (success)
             res.send();
         else
-            res.status(500).send();
+            res.status(500).send(language.Data[req.session.language]["courses"]["error_generic"]);
     });
 
     Server.post("/admin/courses/clearbanner", async function(req, res)
@@ -576,7 +653,7 @@ function Route(Server)
         if (success)
             res.send();
         else
-            res.status(500).send();
+            res.status(500).send(language.Data[req.session.language]["courses"]["error_generic"]);
     });
     
     Server.get("/topics/get/:id", async function(req, res)
@@ -664,8 +741,11 @@ function Route(Server)
         const name = req.body.name?.trim();
         const course = req.body.course?.trim();
         
-        if (!name || !course)
-            return res.status(400).send("Topic's name or course's id can't be empty.");
+        if (!name)
+            return res.status(400).send(language.Data[req.session.language]["topics"]["error_parameter_topicnamemissing"]);
+
+        if (!course)
+            return res.status(400).send(language.Data[req.session.language]["topics"]["error_parameter_courseidmissing"]);
 
         const id = await Courses.Topics.Add(name, course);
         const topic = await Courses.Topics.Get({ topic: id });
@@ -673,23 +753,29 @@ function Route(Server)
         if (id)
             return res.status(200).send(topic[0]);
         else
-            return res.status(500).send("Something wen't wrong.");
+            return res.status(500).send(language.Data[req.session.language]["topics"]["error_generic"]);
     });
 
     Server.patch("/admin/topics/update", async function(req, res)
     {
         const id = req.body.id?.trim();
         const name = req.body.name?.trim();
-        
-        if (!id || !name)
-            return res.status(400).send("Topic's id or name can't be empty.");
+
+        for (const key of ["id", "name"])
+        {
+            if (req.body[key]?.trim())
+                continue;
+
+            const keyLabel = language.Data[req.session.language]["generic"]["key"];
+            return res.status(400).send(language.Data[req.session.language]["topics"]["error_parameter_missing"].format(keyLabel));
+        }
 
         const success = await Courses.Topics.Update(id, name);
 
         if (success)
             return res.status(200).send();
         else
-            return res.status(500).send("Something wen't wrong.");
+            return res.status(500).send(language.Data[req.session.language]["topics"]["error_generic"]);
     });
 
     Server.delete("/admin/topics/delete", async function(req, res)
@@ -717,7 +803,7 @@ function Route(Server)
         if (success)
             return res.send();
         else
-            return res.status(500).send();
+            return res.status(500).send(language.Data[req.session.language]["topics"]["error_generic"]);
     });
 
     Server.get("/sources/get", async function(req, res)
@@ -757,15 +843,24 @@ function Route(Server)
 
         if (data.year)
             data.year = parseInt(data.year);
-        
-        if (data.question == null || data.source == null || data.year == null)
-            return res.status(400).send("Question, source, and year can't be empty.");
 
-        if (data.topic == null || data.course == null)
-            return res.status(400).send("Topic and course can't be empty.");
+        for (const key of ["question", "source", "year", "topic", "course"])
+        {
+            if (data[key])
+                continue;
 
-        if (isNaN(data.year))
-            return res.status(400).send("Year must be a number.");
+            const keyLabel = language.Data[req.session.language]["generic"][key];
+            return res.status(400).send(language.Data[req.session.language]["problems"]["error_parameter_missing"].format(keyLabel));
+        }
+
+        for (const key of ["year"])
+        {
+            if (isNaN(data[key]) == false)
+                continue;
+
+            const keyLabel = language.Data[req.session.language]["generic"][key];
+            return res.status(400).send(language.Data[req.session.language]["problems"]["error_parameter_isnan"].format(keyLabel));
+        }
 
         const id = await Courses.Problems.Add(data.question?.trim(), data.solution?.trim(), data.source?.trim(), data.year, data?.topic.trim(), data.course?.trim());
         const problem = await Courses.Problems.Get({ problem: id });
@@ -773,7 +868,7 @@ function Route(Server)
         if (id)
             return res.send(problem[0]);
         else
-            return res.status(500).send();
+            return res.status(500).send(language.Data[req.session.language]["problems"]["error_generic"]);
     });
 
     Server.patch("/admin/problems/update", async function(req, res)
@@ -784,8 +879,14 @@ function Route(Server)
         if (data.year)
             data.year = parseInt(data.year);
 
-        if (isNaN(data.year))
-            return res.status(400).send("Year must be a number.");
+        for (const key of ["year"])
+        {
+            if (isNaN(data[key]) == false)
+                continue;
+
+            const keyLabel = language.Data[req.session.language]["generic"][key];
+            return res.status(400).send(language.Data[req.session.language]["problems"]["error_parameter_isnan"].format(keyLabel));
+        }
 
         for (const key of keys)
             if (data[key] == null || (data[key]?.trim && data[key]?.trim() == ""))
@@ -793,18 +894,27 @@ function Route(Server)
             else if (typeof data[key] == "string")
                 data[key] = data[key].trim();
 
-        if (data.question == "@null" || data.source == "@null" || data.source.id == null)
-            return res.status(400).send("Question and source can't be empty.");
+        for (const key of ["question", "source", "id"])
+        {
+            if (data[key] != "@null")
+                continue;
 
-        if (data.id == "@null")
-            return res.status(400).send("Id can't be empty.");
+            const keyLabel = language.Data[req.session.language]["generic"][key];
+            return res.status(400).send(language.Data[req.session.language]["problems"]["error_parameter_missing"].format(keyLabel));
+        }
+
+        if (data.source.id == null)
+        {   
+            const keyLabel = language.Data[req.session.language]["generic"]["source"];
+            return res.status(400).send(language.Data[req.session.language]["problems"]["error_parameter_missing"].format(keyLabel));
+        }
         
         const success = await Courses.Problems.Update(data.id, data.question, data.solution, data.source.id, data.year);
 
         if (success)
             return res.send();
         else
-            return res.status(500).send();
+            return res.status(500).send(language.Data[req.session.language]["problems"]["error_generic"]);
     });
 
     Server.patch("/admin/problems/move", async function(req, res)
@@ -812,15 +922,21 @@ function Route(Server)
         const id = req.body.id?.trim();
         const topic = req.body.topic?.trim();
         
-        if (!id || !topic)
-            return res.status(400).send("Problems's id or topic can't be empty.");
+        for (const key of ["id", "topic"])
+        {
+            if (req.body[key]?.trim())
+                continue;
+
+            const keyLabel = language.Data[req.session.language]["generic"][key];
+            return res.status(400).send(language.Data[req.session.language]["problems"]["error_parameter_missing"].format(keyLabel));
+        }
 
         const success = await Courses.Problems.Move(id, topic);
 
         if (success)
-            return res.status(200).send();
+            return res.send();
         else
-            return res.status(500).send("Something wen't wrong.");
+            return res.status(500).send(language.Data[req.session.language]["problems"]["error_generic"]);
     });
 
     Server.delete("/admin/problems/delete", async function(req, res)
@@ -828,14 +944,17 @@ function Route(Server)
         const id = req.body.id?.trim();
         
         if (!id)
-            return res.status(400).send("Problem's id can't be empty.");
+        {
+            const keyLabel = language.Data[req.session.language]["generic"]["id"];
+            return res.status(400).send(language.Data[req.session.language]["problems"]["error_parameter_missing"].format(keyLabel));
+        }
 
         const success = await Courses.Problems.Remove(id);
 
         if (success)
-            return res.status(200).send();
+            return res.send();
         else
-            return res.status(500).send("Something wen't wrong.");
+            return res.status(500).send(language.Data[req.session.language]["problems"]["error_generic"]);
     });
 
     Server.get("/mentor/:course/:topic", async function(req, res, next)
@@ -1050,6 +1169,14 @@ function PrettifyPath(req)
         refresh: refresh, 
         result: path
     }
+}
+
+String.prototype.format = function(...values) 
+{
+  return this.replace(/{(\d+)}/g, function(match, index) 
+  {
+    	return typeof values[index] !== 'undefined' ? values[index] : match;
+  });
 }
 
 module.exports = Route;

@@ -33,9 +33,9 @@
             background: var(--background-page);
 			box-shadow: none;
         }
-        .root .main > .activity > .content
+        .root .main > .activity
         {
-            padding-bottom: calc(var(--padding) + env(safe-area-inset-bottom));
+            padding-bottom: env(safe-area-inset-bottom);
         }
     }
     @media screen and (max-width: 1140px)
@@ -69,19 +69,19 @@
         <span id="Grid_CourseDescription" ad-property="description"><#? course.description ?#></span>
         <div class="details">
             <div>
-                <span><$ courses id_label /></span>
+                <span><$ generic code /></span>
                 <span ad-property="id"><#? course.id ?#></span>
             </div>
             <div>
-                <span><$ courses alias_label /></span>
+                <span><$ generic alias /></span>
                 <span ad-property="alias"><#? course.alias ?#></span>
             </div>
             <div>
-                <span><$ courses semester_label /></span>
+                <span><$ generic semester /></span>
                 <span ad-property="semester"><#? course.semester ?#></span>
             </div>
             <div>
-                <span><$ courses sks_label /></span>
+                <span><$ generic sks /></span>
                 <span ad-property="sks"><#? course.sks ?#></span>
             </div>
         </div>
@@ -95,9 +95,9 @@
     <div class="activity">
         <div class="header cascaded">
             <div class="buttons">
-                <button id="Button_CancelPrint"><$ courses cancel /></button>
+                <button id="Button_CancelPrint"><$ generic cancel /></button>
                 <button id="Button_SubmitPrint">
-                    <span><$ courses print /></span>
+                    <span><$ generic print /></span>
                     <div class="progressring"></div>
                 </button>
             </div>

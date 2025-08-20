@@ -1,7 +1,7 @@
 Components.ContextMenu.Add("Course_Admin", 
     [
         {
-            Title: "<$ courses context_open_in_new_tab />",
+            Title: "<$ courses newtab />",
             Icon: "fbc1",
             Action: (element) => { window.open("/admin/courses/" + element.data.id) }
         }
@@ -10,7 +10,7 @@ Components.ContextMenu.Add("Course_Admin",
 Components.ContextMenu.Add("Topic_Admin", 
     [
         {
-            Title: "<$ topics context_rename />",
+            Title: "<$ generic rename />",
             Icon: "eef7",
             Action: (element) => 
             { 
@@ -22,7 +22,7 @@ Components.ContextMenu.Add("Topic_Admin",
         },
         "separator",
         {
-            Title: "<$ topics context_delete />",
+            Title: "<$ generic delete />",
             Show: ActiveUser.role == "admin",
             Icon: "fd3c",
             Type: "critical",
@@ -30,11 +30,11 @@ Components.ContextMenu.Add("Topic_Admin",
             {
                 Components.ActionSheet.Open(
                 {
-                    Title: "<$ topics delete_topic_confirm_title />".format(element.data.name),
-                    Description: "<$ topics delete_topic_confirm_desc />",
+                    Title: "<$ topics delete_confirm_title />".format(element.data.name),
+                    Description: "<$ topics delete_confirm_message />",
                     Actions: [
                         { 
-                            Title: "<$ topics delete />", Type: "Options.Critical", 
+                            Title: "<$ generic delete />", Type: "Options.Critical", 
                             Action: function() 
                             {   
                                 return new Promise(function(resolve)
@@ -52,14 +52,14 @@ Components.ContextMenu.Add("Topic_Admin",
                                         error: function(error)
                                         {
                                             resolve();
-                                            Components.Notification.Send({ Id: "delete_failed", Title: "<$ topics delete_error_title />", Message: error.responseText || "<$ topics error_generic />", Icon: "\ufe60", Buttons: [{Text: "<$ topics dismiss />"}] });
+                                            Components.Notification.Send({ Id: "delete_failed", Title: "<$ topics delete_error_title />", Message: error.responseText || "<$ topics error_generic />", Icon: "\ufe60", Buttons: [{Text: "<$ generic dismiss />"}] });
                                         }
                                     });
                                 })
                             }
                         },
                         { 
-                            Title: "<$ topics cancel />", Type: "Footer"
+                            Title: "<$ generic cancel />", Type: "Footer"
                         }
                     ]
                 });    
@@ -70,7 +70,7 @@ Components.ContextMenu.Add("Topic_Admin",
 Components.ContextMenu.Add("Problem_Admin", 
     [
         {
-            Title: "<$ problems context_edit />",
+            Title: "<$ generic edit />",
             Icon: "f7cf",
             Action: async (element) => 
             { 
@@ -88,7 +88,7 @@ Components.ContextMenu.Add("Problem_Admin",
             }
         },
         {
-            Title: "<$ problems context_moveto />",
+            Title: "<$ problems move_title />",
             Icon: "f2ed",
             Type: "",
             Action: async (element) => 
@@ -135,7 +135,7 @@ Components.ContextMenu.Add("Problem_Admin",
                             },
                             error: function()
                             {
-                                Components.Notification.Send({ Id: "move_failed", Title: "<$ problems move_error_title />", Message: error.responseText || "<$ problems error_generic />", Icon: "\ufe60", Buttons: [{Text: "<$ problems dismiss />"}] });
+                                Components.Notification.Send({ Id: "move_failed", Title: "<$ problems move_error_title />", Message: error.responseText || "<$ problems error_generic />", Icon: "\ufe60", Buttons: [{Text: "<$ generic dismiss />"}] });
                             }
                         });
                     }
@@ -147,18 +147,18 @@ Components.ContextMenu.Add("Problem_Admin",
         },
         "separator",
         {
-            Title: "<$ problems context_delete />",
+            Title: "<$ generic delete />",
             Icon: "fd3c",
             Type: "critical",
             Action: (element) => 
             {
                 Components.ActionSheet.Open(
                 {
-                    Title: "<$ problems delete_problem_confirm_title />",
-                    Description: "<$ problems delete_problem_confirm_desc />",
+                    Title: "<$ problems delete_confirm_title />",
+                    Description: "<$ problems delete_confirm_message />",
                     Actions: [
                         { 
-                            Title: "<$ problems delete />", Type: "Options.Critical", 
+                            Title: "<$ generic delete />", Type: "Options.Critical", 
                             Action: function() 
                             {
                                 return new Promise(function(resolve)
@@ -180,14 +180,14 @@ Components.ContextMenu.Add("Problem_Admin",
                                         error: function(error)
                                         {
                                             resolve();
-                                            Components.Notification.Send({ Id: "delete_failed", Title: "<$ problems delete_error_title />", Message: error.responseText || "<$ problems error_generic />", Icon: "\ufe60", Buttons: [{Text: "<$ problems dismiss />"}] });
+                                            Components.Notification.Send({ Id: "delete_failed", Title: "<$ problems delete_error_title />", Message: error.responseText || "<$ problems error_generic />", Icon: "\ufe60", Buttons: [{Text: "<$ generic dismiss />"}] });
                                         }
                                     });
                                 })
                             }
                         },
                         { 
-                            Title: "<$ problems cancel />", Type: "Footer"
+                            Title: "<$ generic cancel />", Type: "Footer"
                         }
                     ]
                 });    
@@ -198,7 +198,7 @@ Components.ContextMenu.Add("Problem_Admin",
 Components.ContextMenu.Add("Accounts", 
 [
     {
-        Title: "<$ settings context_delete />",
+        Title: "<$ generic delete />",
         Show: ActiveUser.role == "admin",
         Icon: "fd3c",
         Type: "critical",
@@ -206,11 +206,11 @@ Components.ContextMenu.Add("Accounts",
         {
             Components.ActionSheet.Open(
             {
-                Title: "<$ settings delete_account_confirm_title />",
-                Description: "<$ settings delete_account_confirm_desc />",
+                Title: "<$ accounts delete_account_confirm_title />",
+                Description: "<$ accounts delete_account_confirm_message />",
                 Actions: [
                     { 
-                        Title: "<$ settings delete />", Type: "Options.Critical", 
+                        Title: "<$ generic delete />", Type: "Options.Critical", 
                         Action: function() 
                         {
                             return new Promise(function(resolve)
@@ -227,14 +227,14 @@ Components.ContextMenu.Add("Accounts",
                                     error: function(error)
                                     {
                                         resolve();
-                                        Components.Notification.Send({ Id: "delete_failed", Title: "<$ settings delete_error_title />", Message: error.responseText || "<$ settings error_generic />", Icon: "\ufe60", Buttons: [{Text: "<$ settings dismiss />"}] });
+                                        Components.Notification.Send({ Id: "delete_failed", Title: "<$ accounts delete_error_title />", Message: error.responseText || "<$ settings error_generic />", Icon: "\ufe60", Buttons: [{Text: "<$ generic dismiss />"}] });
                                     }
                                 });
                             })
                         }
                     },
                     { 
-                        Title: "<$ settings cancel />", Type: "Footer"
+                        Title: "<$ generic cancel />", Type: "Footer"
                     }
                 ]
             });    

@@ -1,10 +1,10 @@
 {
-    "title": "Pengaturan",
+    "title": "Setingan",
 
     "signout": "Keluar",
     "appearance": "Tampilan",
     "theme": "Tema",
-    "theme_system": "Default Sistem",
+    "theme_system": "Ngikut Sistem",
     "theme_light": "Terang",
     "theme_dark": "Gelap",
     "accent_color": "Warna Aksen",
@@ -16,8 +16,8 @@
     "copyright": "Hak Cipta",
     "copyright_text": "Seluruh naskah soal adalah hak cipta dari Universitas Katolik Parahyangan.",
     
-    "signout_confirm_title": "Kamu yakin mau keluar?",
-    "signout_confirm_message": "Kamu bisa masuk lagi kapan saja.",
+    "signout_confirm_title": "Seriusan mo sign out?",
+    "signout_confirm_message": "Don't worry, lu bisa login lagi kapan aja kok.",
 
-    "error_generic": "Ada yang salah."
+    "error_generic": "Something went wrong nih."
 }

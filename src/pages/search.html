@@ -291,10 +291,10 @@
             if (result.courses.length == 0 && result.problems.length == 0 && result.topics.length == 0)
             {
                 const title = document.createElement("span");
-                title.innerHTML = "<$ search no_results_title/>";
+                title.innerHTML = "<$ search noresults_title/>";
 
                 const desc = document.createElement("span");
-                desc.innerHTML = "<$ search no_results_description/>";
+                desc.innerHTML = "<$ search noresults_message/>";
 
                 const notfound = document.createElement("div");
                 notfound.setAttribute("id", "Grid_NotFound");

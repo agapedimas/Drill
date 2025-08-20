@@ -18,13 +18,13 @@
 }
     #Grid_Courses:empty::before
     {
-        content: "<$ courses empty_courses_title />";
+        content: "<$ courses empty_title />";
         font-family: var(--font-bold);
         font-size: 1.5em;
     }
     #Grid_Courses:empty::after
     {
-        content: "<$ courses empty_courses_subtitle />";
+        content: "<$ courses empty_message />";
         font-size: 1.12em;
         color: var(--foreground-description);
     }
@@ -34,7 +34,7 @@
     }
     #Grid_Courses.pins:empty::after
     {
-        content: "<$ courses empty_pins_subtitle />";
+        content: "<$ courses empty_pins_message />";
     }
     #Grid_Courses .course
     {
@@ -42,7 +42,7 @@
         display: grid;
         grid-auto-columns: 100%;
         grid-auto-rows: 150px max-content max-content auto;
-        height: calc(150px + 11.435rem);
+        height: calc(150px + 11.4rem);
         background: #f3f3f3;
         border-radius: 10px;
         overflow: hidden;
@@ -79,7 +79,7 @@
             display: inline-block;
             display: -webkit-inline-box;
             overflow: hidden;
-            margin: 10px calc(1.85rem - 10px) calc(1.85rem - 15px);
+            margin: 10px calc(1.85rem - 10px) calc(1.85rem - 0.85em);
             white-space: pre-line;
             text-overflow: ellipsis;
             line-clamp: 5;
@@ -275,13 +275,13 @@
 }
     #Grid_CourseTopics:empty::before
     {
-        content: "<$ courses empty_topics_title />";
+        content: "<$ topics empty_title />";
         font-family: var(--font-bold);
         font-size: 1.5em;
     }
     #Grid_CourseTopics:empty::after
     {
-        content: "<$ courses empty_topics_subtitle />";
+        content: "<$ topics empty_message />";
         font-size: 1.12em;
         color: var(--foreground-description);
     }
@@ -291,7 +291,7 @@
     }
     #Grid_CourseTopics.notfound:empty::after
     {
-        content: "<$ courses notfound_subtitle />";
+        content: "<$ courses notfound_message />";
     }
     :where(#Grid_CourseTopics, #Grid_PrintCourseTopics, #Grid_MoveCourseTopics) .progressring
     {

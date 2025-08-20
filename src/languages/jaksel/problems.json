@@ -1,0 +1,50 @@
+{
+    "title": "Soal",
+    
+    "new_title": "Soal Baru",
+    "edit_title": "Edit Soal",
+    "move_title": "Pindahin Ke...",
+    "move_error_title": "Gagal Pindahin",
+
+    "delete_confirm_title": "Yakin mau ngehapus soal ini?",
+    "delete_confirm_message": "Jawaban yang udah ada bakal ikutan kehapus and it's irreversible yaa.",
+    "delete_error_title": "Gagal Ngehapus",
+    
+    "source_label": "Source Soal",
+    "type_label": "Tipe",
+    "academic_year_label": "Tahun Akademik",
+    "academic_year_placeholder": "e.g.: 2025",
+    
+    "markdown_tab": "Markdown",
+    "preview_tab": "Preview",
+    "problem_text_placeholder": "Spill soalnya di sini...",
+    
+    "discard_create_title": "Buang Draf nih?",
+    "discard_create_message": "Soal yang barusan lu bikin bakal kebuang and ga bakal ke-post.",
+    "keep_creating": "Lanjut Bikin",
+    
+    "discard_edit_title": "Buang Editan?",
+    "discard_edit_message": "Editan yang lu buat ga bakal ke-save.",
+    "keep_editing": "Lanjut Ngedit",
+
+    "create_success_title": "Kerenn, Berhasil Dibikin",
+    "create_success_message": "Soal berhasil dibikin... Yipieee~",
+    "create_failed_title": "Gagal Bikin Soal Nih",
+    
+    "edit_success_title": "Berhasil Ke-save",
+    "edit_success_message": "Perubahan soalnya udah berhasil ke-save.",
+    "edit_failed_title": "Gagal Nge-save",
+    
+    "empty_title": "Soalnya Masih Kosong Nih",
+    "empty_message": "Ntar soal-soalnya bakal pop up di sini.",
+    "offline_title": "Yah, Lu Offline",
+    "offline_message": "Coba connect ke internet dulu, guys.",
+    "unknownerror_title": "Something Went Wrong Nih",
+    "unknownerror_message": "Servernya lagi ngambek dikit, wait ya.",
+    
+    "error_generic": "Something went wrong nih.",
+    "error_parameter_missing": "{0} gaboleh empty yaa.",
+    "error_parameter_isnan": "{0} literally kudu angka nih.",
+    
+    "sources": "[ \"\", \"Kuis\", \"Ujian Tengah Semester\", \"Ujian Akhir Semester\" ]"
+}

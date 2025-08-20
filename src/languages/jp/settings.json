@@ -1,5 +1,6 @@
 {
     "title": "設定",
+
     "signout": "サインアウト",
     "appearance": "外観",
     "theme": "テーマ",
@@ -13,33 +14,10 @@
     "git_repository": "Gitリポジトリ",
     "version": "バージョン",
     "copyright": "著作権",
-    "copyright_text": "すべての試験内容の著作権は、Universitas Katolik Parahyanganに帰属します。",
-    "add_account": "追加",
-    "create_account_title": "アカウント作成",
-    "username_label": "ユーザー名",
-    "username_placeholder": "例: john_smith",
-    "nickname_label": "ニックネーム",
-    "nickname_placeholder": "例: 山田太郎",
-    "url_label": "URL",
-    "url_placeholder": "例: https://instagram.com/john.smith_",
-    "role_label": "役割",
-    "password_label": "パスワード",
-    "password_placeholder": "強力で覚えやすいもの",
+    "copyright_text": "すべての試験コンテンツはUniversitas Katolik Parahyanganによって著作権保護されています。",
+    
     "signout_confirm_title": "本当にサインアウトしますか？",
-    "signout_confirm_desc": "いつでも再サインインできます。",
-    "create_account_error_title": "アカウントの作成に失敗しました",
-    "avatar_change": "アバターを変更",
-    "avatar_upload_error_title": "アバターのアップロードに失敗しました",
-    "avatar_upload_error_size": "最大ファイルサイズは2MBです。",
-    "avatar_upload_success_title": "アップロード成功",
-    "avatar_upload_success_message": "アバターが正常に設定されました。",
-    "cancel": "キャンセル",
-    "create": "作成",
-    "dismiss": "閉じる",
-    "delete": "削除",
-    "context_delete": "削除",
-    "delete_account_confirm_title": "このアカウントを本当に削除しますか？",
-    "delete_account_confirm_desc": "これによりアクセス権は削除されますが、作成されたコース、トピック、問題は引き続き利用可能です。",
-    "delete_error_title": "削除に失敗しました",
-    "error_generic": "何か問題が発生しました。"
+    "signout_confirm_message": "いつでもサインインし直すことができます。",
+
+    "error_generic": "問題が発生しました。"
 }

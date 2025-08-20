@@ -3,7 +3,7 @@
 
     "showing_results": "Menampilkan hasil untuk “{0}”",
     "searchbar_placeholder": "Mata kuliah, topik, atau soal",
-    
-    "no_results_title": "Tidak Ada Hasil",
-    "no_results_description": "Coba cari yang lain."
+
+    "noresults_title": "Tidak Ada Hasil",
+    "noresults_message": "Coba cari yang lain."
 }

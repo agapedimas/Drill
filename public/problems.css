@@ -60,6 +60,10 @@
     }
 }
 
+#Activity_Topic:has(#Grid_CourseProblems:empty)
+{
+    grid-auto-rows: max-content auto;
+}
 #Grid_Print
 {
     font-size: 0.9em;
@@ -216,13 +220,13 @@
 }
     #Grid_CourseProblems:empty::before
     {
-        content: "<$ problems empty_problems_title />";
+        content: "<$ problems empty_title />";
         font-family: var(--font-bold);
         font-size: 1.5em;
     }
     #Grid_CourseProblems:empty::after
     {
-        content: "<$ problems empty_problems_subtitle />";
+        content: "<$ problems empty_message />";
         font-size: 1.12em;
         color: var(--foreground-description);
     }
@@ -232,27 +236,27 @@
 }
     #Grid_CourseProblems.notfound:empty::before
     {
-        content: "<$ problems notfound_topic_title />";
+        content: "<$ topics notfound_title />";
     }
     #Grid_CourseProblems.notfound:empty::after
     {
-        content: "<$ problems notfound_topic_subtitle />";
+        content: "<$ topics notfound_message />";
     }
     #Grid_CourseProblems.offline:empty::before
     {
-        content: "<$ problems offline_topic_title />";
+        content: "<$ problems offline_title />";
     }
     #Grid_CourseProblems.offline:empty::after
     {
-        content: "<$ problems offline_topic_subtitle />";
+        content: "<$ problems offline_message />";
     }
     #Grid_CourseProblems.unknownerror:empty::before
     {
-        content: "<$ problems unknownerror_topic_title />";
+        content: "<$ problems unknownerror_title />";
     }
     #Grid_CourseProblems.unknownerror:empty::after
     {
-        content: "<$ problems unknownerror_topic_subtitle />";
+        content: "<$ problems unknownerror_message />";
     }
     #Grid_PrintContent section
     {

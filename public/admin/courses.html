@@ -7,8 +7,8 @@
 
 <div class="header">
     <div class="buttons">
-        <button id="Button_New"><$ courses create /></button>
-        <button class="icon" id="Button_Filter" ad-tooltip="<$ courses tooltip_filter />">&#xf5bf;</button>
+        <button id="Button_New"><$ generic create /></button>
+        <button class="icon" id="Button_Filter" ad-tooltip="<$ courses filter_title />">&#xf5bf;</button>
     </div>
     <div class="title"><$ courses title /></div>
 </div>
@@ -26,41 +26,41 @@
     <div class="activity">
         <div class="header cascaded">
             <div class="buttons">
-                <button id="Button_CancelNew"><$ courses cancel /></button>
+                <button id="Button_CancelNew"><$ generic cancel /></button>
                 <button id="Button_SubmitNew">
-                    <span><$ courses create /></span>
+                    <span><$ generic create /></span>
                     <div class="progressring"></div>
                 </button>
             </div>
-            <div class="title"><$ courses new_course_title /></div>
+            <div class="title"><$ courses new_title /></div>
         </div>
         <div class="content">
-            <div class="list" ad-header="<$ courses header_basic_info />">
+            <div class="list" ad-header="<$ courses information_basic />">
                 <div class="stack">
-                    <span><$ courses name_label /></span>
-                    <input type="text" class="plain" maxlength="128" id="Input_CourseName" placeholder="<$ courses name_placeholder />"/>
+                    <span><$ generic name /></span>
+                    <input type="text" class="plain" maxlength="128" id="Input_CourseName" placeholder="<$ generic name_placeholder />"/>
                 </div>
                 <div class="stack">
-                    <span><$ courses alias_label /></span>
-                    <input type="text" class="plain" maxlength="16" id="Input_CourseAlias" placeholder="<$ courses alias_placeholder />"/>
+                    <span><$ generic alias /></span>
+                    <input type="text" class="plain" maxlength="16" id="Input_CourseAlias" placeholder="<$ generic alias_placeholder />"/>
                 </div>
                 <div class="stack">
-                    <span><$ courses description_label /></span>
-                    <textarea class="plain" maxlength="1000" id="Input_CourseDescription" placeholder="<$ courses description_placeholder />"></textarea>
+                    <span><$ generic description /></span>
+                    <textarea class="plain" maxlength="1000" id="Input_CourseDescription" placeholder="<$ generic description_placeholder />"></textarea>
                 </div>
             </div>
-            <div class="list" ad-header="<$ courses header_additional_info />">
+            <div class="list" ad-header="<$ courses information_additional />">
                 <div class="stack">
-                    <span><$ courses id_label /></span>
-                    <input type="text" class="plain" maxlength="16" id="Input_CourseId" placeholder="<$ courses id_placeholder />">
+                    <span><$ generic code /></span>
+                    <input type="text" class="plain" maxlength="16" id="Input_CourseId" placeholder="<$ generic id_placeholder />">
                 </div>
                 <div class="stack">
-                    <span><$ courses semester_label /></span>
-                    <input type="number" class="plain" min="1" max="8" id="Input_CourseSemester" placeholder="<$ courses semester_placeholder />"/>
+                    <span><$ generic semester /></span>
+                    <input type="number" class="plain" min="1" max="8" id="Input_CourseSemester" placeholder="<$ generic semester_placeholder />"/>
                 </div>
                 <div class="stack">
-                    <span><$ courses sks_label /></span>
-                    <input type="number" class="plain" min="1" max="16" id="Input_CourseSKS" placeholder="<$ courses sks_placeholder />"/>
+                    <span><$ generic sks /></span>
+                    <input type="number" class="plain" min="1" max="16" id="Input_CourseSKS" placeholder="<$ generic sks_placeholder />"/>
                 </div>
             </div>
             <span class="error hidden" id="Text_Error"></span>
@@ -229,10 +229,10 @@
             Components.ActionSheet.Open(
             {
                 Title: "<$ courses discard_create_confirm_title />",
-                Description: "<$ courses discard_create_confirm_desc />",
+                Description: "<$ courses discard_create_confirm_message />",
                 Actions: [
                     { 
-                        Title: "<$ courses discard />", Type: "Options.Critical", 
+                        Title: "<$ generic discard />", Type: "Options.Critical", 
                         Action: o => 
                         {
                             PopOver_NewCourse.close(true);

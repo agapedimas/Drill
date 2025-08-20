@@ -2,24 +2,24 @@
     "title": "Mentor",
 
     "welcome_title": "Selamat Datang di Mentor",
-    "welcome_description": "Dosenmu akhir-akhir ini lagi sibuk banget, padahal kamu butuh latihan tambahan. Inilah mentor, siap bantu kamu belajar—layaknya asdos.",
+    "welcome_description": "Dosenmu sedang sibuk akhir-akhir ini, padahal kamu butuh latihan soal. Itulah kenapa Mentor di sini, yang selalu siap untuk bantu kamu belajar—seperti asdos.",
 
-    "readyfor_title": "Sudah Siap Ujian?",
-    "readyfor_description": "Persiapkan Ujianmu Bareng Mentor.",
+    "readyfor_title": "Sudah Siap untuk Ujian?",
+    "readyfor_description": "Persiapkan ujianmu bareng Mentor.",
 
-    "features_topic_title": "Topik pilihan",
+    "features_topic_title": "Pilih topik sesukamu",
     "features_topic_description": "Kamu bisa minta latihan soal berdasarkan topik yang kamu mau.",
     "features_problem_title": "Soal bervariasi",
-    "features_problem_description": "Soal latihan dibuat acak biar kamu bisa dapet lebih banyak gambaran soal.",
+    "features_problem_description": "Latihan soal akan diacak supaya kamu bisa punya gambaran soal yang lebih luas.",
     "features_update_title": "Di-update setiap hari",
-    "features_update_description": "Kamu bisa minta latihan soal baru setiap hari biar kamu bisa makin jago.",
+    "features_update_description": "Kamu bisa minta latihan soal baru setiap hari supaya kamu makin jago.",
 
-    "generating": "Soal sedang dibuat. Biasanya memakan waktu 5-7 menit.",
+    "generating_message": "Soal sedang dibuat...\\nBiasanya memakan waktu 5-7 menit.",
     
     "metadata_updated": "Di-update {0}",
     "metadata_problems": "{0} soal pilihan ganda",
     "metadata_aigenerated": "Dibuat oleh AI",
-    "metadata_score": "Kamu mendapat nilai {0}",
+    "metadata_score": "Kamu dapat nilai {0}",
 
     "results_view": "Lihat Hasil"
 }

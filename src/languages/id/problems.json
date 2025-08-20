@@ -1,30 +1,50 @@
 {
     "title": "Soal",
-
-    "context_edit": "Edit",
-    "context_delete": "Hapus",
-    "context_moveto": "Pindahkan ke...",
-    "delete": "Hapus",
-    "cancel": "Batal",
-    "dismiss": "Tutup",
     
+    "new_title": "Soal Baru",
+    "edit_title": "Edit Soal",
     "move_title": "Pindahkan ke...",
     "move_error_title": "Gagal Memindahkan",
-    
-    "delete_problem_confirm_title": "Yakin mau hapus soal ini?",
-    "delete_problem_confirm_desc": "Jawabannya juga bakal ikut kehapus. Aksi ini gak bisa dibatalin.",
+
+    "delete_confirm_title": "Kamu yakin mau menghapus soal ini?",
+    "delete_confirm_message": "Jawabannya juga akan ikut terhapus dan tidak bisa dipulihkan.",
     "delete_error_title": "Gagal Menghapus",
     
-    "empty_problems_title": "Belum Ada Soal",
-    "empty_problems_subtitle": "Soal yang ditambahkan akan muncul di sini.",
-    "notfound_topic_title": "Topik Tidak Ditemukan",
-    "notfound_topic_subtitle": "Mungkin udah dipindah atau dihapus.",
-    "offline_topic_title": "Kamu Offline",
-    "offline_topic_subtitle": "Coba hubungkan ke internet.",
-    "unknownerror_topic_title": "Ada yang Salah",
-    "unknownerror_topic_subtitle": "Sepertinya lagi ada masalah di server kami.",
+    "source_label": "Sumber Soal",
+    "type_label": "Jenis",
+    "academic_year_label": "Tahun Akademik",
+    "academic_year_placeholder": "cth.: 2025",
+    
+    "markdown_tab": "Markdown",
+    "preview_tab": "Pratinjau",
+    "problem_text_placeholder": "Ketik soal di sini...",
+    
+    "discard_create_title": "Buang Draf?",
+    "discard_create_message": "Soal yang baru saja dibuat akan dibuang dan tidak akan di-post.",
+    "keep_creating": "Lanjut Membuat",
+    
+    "discard_edit_title": "Buang Perubahan?",
+    "discard_edit_message": "Perubahan yang kamu buat tidak akan disimpan.",
+    "keep_editing": "Lanjut Mengedit",
 
+    "create_success_title": "Berhasil Dibuat",
+    "create_success_message": "Soal berhasil dibuat.",
+    "create_failed_title": "Gagal Membuat",
+    
+    "edit_success_title": "Berhasil Disimpan",
+    "edit_success_message": "Soal berhasil diubah dan disimpan.",
+    "edit_failed_title": "Gagal Menyimpan",
+    
+    "empty_title": "Belum Ada Soal",
+    "empty_message": "Soal-soal nantinya akan muncul di sini.",
+    "offline_title": "Kamu Offline",
+    "offline_message": "Coba hubungkan ke internet.",
+    "unknownerror_title": "Ada yang Salah",
+    "unknownerror_message": "Saat ini server kami lagi ada masalah.",
+    
     "error_generic": "Ada yang salah.",
+    "error_parameter_missing": "{0} tidak boleh kosong.",
+    "error_parameter_isnan": "{0} harus berupa angka.",
 
     "sources": "[ \"\", \"Kuis\", \"Ujian Tengah Semester\", \"Ujian Akhir Semester\" ]"
 }

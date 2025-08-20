@@ -1,0 +1,25 @@
+{
+    "title": "Mentor",
+
+    "welcome_title": "Welcome to Mentor",
+    "welcome_description": "Dosen lagi hectic banget yakann, padahal lu butuh banget latihan soal. Nah, Mentor hadir buat nemenin lu belajar—kek asdos lah intinya.",
+
+    "readyfor_title": "Udah Ready Buat Ujian?",
+    "readyfor_description": "Prepare ujian lu bareng Mentor.",
+
+    "features_topic_title": "Bebas pilih topik",
+    "features_topic_description": "Lu bisa request soal sesuai topik yang lu pengen.",
+    "features_problem_title": "Soal seabrek-abrek",
+    "features_problem_description": "Soalnya diacak biar makin banyak referensi buat lu.",
+    "features_update_title": "Update tiap hari",
+    "features_update_description": "Lu bisa request soal baru tiap hari biar makin pro.",
+
+    "generating_message": "Lagi generate soal nih...\\nBisa makan waktu 5-7 menit yaa.",
+    
+    "metadata_updated": "Last Update {0}",
+    "metadata_problems": "{0} soal pilihan ganda",
+    "metadata_aigenerated": "Dibuat oleh AI",
+    "metadata_score": "Skor lu {0} nih",
+
+    "results_view": "Lihat Hasilnya"
+}

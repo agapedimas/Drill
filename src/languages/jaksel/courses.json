@@ -1,0 +1,60 @@
+{
+    "title": "Matkul",
+    
+    "newtab": "Buka di new tab",
+    "pin_template": "Pin “{0}”",
+    "unpin_template": "Unpin “{0}”",
+    "pin": "Pin",
+    "unpin": "Unpin",
+
+    "new_title": "Matkul Baru",
+    "edit_title": "Edit Matkul",
+    "delete_title": "Hapus Matkul",
+    
+    "filter_title": "Filter",
+    "filter_all": "Semua",
+    "filter_sortby": "Sort",
+    "filter_semester": "Semester {0}",
+    "filter_default": "Default Server",
+
+    "print_title": "Pilih Max 5 Topik yaa",
+    
+    "pinned": "Matkul Udah Di-pin",
+
+    "information_basic": "Info Biasa",
+    "information_additional": "Info Tambahan",
+
+    "keep_creating": "Lanjut Bikin",
+    "keep_editing": "Lanjut Ngedit",
+    
+    "discard_create_confirm_title": "Mo Buang Draf?",
+    "discard_create_confirm_message": "Yang tadi lu ketik bakal auto ilang yaa.",
+    "discard_edit_confirm_title": "Mo Buang Editan?",
+    "discard_edit_confirm_message": "Editan lu ga bakal kesimpen nih.",
+
+    "delete_confirm_title": "Yakin mo apus\\n“{0}”?",
+    "delete_confirm_message": "Soal-soal sama jawabannya auto keapus permanen yaa.",
+    "delete_error_title": "Gagal Ngehapus",
+
+    "banner_upload_error_title": "Gagal Upload Banner",
+    "banner_upload_error_message": "File max 2 MB yaa.",
+    "banner_upload_success_title": "Banner Udah Ke-Ganti",
+    "banner_upload_success_message": "Banner udah berhasil di-sett.",
+    "banner_clear_error_title": "Gagal Ngehapus Banner",
+    "banner_clear_success_title": "Keapus",
+    "banner_clear_success_message": "Banner berhasil dihapus.",
+
+    "empty_title": "Belom Ada Matkul",
+    "empty_message": "Matkul bakal muncul di sini ntar.",
+    "notfound_title": "Matkulnya Ga Ada",
+    "notfound_message": "Keknya udah di-remove ato diapus nih.",
+    "empty_pins_title": "Belom Nge-pin",
+    "empty_pins_message": "Pin matkul dulu gih biar muncul di sini.",
+
+    "error_generic": "Something went wrong nih.",
+    "error_parameter_missing": "{0} gaboleh kosong yaa.",
+    "error_parameter_isnan": "{0} literally kudu angka nih.",
+    "error_parameter_idexists": "Mata kuliah “{0}” udah ada nih.",
+    "error_parameter_idnotfound": "Mata kuliah “{0}” gaada nih.",
+    "error_delete_nopermission": "You dont have the permission buat ngehapus matkul."
+}

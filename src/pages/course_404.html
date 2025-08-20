@@ -15,8 +15,8 @@
         }
         .root .main > .activity:nth-child(1)
         {
-            background: var(--overlay-7);
-            border-right: 1px solid var(--border-sidebar);
+            background: var(--gray-7);
+			box-shadow: inset -10px 0 5px -10px var(--border-sidebar);
         }
             .root .main > #Activity_Topic > .header > .buttons > .back
             {
@@ -27,6 +27,15 @@
         .root 
         {
             grid-auto-rows: auto 0;
+        }
+        .root .main > .activity:nth-child(1)
+        {
+            background: var(--background-page);
+			box-shadow: none;
+        }
+        .root .main > .activity
+        {
+            padding-bottom: env(safe-area-inset-bottom);
         }
     }
     @media screen and (max-width: 1140px)

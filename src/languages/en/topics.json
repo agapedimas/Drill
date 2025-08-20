@@ -1,64 +1,33 @@
 {
     "title": "Topics",
 
-    "back": "Back",
-    "tooltip_print": "Print",
+    "new_title": "New Topic",
+    "rename_title": "Rename Topic",
+    "name_placeholder": "e.g.: Input and Output",
 
     "problems_label": "{0} Problems",
     "updated_label": "Updated {0}",
 
-    "context_rename": "Rename",
-    "context_delete": "Delete",
-    
-    "delete": "Delete",
-    "cancel": "Cancel",
-    "create": "Create",
-    "save": "Save",
-    "dismiss": "Dismiss",
-    "discard": "Discard",
-    
-    "tooltip_new_problem": "New Problem",
-    "new_problem_title": "New Problem",
-    "edit_problem_title": "Edit Problem",
-
-    "select_topic_title": "Choose Topic",
-    "change_topic_title": "Change Topic",
-    
-    "source_header": "Problem Source",
-    "type_label": "Type",
-    "academic_year_label": "Academic Year",
-    "academic_year_placeholder": "e.g: 2025",
-    
-    "markdown_tab": "Markdown",
-    "preview_tab": "Preview",
-    "problem_text_placeholder": "Type the problem here...",
-
-    "delete_topic_confirm_title": "Are you sure you want to delete\\n'{0}'?",
-    "delete_topic_confirm_desc": "All of its problems and their solutions will also be deleted. This action cannot be undone.",
-    "delete_error_title": "Deletion Failed",
-    
-    "discard_create_problem_title": "Discard Problem Draft?",
-    "discard_create_problem_desc": "The new problem will be discarded and won't be posted.",
-    "keep_creating_problem": "Keep Creating",
-    
-    "discard_edit_problem_title": "Discard Changes?",
-    "discard_edit_problem_desc": "Your changes won't be saved.",
-    "keep_editing_problem": "Keep Editing",
-
-    "create_success_title": "Creation Successful",
-    "create_success_message": "The problem was created successfully.",
-    "create_failed_title": "Creation Failed",
-    
-    "edit_success_title": "Saved Successfully",
-    "edit_success_message": "The problem was successfully updated and saved.",
-    "edit_failed_title": "Save Failed",
-
-    "error_generic": "Something went wrong.",
-
-    "questionbank": "Question Bank",
+    "questionbank": "Drills",
     "questionbank_disclaimer": "Do not distribute this document outside the scope of Universitas Katolik Parahyangan.\nUse this document appropriately.",
 
-    "tooltip_quizmentor": "Practice with Mentor",
+    "practice_label": "Practice with Mentor",
+    "recently_updated_title": "Recently Updated",
 
-    "recently_updated_title": "Recently Updated"
+    "select_title": "Choose Topic",
+    "change_title": "Change Topic",
+
+    "delete_confirm_title": "Are you sure you want to delete\\n“{0}”?",
+    "delete_confirm_message": "All of its problems and their solutions will also be deleted. This action cannot be undone.",
+    "delete_error_title": "Failed to Delete",
+
+    "empty_title": "No Topics Yet",
+    "empty_message": "Added topics will appear here.",
+    "notfound_title": "Topic Not Found",
+    "notfound_message": "It may have been moved or deleted.",
+
+    "error_generic": "Something went wrong.",
+    "error_parameter_missing": "{0} must be specified.",
+    "error_parameter_topicnamemissing": "Topic's name must be specified.",
+    "error_parameter_courseidmissing": "Course's id must be specified."
 }

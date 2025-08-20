@@ -91,13 +91,13 @@ const Courses =
             {
                 context.commands[0].Show = false;
                 context.commands[1].Show = true;
-                context.commands[1].Title = "<$ courses context_unpin_template />".format(course.alias || course.name);
+                context.commands[1].Title = "<$ courses unpin_template />".format(course.alias || course.name);
             }
             else
             {
                 context.commands[1].Show = false;
                 context.commands[0].Show = true;
-                context.commands[0].Title = "<$ courses context_pin_template />".format(course.alias || course.name);
+                context.commands[0].Title = "<$ courses pin_template />".format(course.alias || course.name);
             }
             Components.ContextMenu.Open("Course", box, event);
         }
@@ -192,7 +192,7 @@ const Courses =
                     const context = Components.ContextMenu.List.find(o => o.id == "Course");
                     context.commands[0].Show = false;
                     context.commands[1].Show = true;
-                    context.commands[1].Title = "<$ courses context_unpin />";
+                    context.commands[1].Title = "<$ courses unpin />";
             
                     Components.ContextMenu.Open("Course", a, event);
                 }
@@ -264,12 +264,12 @@ Components.ContextMenu.Add("Courses",
                 },
                 {
                     value: "name",
-                    Title: "<$ courses name_label />",
+                    Title: "<$ generic name />",
                     Action: o => Sort_Change("name")
                 },
                 {
                     value: "sks",
-                    Title: "<$ courses sks_label />",
+                    Title: "<$ generic sks />",
                     Action: o => Sort_Change("sks")
                 }
             ]
@@ -288,7 +288,7 @@ Components.ContextMenu.Add("Course",
             Action: (element) => { Courses.Pins.Remove(element.data.id) }
         },
         {
-            Title: "<$ courses context_open_in_new_tab />",
+            Title: "<$ courses newtab />",
             Icon: "fbc1",
             Action: (element) => { window.open("/courses/" + element.data.id) }
         }
@@ -296,19 +296,19 @@ Components.ContextMenu.Add("Course",
 Components.ContextMenu.Add("Course_More", 
     [
         {
-            Title: "<$ courses context_pin />",
+            Title: "<$ courses pin />",
             Show: o => Courses.Pins.Includes(Courses.Active.id) == false,
             Icon: "f892",
             Action: o => Courses.Pins.Add(Courses.Active.id, Courses.Active.name)
         },
         {
-            Title: "<$ courses context_unpin />",
+            Title: "<$ courses unpin />",
             Show: o => Courses.Pins.Includes(Courses.Active.id) == true,
             Icon: "f88f",
             Action: o => Courses.Pins.Remove(Courses.Active.id)
         },
         {
-            Title: "<$ courses context_print />",
+            Title: "<$ generic print_bulk />",
             Icon: "f948",
             Action: function (element) 
             { 
@@ -356,7 +356,7 @@ const Topics =
     {
         const back = document.createElement("button");
         back.classList.add("back");
-        back.innerHTML = "<$ topics back />";
+        back.innerHTML = "<$ generic back />";
         back.onclick = Topics.Back;
         
         const buttons = document.createElement("div");
@@ -874,12 +874,10 @@ window.addEventListener("popstate", function()
     {
         Topics.Back(true);
     }
-    else
-    {
-        CheckAccent();
-        CheckTheme();
-        Courses.Pins.AppendSidebar();
-    }
+    
+    CheckAccent();
+    CheckTheme();
+    Courses.Pins.AppendSidebar();
 })
 
 marked.use(markedMoreLists());

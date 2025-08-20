@@ -67,6 +67,7 @@
             }
         #Settings_Account .details
         {
+            display: block;
         }
             #Settings_Account .details .name
             {    
@@ -85,11 +86,12 @@
             }
     #Settings_Accents
     {
-        
+        display: grid;
+        grid-auto-flow: column;
+        gap: 2px;
     }
         #Settings_Accents .color
         {
-            display: inline-block;
             width: 25px;
             height: 25px;
             border-radius: 100%;
@@ -173,7 +175,7 @@
 
 <div class="content">
     <div id="Settings_Account">
-        <div class="avatar" id="Grid_Avatar" ad-tooltip="<$ settings avatar_change />">
+        <div class="avatar" id="Grid_Avatar" ad-tooltip="<$ accounts avatar_change />">
             <img id="Image_Avatar" src="/avatar/<#? activeuser.id ?#>?v=<#? activeuser.avatarversion ?#>"/>
         </div>
         <div class="details">
@@ -208,6 +210,7 @@
             <select class="plain" name="language" id="Select_Language">
                 <option value="en">English</option>
                 <option value="id">Bahasa Indonesia</option>
+                <option value="jaksel">Jakarta Selatan</option>
                 <option value="kr">Korean (한국어)</option>
                 <option value="jp">Japanese (日本語)</option>
             </select>
@@ -236,32 +239,32 @@
     <div class="activity">
         <div class="header cascaded">
             <div class="buttons">
-                <button id="Button_CancelAdd"><$ settings cancel /></button>
-                <button id="Button_SubmitAdd"><$ settings create /></button>
+                <button id="Button_CancelAdd"><$ generic cancel /></button>
+                <button id="Button_SubmitAdd"><$ generic create /></button>
             </div>
-            <div class="title"><$ settings create_account_title /></div>
+            <div class="title"><$ accounts create_account_title /></div>
         </div>
         <div class="content">
             <div class="list">
                 <div class="stack">
-                    <span><$ settings username_label /></span>
-                    <input type="text" class="plain" id="Input_Username" placeholder="<$ settings username_placeholder />"/>
+                    <span><$ generic username /></span>
+                    <input type="text" class="plain" id="Input_Username" placeholder="<$ generic username_placeholder />"/>
                 </div>
                 <div class="stack">
-                    <span><$ settings nickname_label /></span>
-                    <input type="text" class="plain" id="Input_Nickname" placeholder="<$ settings nickname_placeholder />"/>
+                    <span><$ generic nickname /></span>
+                    <input type="text" class="plain" id="Input_Nickname" placeholder="<$ generic nickname_placeholder />"/>
                 </div>
                 <div class="stack">
-                    <span><$ settings url_label /></span>
-                    <input type="text" class="plain" id="Input_URL" placeholder="<$ settings url_placeholder />"/>
+                    <span><$ generic url /></span>
+                    <input type="text" class="plain" id="Input_URL" placeholder="<$ generic url_placeholder />"/>
                 </div>
                 <div class="stack">
-                    <span><$ settings role_label /></span>
+                    <span><$ generic role /></span>
                     <select class="plain" id="Select_Role"></select>
                 </div>
                 <div class="stack">
-                    <span><$ settings password_label /></span>
-                    <input type="text" class="plain" id="Input_Password" placeholder="<$ settings password_placeholder />"/>
+                    <span><$ generic password /></span>
+                    <input type="text" class="plain" id="Input_Password" placeholder="<$ generic password_placeholder />"/>
                 </div>
             </div>
         </div>
@@ -275,7 +278,7 @@
     Button_SignOut.onclick = SignOut;
     
     if ("<#? activeuser.role ?#>" == "admin")
-        List_Accounts.setAttribute("ad-action", "<$ settings add_account />");
+        List_Accounts.setAttribute("ad-action", "<$ generic add />");
 
     function Color_Change(accent)
     {
@@ -294,7 +297,7 @@
         Components.ActionSheet.Open(
         {
             Title: "<$ settings signout_confirm_title />",
-            Description: "<$ settings signout_confirm_desc />",
+            Description: "<$ settings signout_confirm_message />",
             Actions: [
                 { 
                     Title: "<$ settings signout />", Type: "Options.Critical", 
@@ -307,7 +310,7 @@
                     }
                 },
                 { 
-                    Title: "<$ settings cancel />", Type: "Footer"
+                    Title: "<$ generic cancel />", Type: "Footer"
                 }
             ]
         });     
@@ -360,7 +363,7 @@
                 Button_CancelAdd.disabled = false;
                 Button_SubmitAdd.disabled = false;
 
-                Components.Notification.Send({ Id: "createaccount_failed", Title: "<$ settings create_account_error_title />", Message: error.responseText || "<$ settings error_generic />", Icon: "\ufe60", Buttons: [{Text: "<$ settings dismiss />"}] });
+                Components.Notification.Send({ Id: "createaccount_failed", Title: "<$ accounts create_account_error_title/>", Message: error.responseText || "<$ settings error_generic />", Icon: "\ufe60", Buttons: [{Text: "<$ generic dismiss />"}] });
             }
         })
     }
@@ -465,7 +468,7 @@
                 return;
 
             if (files[0].size > 2000000)
-                return Components.Notification.Send({ Id: "avatar_failed", Title: "<$ settings avatar_upload_error_title />", Message: "<$ settings avatar_upload_error_size />", Icon: "\ufe64", Buttons: [{Text: "<$ settings dismiss />"}] });
+                return Components.Notification.Send({ Id: "avatar_failed", Title: "<$ accounts avatar_upload_error_title />", Message: "<$ accounts avatar_upload_error_message />", Icon: "\ufe64", Buttons: [{Text: "<$ generic dismiss />"}] });
                 
             const form = new FormData();
             form.append("file", files[0]);
@@ -480,11 +483,11 @@
                 {
                     Image_Avatar.src = "/avatar/<#? activeuser.id ?#>?cache=false";
                     Components.Notification.Remove({ Id: "avatar_failed" });
-                    Components.Notification.Send({ Id: "avatar_success", Title: "<$ settings avatar_upload_success_title />", Message: "<$ settings avatar_upload_success_message />", Icon: "\uf873"});
+                    Components.Notification.Send({ Id: "avatar_success", Title: "<$ accounts avatar_upload_success_title />", Message: "<$ accounts avatar_upload_success_message />", Icon: "\uf873"});
                 },
                 error: function(error)
                 {                   
-                    Components.Notification.Send({ Id: "avatar_failed", Title: "<$ settings avatar_upload_error_title />", Message: error.responseText || "<$ settings error_generic />", Icon: "\ufe64", Buttons: [{Text: "<$ settings dismiss />"}] });
+                    Components.Notification.Send({ Id: "avatar_failed", Title: "<$ accounts avatar_upload_error_title />", Message: error.responseText || "<$ settings error_generic />", Icon: "\ufe64", Buttons: [{Text: "<$ generic dismiss />"}] });
                 }
             });
         }

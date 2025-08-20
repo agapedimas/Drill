@@ -1,30 +1,50 @@
 {
     "title": "문제",
-    
-    "context_edit": "수정",
-    "context_delete": "삭제",
-    "context_moveto": "이동...",
-    "delete": "삭제",
-    "cancel": "취소",
-    "dismiss": "닫기",
-    
+
+    "new_title": "새 문제",
+    "edit_title": "문제 편집",
     "move_title": "이동...",
-    "move_error_title": "이동에 실패했습니다",
-    
-    "delete_problem_confirm_title": "이 문제를 정말 삭제하시겠습니까?",
-    "delete_problem_confirm_desc": "풀이도 함께 삭제됩니다. 이 작업은 되돌릴 수 없습니다.",
+    "move_error_title": "이동 실패",
+
+    "delete_confirm_title": "이 문제를 정말 삭제하시겠습니까?",
+    "delete_confirm_message": "해답도 삭제됩니다. 이 작업은 실행 취소할 수 없습니다.",
     "delete_error_title": "삭제 실패",
     
-    "empty_problems_title": "아직 문제가 없습니다",
-    "empty_problems_subtitle": "추가된 문제는 여기에 표시됩니다.",
-    "notfound_topic_title": "주제를 찾을 수 없음",
-    "notfound_topic_subtitle": "이동되었거나 삭제되었을 수 있습니다.",
-    "offline_topic_title": "오프라인 상태예요",
-    "offline_topic_subtitle": "인터넷에 연결해 주세요.",
-    "unknownerror_topic_title": "오류가 발생했어요",
-    "unknownerror_topic_subtitle": "현재 서버에 문제가 발생했어요.",
+    "source_label": "문제 출처",
+    "type_label": "유형",
+    "academic_year_label": "학년도",
+    "academic_year_placeholder": "예: 2025",
+    
+    "markdown_tab": "Markdown",
+    "preview_tab": "미리보기",
+    "problem_text_placeholder": "여기에 문제를 입력하세요...",
+    
+    "discard_create_title": "초안을 삭제하시겠습니까?",
+    "discard_create_message": "새 문제는 삭제되고 게시되지 않습니다.",
+    "keep_creating": "계속 만들기",
+    
+    "discard_edit_title": "변경 사항을 삭제하시겠습니까?",
+    "discard_edit_message": "변경 사항은 저장되지 않습니다。",
+    "keep_editing": "계속 편집",
 
+    "create_success_title": "성공적으로 생성했습니다",
+    "create_success_message": "문제가 성공적으로 생성되었습니다.",
+    "create_failed_title": "생성 실패",
+    
+    "edit_success_title": "성공적으로 저장했습니다",
+    "edit_success_message": "문제가 성공적으로 업데이트 및 저장되었습니다.",
+    "edit_failed_title": "저장 실패",
+    
+    "empty_title": "아직 문제가 없습니다",
+    "empty_message": "추가된 문제는 여기에 표시됩니다.",
+    "offline_title": "오프라인 상태입니다",
+    "offline_message": "인터넷에 연결하십시오.",
+    "unknownerror_title": "문제가 발생했습니다",
+    "unknownerror_message": "현재 서버에 문제가 발생했습니다.",
+    
     "error_generic": "문제가 발생했습니다.",
+    "error_parameter_missing": "{0}을(를) 지정해야 합니다.",
+    "error_parameter_isnan": "{0}은(는) 숫자여야 합니다.",
 
-    "sources": "[ \"\", \"퀴즈\", \"중간고사\", \"기말고사\" ]"
+    "sources": "[\"\", \"퀴즈\", \"중간 고사\", \"기말 고사\"]"
 }

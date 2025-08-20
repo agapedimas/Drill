@@ -106,6 +106,10 @@
     width: 800px;
     max-width: calc(100vw - var(--padding) * 2);
 }
+    :where(#PopOver_Problem, #PopOver_EditProblem) .activity
+    {
+        grid-auto-rows: max-content auto;
+    }
     :where(#PopOver_Problem, #PopOver_EditProblem) .activity > .content
     {
         display: grid;

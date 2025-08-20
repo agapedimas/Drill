@@ -10,8 +10,8 @@
 
 <div class="header">
     <div class="buttons">
-        <button class="back" onclick="Topics.Back()"><$ topics back /></button>
-        <button id="Button_NewProblem" class="icon" ad-tooltip="<$ topics tooltip_new_problem />">&#xf8dd;</button>
+        <button class="back" onclick="Topics.Back()"><$ generic back /></button>
+        <button id="Button_NewProblem" class="icon" ad-tooltip="<$ problems new_title />">&#xf8dd;</button>
     </div>
     <div class="title"><#? topic.name ?#></div>
 </div>
@@ -24,33 +24,33 @@
     <div class="activity">
         <div class="header cascaded">
             <div class="buttons">
-                <button id="Button_CancelNewProblem"><$ topics cancel /></button>
+                <button id="Button_CancelNewProblem"><$ generic cancel /></button>
                 <button id="Button_SubmitNewProblem">
-                    <span><$ topics create /></span>
+                    <span><$ generic create /></span>
                     <div class="progressring"></div>
                 </button>
             </div>
-            <div class="title"><$ topics new_problem_title /></div>
+            <div class="title"><$ problems new_title /></div>
         </div>
         <div class="content">
-            <div class="list" ad-header="<$ topics source_header />">
+            <div class="list" ad-header="<$ problems source_label />">
                 <div class="stack">
-                    <span><$ topics type_label /></span>
+                    <span><$ problems type_label /></span>
                     <select class="plain" id="Select_ProblemSource"></select>
                 </div>
                 <div class="stack">
-                    <span><$ topics academic_year_label /></span>
-                    <input type="number" class="plain" min="2010" id="Input_ProblemYear" placeholder="<$ topics academic_year_placeholder />"/>
+                    <span><$ problems academic_year_label /></span>
+                    <input type="number" class="plain" min="2010" id="Input_ProblemYear" placeholder="<$ problems academic_year_placeholder />"/>
                 </div>
             </div>
             <div class="pivot" id="Pivot_Problem">
                 <div class="pivotcontent">
                     <div class="section">
-                        <div class="pivottitle"><$ topics markdown_tab /></div>
-                        <textarea id="Input_ProblemText" placeholder="<$ topics problem_text_placeholder />"></textarea>
+                        <div class="pivottitle"><$ problems markdown_tab /></div>
+                        <textarea id="Input_ProblemText" placeholder="<$ problems problem_text_placeholder />"></textarea>
                     </div>
                     <div class="section">
-                        <div class="pivottitle"><$ topics preview_tab /></div>
+                        <div class="pivottitle"><$ problems preview_tab /></div>
                         <div class="preview" id="Grid_ProblemPreview"></div>
                     </div>
                 </div>
@@ -63,33 +63,33 @@
     <div class="activity">
         <div class="header cascaded">
             <div class="buttons">
-                <button id="Button_CancelEditProblem"><$ topics cancel /></button>
+                <button id="Button_CancelEditProblem"><$ generic cancel /></button>
                 <button id="Button_DoneEditProblem">
-                    <span><$ topics save /></span>
+                    <span><$ generic save /></span>
                     <div class="progressring"></div>
                 </button>
             </div>
-            <div class="title"><$ topics edit_problem_title /></div>
+            <div class="title"><$ problems edit_title /></div>
         </div>
         <div class="content">
-            <div class="list" ad-header="<$ topics source_header />">
+            <div class="list" ad-header="<$ problems source_label />">
                 <div class="stack">
-                    <span><$ topics type_label /></span>
+                    <span><$ problems type_label /></span>
                     <select class="plain" id="Select_ProblemSourceEdit"></select>
                 </div>
                 <div class="stack">
-                    <span><$ topics academic_year_label /></span>
-                    <input type="number" class="plain" min="2010" id="Input_ProblemYearEdit" placeholder="<$ topics academic_year_placeholder />"/>
+                    <span><$ problems academic_year_label /></span>
+                    <input type="number" class="plain" min="2010" id="Input_ProblemYearEdit" placeholder="<$ problems academic_year_placeholder />"/>
                 </div>
             </div>
             <div class="pivot" id="Pivot_ProblemEdit">
                 <div class="pivotcontent">
                     <div class="section">
-                        <div class="pivottitle"><$ topics markdown_tab /></div>
-                        <textarea id="Input_ProblemTextEdit" placeholder="<$ topics problem_text_placeholder />"></textarea>
+                        <div class="pivottitle"><$ problems markdown_tab /></div>
+                        <textarea id="Input_ProblemTextEdit" placeholder="<$ problems problem_text_placeholder />"></textarea>
                     </div>
                     <div class="section">
-                        <div class="pivottitle"><$ topics preview_tab /></div>
+                        <div class="pivottitle"><$ problems preview_tab /></div>
                         <div class="preview" id="Grid_ProblemPreviewEdit"></div>
                     </div>
                 </div>
@@ -102,7 +102,7 @@
     <div class="activity">
         <div class="header cascaded">
             <div class="buttons">
-                <button id="Button_CancelMove"><$ problems cancel /></button>
+                <button id="Button_CancelMove"><$ generic cancel /></button>
             </div>
             <div class="title"><$ problems move_title /></div>
         </div>
@@ -208,18 +208,18 @@
 
             Components.ActionSheet.Open(
             {
-                Title: "<$ topics discard_create_problem_title />",
-                Description: "<$ topics discard_create_problem_desc />",
+                Title: "<$ problems discard_create_title />",
+                Description: "<$ problems discard_create_message />",
                 Actions: [
                     { 
-                        Title: "<$ topics discard />", Type: "Options.Critical", 
+                        Title: "<$ generic discard />", Type: "Options.Critical", 
                         Action: o => 
                         {
                             PopOver_Problem.close(true);
                         }
                     },
                     { 
-                        Title: "<$ topics keep_creating_problem />", Type: "Footer"
+                        Title: "<$ problems keep_creating />", Type: "Footer"
                     }
                 ]
             }); 
@@ -231,18 +231,18 @@
 
             Components.ActionSheet.Open(
             {
-                Title: "<$ topics discard_edit_problem_title />",
-                Description: "<$ topics discard_edit_problem_desc />",
+                Title: "<$ problems discard_edit_title />",
+                Description: "<$ problems discard_edit_message />",
                 Actions: [
                     { 
-                        Title: "<$ topics discard />", Type: "Options.Critical", 
+                        Title: "<$ generic discard />", Type: "Options.Critical", 
                         Action: o => 
                         {
                             PopOver_EditProblem.close(true);
                         }
                     },
                     { 
-                        Title: "<$ topics keep_editing_problem />", Type: "Footer"
+                        Title: "<$ problems keep_editing />", Type: "Footer"
                     }
                 ]
             }); 
@@ -295,7 +295,7 @@
                     Activity_Topic.scrollTop = box.offsetTop - 100;
                     
                     Components.Notification.Remove({ Id: "create_failed" });
-                    Components.Notification.Send({ Id: "create_success", Title: "<$ topics create_success_title />", Message: "<$ topics create_success_message />", Icon: "\uef1c"});
+                    Components.Notification.Send({ Id: "create_success", Title: "<$ problems create_success_title />", Message: "<$ problems create_success_message />", Icon: "\uef1c"});
                 },
                 error: function(error)
                 {
@@ -303,7 +303,7 @@
                     Button_CancelNewProblem.disabled = false;
                     PopOver_Problem.isloading = false;
                     $("#PopOver_Problem :where(input, textarea, select)").attr("disabled", false);
-                    Components.Notification.Send({ Id: "create_failed", Title: "<$ topics create_failed_title />", Message: error.responseText || "<$ topics error_generic />", Icon: "\ufe60", Buttons: [{Text: "<$ topics dismiss />"}] });
+                    Components.Notification.Send({ Id: "create_failed", Title: "<$ problems create_failed_title />", Message: error.responseText || "<$ topics error_generic />", Icon: "\ufe60", Buttons: [{Text: "<$ generic dismiss />"}] });
                 }
             });
         }
@@ -356,7 +356,7 @@
                     Activity_Topic.scrollTop = box.offsetTop - 100;
                     
                     Components.Notification.Remove({ Id: "edit_failed" });
-                    Components.Notification.Send({ Id: "edit_success", Title: "<$ topics edit_success_title />", Message: "<$ topics edit_success_message />", Icon: "\uef1c"});
+                    Components.Notification.Send({ Id: "edit_success", Title: "<$ problems edit_success_title />", Message: "<$ problems edit_success_message />", Icon: "\uef1c"});
                 },
                 error: function(error)
                 {
@@ -364,7 +364,7 @@
                     Button_CancelEditProblem.disabled = false;
                     PopOver_EditProblem.isloading = false;
                     $("#PopOver_EditProblem :where(input, textarea, select)").attr("disabled", false);
-                    Components.Notification.Send({ Id: "edit_failed", Title: "<$ topics edit_failed_title />", Message: error.responseText || "<$ topics error_generic />", Icon: "\ufe60", Buttons: [{Text: "<$ topics dismiss />"}] });
+                    Components.Notification.Send({ Id: "edit_failed", Title: "<$ problems edit_failed_title />", Message: error.responseText || "<$ topics error_generic />", Icon: "\ufe60", Buttons: [{Text: "<$ generic dismiss />"}] });
                 }
             });
         }
@@ -398,7 +398,7 @@
 
         item.parentNode.replaceChild(box, item); 
     }
-    const Inputs_CheckNew = function()
+    function Inputs_CheckNew()
     {
         if (
             (Input_ProblemText.value.trim() == "" && Input_ProblemYear.value == "") ||
@@ -414,7 +414,7 @@
             PopOver_Problem.isunsaved = true;
         }
     }
-    const Inputs_CheckEdit = function()
+    function Inputs_CheckEdit()
     {
         const data = PopOver_EditProblem.element?.data;
         

@@ -33,6 +33,10 @@
             background: var(--background-page);
 			box-shadow: none;
         }
+        .root .main > .activity
+        {
+            padding-bottom: env(safe-area-inset-bottom);
+        }
     }
     @media screen and (max-width: 1140px)
     {
@@ -54,8 +58,8 @@
 <div class="header cascaded">
     <div class="buttons dynamic" theme="dark">
         <button class="back" onclick="Courses.Back('/admin')" id="Button_BackCourses"></button>
-        <button id="Button_Edit" class="icon" ad-tooltip="<$ courses tooltip_edit_course />">&#xf7cf;</button>
-        <button id="Button_New" class="icon" ad-tooltip="<$ courses tooltip_new_topic />">&#xf8dd;</button>
+        <button id="Button_Edit" class="icon" ad-tooltip="<$ courses edit_title />">&#xf7cf;</button>
+        <button id="Button_New" class="icon" ad-tooltip="<$ topics new_title />">&#xf8dd;</button>
     </div>
     <div class="title hide"><#? course.alias ?#></div>
 </div>
@@ -66,19 +70,19 @@
         <span id="Grid_CourseDescription" ad-property="description"><#? course.description ?#></span>
         <div class="details">
             <div>
-                <span><$ courses id_label /></span>
+                <span><$ generic code /></span>
                 <span ad-property="id"><#? course.id ?#></span>
             </div>
             <div>
-                <span><$ courses alias_label /></span>
+                <span><$ generic alias /></span>
                 <span ad-property="alias"><#? course.alias ?#></span>
             </div>
             <div>
-                <span><$ courses semester_label /></span>
+                <span><$ generic semester /></span>
                 <span ad-property="semester"><#? course.semester ?#></span>
             </div>
             <div>
-                <span><$ courses sks_label /></span>
+                <span><$ generic sks /></span>
                 <span ad-property="sks"><#? course.sks ?#></span>
             </div>
         </div>
@@ -92,52 +96,52 @@
     <div class="activity">
         <div class="header cascaded">
             <div class="buttons">
-                <button id="Button_CancelEdit"><$ courses cancel /></button>
+                <button id="Button_CancelEdit"><$ generic cancel /></button>
                 <button id="Button_SaveEdit">
-                    <span><$ courses save /></span>
+                    <span><$ generic save /></span>
                     <div class="progressring"></div>
                 </button>
             </div>
-            <div class="title"><$ courses edit_course_title /></div>
+            <div class="title"><$ courses edit_title /></div>
         </div>
         <div class="content">
-            <div id="List_Banner" class="list" ad-header="<$ courses banner_label />" ad-action="<$ courses clear />">
+            <div id="List_Banner" class="list" ad-header="<$ generic banner />" ad-action="<$ generic clear />">
                 <div class="banner">
                     <img id="Image_Banner" src="/banner/<#? course.id ?#>?v=<#? course.bannerversion ?#>"/>
                     <input type="file" id="Input_File" accept=".jpg, .jpeg, .png, .webp"/>
                 </div>
             </div>
-            <div class="list" ad-header="<$ courses header_basic_info />">
+            <div class="list" ad-header="<$ courses information_basic />">
                 <div class="stack">
-                    <span><$ courses name_label /></span>
-                    <input type="text" class="plain" maxlength="128" id="Input_CourseName" placeholder="<$ courses name_placeholder />"/>
+                    <span><$ generic name /></span>
+                    <input type="text" class="plain" maxlength="128" id="Input_CourseName" placeholder="<$ generic name_placeholder />"/>
                 </div>
                 <div class="stack">
-                    <span><$ courses alias_label /></span>
-                    <input type="text" class="plain" maxlength="16" id="Input_CourseAlias" placeholder="<$ courses alias_placeholder />"/>
+                    <span><$ generic alias /></span>
+                    <input type="text" class="plain" maxlength="16" id="Input_CourseAlias" placeholder="<$ generic alias_placeholder />"/>
                 </div>
                 <div class="stack">
-                    <span><$ courses description_label /></span>
-                    <textarea class="plain" maxlength="1000" id="Input_CourseDescription" placeholder="<$ courses description_placeholder />"></textarea>
+                    <span><$ generic description /></span>
+                    <textarea class="plain" maxlength="1000" id="Input_CourseDescription" placeholder="<$ generic description_placeholder />"></textarea>
                 </div>
             </div>
-            <div class="list" ad-header="<$ courses header_additional_info />">
+            <div class="list" ad-header="<$ courses information_additional />">
                 <div class="stack">
-                    <span><$ courses id_label /></span>
-                    <input type="text" class="plain" maxlength="16" id="Input_CourseId" placeholder="<$ courses id_placeholder />">
+                    <span><$ generic code /></span>
+                    <input type="text" class="plain" maxlength="16" id="Input_CourseId" placeholder="<$ generic id_placeholder />">
                 </div>
                 <div class="stack">
-                    <span><$ courses semester_label /></span>
-                    <input type="number" class="plain" min="1" max="8" id="Input_CourseSemester" placeholder="<$ courses semester_placeholder />"/>
+                    <span><$ generic semester /></span>
+                    <input type="number" class="plain" min="1" max="8" id="Input_CourseSemester" placeholder="<$ generic semester_placeholder />"/>
                 </div>
                 <div class="stack">
-                    <span><$ courses sks_label /></span>
-                    <input type="number" class="plain" min="1" max="16" id="Input_CourseSKS" placeholder="<$ courses sks_placeholder />"/>
+                    <span><$ generic sks /></span>
+                    <input type="number" class="plain" min="1" max="16" id="Input_CourseSKS" placeholder="<$ generic sks_placeholder />"/>
                 </div>
             </div>
             <span class="error hidden" id="Text_Error"></span>
             <button class="plain critical" id="Button_DeleteCourse">
-                <span><$ courses delete_course /></span>
+                <span><$ courses delete_title /></span>
             </button>
         </div>
     </div>
@@ -147,19 +151,19 @@
     <div class="activity">
         <div class="header cascaded">
             <div class="buttons">
-                <button id="Button_CancelNew"><$ courses cancel /></button>
+                <button id="Button_CancelNew"><$ generic cancel /></button>
                 <button id="Button_SubmitNew">
-                    <span><$ courses create /></span>
+                    <span><$ generic create /></span>
                     <div class="progressring"></div>
                 </button>
             </div>
-            <div class="title"><$ courses new_topic_title /></div>
+            <div class="title"><$ topics new_title /></div>
         </div>
         <div class="content">
             <div class="list">
                 <div class="stack">
-                    <span><$ courses topic_name_label /></span>
-                    <input type="text" class="plain" maxlength="128" id="Input_TopicName" placeholder="<$ courses topic_name_placeholder />"/>
+                    <span><$ generic name /></span>
+                    <input type="text" class="plain" maxlength="128" id="Input_TopicName" placeholder="<$ topics name_placeholder />"/>
                 </div>
             </div>
         </div>
@@ -170,19 +174,19 @@
     <div class="activity">
         <div class="header cascaded">
             <div class="buttons">
-                <button id="Button_CancelRename"><$ courses cancel /></button>
+                <button id="Button_CancelRename"><$ generic cancel /></button>
                 <button id="Button_DoneRename">
-                    <span><$ courses rename /></span>
+                    <span><$ generic rename /></span>
                     <div class="progressring"></div>
                 </button>
             </div>
-            <div class="title"><$ courses rename_topic_title /></div>
+            <div class="title"><$ topics rename_title /></div>
         </div>
         <div class="content">
             <div class="list">
                 <div class="stack">
-                    <span><$ courses topic_name_label /></span>
-                    <input type="text" class="plain" maxlength="128" id="Input_TopicNameRename" placeholder="<$ courses topic_name_placeholder />"/>
+                    <span><$ generic name /></span>
+                    <input type="text" class="plain" maxlength="128" id="Input_TopicNameRename" placeholder="<$ topics name_placeholder />"/>
                 </div>
             </div>
         </div>
@@ -208,9 +212,6 @@
             return box;
         }
 
-        const course = JSON.parse(`<#? course ?#>`);
-        course.oldId = course.id;
-
         Input_CourseName.oninput = 
         Input_CourseAlias.oninput =
         Input_CourseDescription.oninput =
@@ -229,10 +230,10 @@
             Components.ActionSheet.Open(
             {
                 Title: "<$ courses discard_edit_confirm_title />",
-                Description: "<$ courses discard_edit_confirm_desc />",
+                Description: "<$ courses discard_edit_confirm_message />",
                 Actions: [
                     { 
-                        Title: "<$ courses discard />", Type: "Options.Critical", 
+                        Title: "<$ generic discard />", Type: "Options.Critical", 
                         Action: o => 
                         {
                             PopOver_EditCourse.close(true);
@@ -246,12 +247,12 @@
         }
         Button_Edit.onclick = function()
         {
-            Input_CourseId.value = course.id;
-            Input_CourseName.value = course.name;
-            Input_CourseAlias.value = course.alias;
-            Input_CourseDescription.value = course.description || "";
-            Input_CourseSemester.value = course.semester;
-            Input_CourseSKS.value = course.sks;
+            Input_CourseId.value = Courses.Active.id;
+            Input_CourseName.value = Courses.Active.name;
+            Input_CourseAlias.value = Courses.Active.alias;
+            Input_CourseDescription.value = Courses.Active.description || "";
+            Input_CourseSemester.value = Courses.Active.semester;
+            Input_CourseSKS.value = Courses.Active.sks;
             PopOver_EditCourse.open(this);
             Text_Error.classList.add("hidden");
             Inputs_Check();
@@ -266,7 +267,7 @@
             
             const editedCourse = 
             {
-                oldId: course.oldId,
+                oldId: "<#? course.id ?#>",
                 id: Input_CourseId.value.replace(/([^A-Za-z0-9\-\_])/gi, ""),
                 name: Input_CourseName.value,
                 alias: Input_CourseAlias.value,
@@ -284,7 +285,7 @@
                 {
                     if (Object.keys(changes).includes("name"))
                     {
-                        document.title = document.title.replace(course.name, changes.name);
+                        document.title = document.title.replace(Courses.Active.name, changes.name);
                         $("[ad-property=name]").text(changes.name || "");
                     }
 
@@ -300,7 +301,7 @@
                     if (Object.keys(changes).includes("id"))
                         window.location.replace("/admin/courses/" + changes.id);
 
-                    Object.assign(course, changes);
+                    Object.assign(Courses.Active, changes);
                     Button_CancelEdit.disabled = false;
                     Button_SaveEdit.disabled = false;
                     PopOver_EditCourse.isloading = false;
@@ -435,11 +436,11 @@
         {
             Components.ActionSheet.Open(
             {
-                Title: "<$ courses delete_course_confirm_title />".format(course.name),
-                Description: "<$ courses delete_course_confirm_desc />",
+                Title: "<$ courses delete_confirm_title />".format(Courses.Active.name),
+                Description: "<$ courses delete_confirm_message />",
                 Actions: [
                     { 
-                        Title: "<$ courses delete />", Type: "Options.Critical", 
+                        Title: "<$ generic delete />", Type: "Options.Critical", 
                         Action: function() 
                         {
                             return new Promise(function(resolve)
@@ -447,7 +448,7 @@
                                 $.ajax({
                                     type: "delete",
                                     url: "/admin/courses/delete", 
-                                    data: { id: course.id },
+                                    data: { id: Courses.Active.id },
                                     success: function()
                                     {
                                         Courses.Back('/admin');
@@ -456,14 +457,14 @@
                                     error: function(error)
                                     {
                                         resolve();
-                                        Components.Notification.Send({ Id: "delete_failed", Title: "<$ courses delete_error_title />", Message: error.responseText || "<$ courses error_generic />", Icon: "\ufe60", Buttons: [{Text: "<$ courses dismiss />"}] });
+                                        Components.Notification.Send({ Id: "delete_failed", Title: "<$ courses delete_error_title />", Message: error.responseText || "<$ courses error_generic />", Icon: "\ufe60", Buttons: [{Text: "<$ generic dismiss />"}] });
                                     }
                                 });
                             })
                         }
                     },
                     { 
-                        Title: "<$ courses cancel />", Type: "Footer"
+                        Title: "<$ generic cancel />", Type: "Footer"
                     }
                 ]
             });
@@ -536,7 +537,7 @@
                 return;
 
             if (files[0].size > 2000000)
-                return Components.Notification.Send({ Id: "banner_failed", Title: "<$ courses banner_upload_error_title />", Message: "<$ courses banner_upload_error_size />", Icon: "\ufe64", Buttons: [{Text: "<$ courses dismiss />"}] });
+                return Components.Notification.Send({ Id: "banner_failed", Title: "<$ courses banner_upload_error_title />", Message: "<$ courses banner_upload_error_message />", Icon: "\ufe64", Buttons: [{Text: "<$ generic dismiss />"}] });
                 
             Button_CancelEdit.disabled = true;
             Button_SaveEdit.disabled = true;
@@ -580,7 +581,7 @@
                     Text_Error.classList.remove("hidden");
                     $("#PopOver_EditCourse :where(input, textarea)").removeAttr("disabled");
 
-                    Components.Notification.Send({ Id: "banner_failed", Title: "<$ courses banner_upload_error_title />", Message: error.responseText || "<$ courses error_generic />", Icon: "\ufe64", Buttons: [{Text: "<$ courses dismiss />"}] });
+                    Components.Notification.Send({ Id: "banner_failed", Title: "<$ courses banner_upload_error_title />", Message: error.responseText || "<$ courses error_generic />", Icon: "\ufe64", Buttons: [{Text: "<$ generic dismiss />"}] });
                 }
             });
         }
@@ -603,7 +604,6 @@
                     Inputs_Check();
                     Button_CancelEdit.disabled = false;
                     PopOver_EditCourse.isloading = false;
-                    Text_Error.classList.remove("hidden");
                     $("#PopOver_EditCourse :where(input, textarea)").removeAttr("disabled");
 
                     Components.Notification.Send({ Id: "banner_success", Title: "<$ courses banner_clear_success_title />", Message: "<$ courses banner_clear_success_message />", Icon: "\uf873"});
@@ -613,10 +613,9 @@
                     Inputs_Check();
                     Button_CancelEdit.disabled = false;
                     PopOver_EditCourse.isloading = false;
-                    Text_Error.classList.remove("hidden");
                     $("#PopOver_EditCourse :where(input, textarea)").removeAttr("disabled");
 
-                    Components.Notification.Send({ Id: "banner_failed", Title: "<$ courses banner_clear_error_title />", Message: "<$ courses error_generic />", Icon: "\ufe64", Buttons: [{Text: "<$ courses dismiss />"}] });
+                    Components.Notification.Send({ Id: "banner_failed", Title: "<$ courses banner_clear_error_title />", Message: "<$ courses error_generic />", Icon: "\ufe64", Buttons: [{Text: "<$ generic dismiss />"}] });
                 }
             });
         }
@@ -633,7 +632,7 @@
         if ("<#? activeuser.role ?#>" != "admin")
             Button_DeleteCourse.disabled = true;
 
-        const Inputs_Check = function()
+        function Inputs_Check()
         {
             const data = Courses.Active;
             if (
