@@ -38,6 +38,7 @@
     "password": "Kata Sandi",
     "url": "URL",
     "role": "Peran",
+    "editors": "Editor",
     
     "id_placeholder": "cth.: AIF2301062",
     "name_placeholder": "cth.: Dasar Pemrograman",

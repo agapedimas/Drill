@@ -38,6 +38,7 @@
     "password": "Password",
     "url": "URL",
     "role": "Peran",
+    "editors": "Editor",
     
     "id_placeholder": "ex: AIF2301062",
     "name_placeholder": "ex: Dasar Pemrograman",

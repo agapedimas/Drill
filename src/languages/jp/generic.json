@@ -38,6 +38,7 @@
     "password": "パスワード",
     "url": "URL",
     "role": "役割",
+    "editors": "編集者",
 
     "id_placeholder": "例: AIF2301062",
     "name_placeholder": "例: プログラミングの基礎",

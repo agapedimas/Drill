@@ -991,11 +991,13 @@ function Route(Server)
 
     Server.get(["/search", "/admin/search"], async function(req, res, next)
     {
+        const paths = req.path.split("/").filter(o => o);
+        req.isAdmin = paths[0] == "admin";
         req.filepath = "./src/pages/search";
         next();
     });
 
-    Server.post("/search", async function(req, res)
+    Server.post(["/search", "/admin/search"], async function(req, res)
     {
         if (req.query.q == null || req.query.q.trim() == "")
             return res.send({});

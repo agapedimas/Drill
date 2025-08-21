@@ -204,6 +204,9 @@ const Courses =
             "UPDATE courses SET " + keys.map(o => o + "=?").join(", ") + " WHERE id=?", 
             [...values,id]
         );
+
+        if (newid)
+            return result.success && await Courses.Banners.Rename(id, newid);
         
         return result.success;
     },
@@ -818,6 +821,30 @@ const Courses =
                 const path = "./src/banners/" + id;
                 FileIO.writeFileSync(path, buffer);
                 await SQL.Query("UPDATE courses SET bannerversion = bannerversion + 1 WHERE id = ?", [id]);
+                return true;
+            }
+            catch(error)
+            {
+                console.error(error);
+                return false;
+            }
+        },
+        /**
+         * Rename banner of course
+         * @param { string } oldid Old id of course 
+         * @param { string } newid New id of course 
+         * @returns { Promise<boolean> } @true if operation completed successfully, otherwise @false
+         */
+        Rename: async function(oldid, newid)
+        {
+            try
+            {
+                const path1 = "./src/banners/" + oldid;
+                const path2 = "./src/banners/" + newid;
+                
+                if (FileIO.existsSync(path1))
+                    FileIO.renameSync(path1, path2);
+
                 return true;
             }
             catch(error)

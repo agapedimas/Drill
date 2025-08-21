@@ -22,14 +22,15 @@ Courses.Pins.AppendSidebar();
 let Search_Timeout;
 Input_SearchGlobal.oninput = function()
 {
+    const origin = Input_SearchGlobal.getAttribute("origin") || "";
     clearTimeout(Search_Timeout);
-    if (window.location.pathname.startsWith("/search") == false)
+    if (window.location.pathname.startsWith(origin + "/search") == false)
     {
         if (this.value.trim() != "")
         {
             Search_Timeout = setTimeout(async function()
             { 
-                let url = new URL(window.location.origin + "/search");
+                let url = new URL(window.location.origin + origin + "/search");
                 url.searchParams.set("q", Input_SearchGlobal.value.trim());
                 window.location.href = url.href;
             }, 500);

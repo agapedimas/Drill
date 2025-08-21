@@ -38,6 +38,7 @@
     "password": "비밀번호",
     "url": "URL",
     "role": "역할",
+    "editors": "편집자들",
 
     "id_placeholder": "예: AIF2301062",
     "name_placeholder": "예: 프로그래밍 기초",

@@ -151,6 +151,7 @@
         Arrow.Check(Grid_CourseTopics);
     });
 
+    const apptitle = document.title;
     {    
         let url = new URL(window.location.href);
         let query = url.searchParams.get("q");
@@ -162,6 +163,7 @@
             Input_Search.value = query;
             Text_Query.innerHTML = "<$ search showing_results />".format("<b>" + query + "</b>");
             Text_Query.style.opacity = "1";
+            document.title = query + " - " + apptitle;
         }   
         
         const resize = function()
@@ -215,6 +217,7 @@
             Activity_Main.scrollTop = 0;
             Text_Query.style.opacity = "0";
             window.history.replaceState(null, null, "/search");
+            document.title = "<$ search title /> - " + apptitle;
             Grid_Courses.innerHTML = null;
             Grid_CourseTopics.innerHTML = null;
             Grid_CourseProblems.innerHTML = null;
@@ -226,14 +229,19 @@
             return;
         }
 
+        const origin = Input_SearchGlobal.getAttribute("origin") || "";
+
         Search_Timeout = setTimeout(async function()
         { 
-            if (Search_LastQuery == Input_SearchGlobal.value.trim())
+            let query = Input_SearchGlobal.value.trim();
+            
+            if (Search_LastQuery == query)
                 return;
             
             let url = new URL(window.location.href);
-            url.searchParams.set("q", Input_SearchGlobal.value.trim());
+            url.searchParams.set("q", query);
             window.history.replaceState(null, null, url.href);
+            document.title = query + " - " + apptitle;
             
             const result = await $.post(url.href);
 
@@ -247,6 +255,7 @@
             for (const course of result.courses)
             {
                 const box = Courses.Render(course);
+                box.setAttribute("goto", origin + "/courses/" + course.id);
                 Grid_Courses.append(box); 
             }
 
@@ -266,7 +275,7 @@
                     const url = new URL("http://aga.pe/");
                     url.searchParams.set("name", topic.name);
                     const name = url.search.replace("?name=", "").replaceAll("+", "-").replaceAll("---", "-").toLowerCase();
-                    window.location.href = "/courses/" + box.data.course + "/" + name;
+                    window.location.href = origin + "/courses/" + box.data.course + "/" + name;
                 }
 
                 Grid_CourseTopics.append(box); 
@@ -280,13 +289,16 @@
                     const url = new URL("http://aga.pe/");
                     url.searchParams.set("name", problem.topic);
                     const name = url.search.replace("?name=", "").replaceAll("+", "-").replaceAll("---", "-").toLowerCase();
-                    window.location.href = "/courses/" + box.data.course + "/" + name;
+                    window.location.href = origin + "/courses/" + box.data.course + "/" + name;
                 }
                 Grid_CourseProblems.append(box); 
             }
 
             Arrow.Check(Grid_Courses);
             Arrow.Check(Grid_CourseTopics);
+            
+            Grid_Courses.scrollLeft = 0;
+            Grid_CourseTopics.scrollLeft = 0;
 
             if (result.courses.length == 0 && result.problems.length == 0 && result.topics.length == 0)
             {
@@ -306,9 +318,9 @@
             }
         
             Text_Query.style.opacity = "1";    
-            Text_Query.innerHTML = "<$ search showing_results />".format("<b>" + Input_SearchGlobal.value.trim() + "</b>");
+            Text_Query.innerHTML = "<$ search showing_results />".format("<b>" + query + "</b>");
             
-            Search_LastQuery = Input_SearchGlobal.value.trim();
+            Search_LastQuery = query;
             Activity_Main.classList.remove("loading");
             Activity_Main.scrollTop = 0;
         }, timeout);

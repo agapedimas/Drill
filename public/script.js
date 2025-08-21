@@ -8,7 +8,7 @@ const Courses =
             const urlPrev = new URL(document.referrer);
             const urlNow = new URL(location.href);
 
-            if (urlPrev.origin == urlNow.origin)
+            if (urlPrev.origin == urlNow.origin && window.history.length > 2)
             {
                 if (urlPrev.pathname == origin + "/courses" || urlPrev.pathname == origin + "/home" || urlPrev.pathname == origin + "/pins" || urlPrev.pathname == origin + "/search")
                 {
@@ -275,7 +275,7 @@ Components.ContextMenu.Add("Courses",
             ]
         }
     ]);
-Components.ContextMenu.Add("Course", 
+Components.ContextMenu.Add("Course",    
     [
         {
             Show: false,
@@ -286,6 +286,14 @@ Components.ContextMenu.Add("Course",
             Show: false,
             Icon: "f88f",
             Action: (element) => { Courses.Pins.Remove(element.data.id) }
+        },
+        {
+            Title: "<$ courses link_copy />",
+            Icon: "f5cc",
+            Action: (element) => 
+            {     
+                navigator.clipboard.writeText("https://drill.agapedimas.com/courses/" + element.data.id);
+            }
         },
         {
             Title: "<$ courses newtab />",
@@ -306,6 +314,14 @@ Components.ContextMenu.Add("Course_More",
             Show: o => Courses.Pins.Includes(Courses.Active.id) == true,
             Icon: "f88f",
             Action: o => Courses.Pins.Remove(Courses.Active.id)
+        },
+        {
+            Title: "<$ courses link_copy />",
+            Icon: "f5cc",
+            Action: (element) => 
+            {     
+                navigator.clipboard.writeText("https://drill.agapedimas.com/courses/" + element.data.id);
+            }
         },
         {
             Title: "<$ generic print_bulk />",

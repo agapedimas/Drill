@@ -146,6 +146,7 @@ const Functions =
 				.replace("<#? appsettings ?#>", Template.Data.Settings)
 				.replaceAll("<#? applang ?#>", language)
 				.replaceAll("<#? apptitle ?#>", Variables.AppTitle)
+				.replaceAll("<#? apptitleadmin ?#>", Variables.AppTitleAdmin)
 				.replaceAll("<#? appicon ?#>", Variables.AppIcon)
 				.replaceAll("<#? appassets ?#>", Variables.AppAssets)
 				.replaceAll("<#? apphomepage ?#>", Variables.WebHomepage)
@@ -160,10 +161,11 @@ const Functions =
 
 		const pageVariables = 
 		[
-			{ prefix: "ad-title", replacement: "page_title" },
-			{ prefix: "ad-desc", replacement: "page_description" },
-			{ prefix: "ad-keyword", replacement: "page_keywords", default: Variables.Keyword },
-			{ prefix: "ad-thumbnail", replacement: "page_thumbnail", default: Variables.Thumbnail }
+			{ prefix: "ad-title", replacement: "page_title", default: Variables.AppTitle },
+			{ prefix: "ad-name", replacement: "page_name", default: Variables.AppTitle },
+			{ prefix: "ad-desc", replacement: "page_description", default: Language.Data[language]["metadata"]["description"] },
+			{ prefix: "ad-keyword", replacement: "page_keywords", default: Language.Data[language]["metadata"]["keywords"] },
+			{ prefix: "ad-thumbnail", replacement: "page_thumbnail", default: Variables.AppThumbnail }
 		];
 		
 		for (const variable of pageVariables)

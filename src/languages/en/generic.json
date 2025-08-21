@@ -38,6 +38,7 @@
     "password": "Password",
     "url": "URL",
     "role": "Role",
+    "editors": "Editors",
     
     "id_placeholder": "e.g: AIF2301062",
     "name_placeholder": "e.g: Programming Fundamentals",
