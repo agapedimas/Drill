@@ -150,6 +150,7 @@ const Functions =
 				.replaceAll("<#? appicon ?#>", Variables.AppIcon)
 				.replaceAll("<#? appassets ?#>", Variables.AppAssets)
 				.replaceAll("<#? apphomepage ?#>", Variables.WebHomepage)
+				.replaceAll("<#? apphost ?#>", Variables.WebHost)
 				.replaceAll("<#? appversion ?#>", Variables.Version)
 
 		let hrefLang = "<link rel='alternate' hreflang='x-default' href='" + Variables.WebHost + "/" + path + "'>";

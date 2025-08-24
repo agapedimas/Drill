@@ -4,6 +4,9 @@
     "showing_results": "Showing results for “{0}”",
     "searchbar_placeholder": "Courses, topics, or problems",
 
+    "start_title": "Search",
+    "start_message": "Try searching courses, topics, or problems.",
+
     "noresults_title": "No Results",
     "noresults_message": "Try a new search."
 }

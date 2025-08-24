@@ -4,6 +4,9 @@
     "showing_results": "“{0}” 검색 결과",
     "searchbar_placeholder": "강좌, 주제 또는 문제",
 
+    "start_title": "검색",
+    "start_message": "강의, 주제 또는 문제를 검색해 보세요.",
+
     "noresults_title": "결과 없음",
     "noresults_message": "새로운 검색을 시도해 보세요."
 }

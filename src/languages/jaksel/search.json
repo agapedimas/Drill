@@ -4,6 +4,9 @@
     "showing_results": "Nampilin hasil “{0}”",
     "searchbar_placeholder": "Matkul, topik, atau soal",
 
+    "start_title": "Cari",
+    "start_message": "Coba cari matkul, topik, atau soal.",
+
     "noresults_title": "Yah, Ngga Ketemu",
     "noresults_message": "Sumpah gaada, coba deh cari pake keyword laen."
 }

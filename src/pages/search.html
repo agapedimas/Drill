@@ -1,10 +1,11 @@
 <ad-title><$ search title /></ad-title>
 
 <style>
+    @import url("/<#? applang ?#>/collections.css");
     @import url("/<#? applang ?#>/courses.css");
     @import url("/<#? applang ?#>/problems.css");
-    @import url("/<#? applang ?#>/collections.css");
     
+    .start,
     .notfound
     {
         position: relative;
@@ -18,11 +19,21 @@
         gap: 0.25em;
         text-align: center;
     }
+    .start
+    {
+        height: calc(100% + var(--searchtransform));
+    }
+    :where(.activity.searching) .start
+    {
+        opacity: 0;
+    }
+        .start span:first-child,
         .notfound span:first-child
         {
             font-family: var(--font-bold);
             font-size: 1.5em;
         }
+        .start span:last-child,
         .notfound span:last-child
         {
             font-size: 1.12em;
@@ -66,6 +77,7 @@
             height: 0 !important;
         }
 
+    #Activity_Main:has(.start),
     #Activity_Main:has(.notfound),
     #Activity_Main:has(#Grid_Courses:empty):has(#Grid_CourseTopics:empty):has(#Grid_CourseProblems:empty)
     {
@@ -77,11 +89,11 @@
             display: none;
         }   
 
-    #Activity_Main :where(.notfound, section)
+    #Activity_Main :where(.start, .notfound, section)
     {
         transition: 0.15s opacity;
     }
-    #Activity_Main.loading :where(.notfound, section)
+    #Activity_Main.loading :where(.start, .notfound, section)
     {
         opacity: 0.5;
         pointer-events: none;
@@ -89,10 +101,16 @@
 
     @media screen and (max-width: 800px) 
     {
+        .start,
         .notfound
         {
             top: 0;
         }
+        .start
+        {
+            display: none;
+        }
+        #Activity_Main:has(.start),
         #Activity_Main:has(.notfound),
         #Activity_Main:has(#Grid_Courses:empty):has(#Grid_CourseTopics:empty):has(#Grid_CourseProblems:empty)
         {
@@ -117,7 +135,7 @@
 </div>
 
 <div class="content">
-    <div id="Text_Query"></div>
+    <div id="Text_Query">...</div>
     <section ad-header="<$ courses title />">
         <div class="arrow prev hidden" id="Arrow_PrevCourses">&#xef3d;</div>
         <div class="arrow next hidden" id="Arrow_NextCourses">&#xef3e;</div>
@@ -207,6 +225,8 @@
     
     function Input_Check(notimeout)
     {
+        const origin = Input_SearchGlobal.getAttribute("origin") || "";
+
         let timeout = notimeout ? 0 : 400;
         clearTimeout(Search_Timeout);
         Activity_Main.classList.add("loading");
@@ -216,7 +236,7 @@
             Activity_Main.classList.remove("loading");
             Activity_Main.scrollTop = 0;
             Text_Query.style.opacity = "0";
-            window.history.replaceState(null, null, "/search");
+            window.history.replaceState(null, null,  origin + "/search");
             document.title = "<$ search title /> - " + apptitle;
             Grid_Courses.innerHTML = null;
             Grid_CourseTopics.innerHTML = null;
@@ -225,11 +245,26 @@
             if (window['Grid_NotFound'])
                 Grid_NotFound.remove();
 
+            if (window['Grid_Start'])
+                Grid_Start.remove();
+
+            const title = document.createElement("span");
+            title.innerHTML = "<$ search start_title/>";
+
+            const desc = document.createElement("span");
+            desc.innerHTML = "<$ search start_message/>";
+
+            const start = document.createElement("div");
+            start.setAttribute("id", "Grid_Start");
+            start.classList.add("start");
+            start.append(title);
+            start.append(desc);
+
+            Text_Query.parentNode.append(start);
+
             Search_LastQuery = "";
             return;
         }
-
-        const origin = Input_SearchGlobal.getAttribute("origin") || "";
 
         Search_Timeout = setTimeout(async function()
         { 
@@ -251,6 +286,9 @@
 
             if (window['Grid_NotFound'])
                 Grid_NotFound.remove();
+
+            if (window['Grid_Start'])
+                Grid_Start.remove();
 
             for (const course of result.courses)
             {
@@ -317,7 +355,7 @@
                 Text_Query.parentNode.append(notfound);
             }
         
-            Text_Query.style.opacity = "1";    
+            Text_Query.style.opacity = "1";
             Text_Query.innerHTML = "<$ search showing_results />".format("<b>" + query + "</b>");
             
             Search_LastQuery = query;

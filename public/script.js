@@ -292,7 +292,7 @@ Components.ContextMenu.Add("Course",
             Icon: "f5cc",
             Action: (element) => 
             {     
-                navigator.clipboard.writeText("https://drill.agapedimas.com/courses/" + element.data.id);
+                navigator.clipboard?.writeText("https://drill.agapedimas.com/courses/" + element.data.id);
             }
         },
         {
@@ -320,7 +320,7 @@ Components.ContextMenu.Add("Course_More",
             Icon: "f5cc",
             Action: (element) => 
             {     
-                navigator.clipboard.writeText("https://drill.agapedimas.com/courses/" + element.data.id);
+                navigator.clipboard?.writeText("https://drill.agapedimas.com/courses/" + Courses.Active.id);
             }
         },
         {

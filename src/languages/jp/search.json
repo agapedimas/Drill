@@ -4,6 +4,9 @@
     "showing_results": "「{0}」の検索結果",
     "searchbar_placeholder": "コース、トピック、または問題",
 
+    "start_title": "検索",
+    "start_message": "コース、トピック、または問題を検索してみてください。",
+
     "noresults_title": "結果がありません",
     "noresults_message": "新しい検索をお試しください。"
 }
