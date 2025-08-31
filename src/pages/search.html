@@ -1,9 +1,9 @@
 <ad-title><$ search title /></ad-title>
 
 <style>
-    @import url("/<#? applang ?#>/collections.css");
     @import url("/<#? applang ?#>/courses.css");
     @import url("/<#? applang ?#>/problems.css");
+    @import url("/<#? applang ?#>/collections.css");
     
     .start,
     .notfound
@@ -154,6 +154,40 @@
 </div>
 
 <script>
+    const origin = Input_SearchGlobal.getAttribute("origin") || "";
+
+    const a = Courses.Render;
+    Courses.Render = function(course)
+    {
+        const box = a(course);
+
+        if (origin)
+        {
+            box.oncontextmenu = function(event)
+            {
+                Components.ContextMenu.Open("Course_" + origin, box, event);
+            }
+        }
+
+        return box;
+    }
+
+    const b = Topics.Render;
+    Topics.Render = function(topic)
+    {
+        const box = b(topic);
+
+        if (origin)
+        {
+            box.oncontextmenu = function(event)
+            {
+                Components.ContextMenu.Open("Topic_" + origin, box, event);
+            }
+        }
+
+        return box;
+    }
+
     Grid_Courses.onscroll = o => Arrow.Check(Grid_Courses);
     Grid_CourseTopics.onscroll = o => Arrow.Check(Grid_CourseTopics);
     Grid_CourseProblems.onscroll = o => Arrow.Check(Grid_CourseProblems);
@@ -225,8 +259,6 @@
     
     function Input_Check(notimeout)
     {
-        const origin = Input_SearchGlobal.getAttribute("origin") || "";
-
         let timeout = notimeout ? 0 : 400;
         clearTimeout(Search_Timeout);
         Activity_Main.classList.add("loading");

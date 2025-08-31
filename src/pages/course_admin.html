@@ -401,15 +401,14 @@
                 },
                 success: function()
                 {
-                    if (Topics.IsOpened())
-                    {
-                        Topics.Back();
-                        PopOver_RenameTopic.element.click();
-                    }
                     
                     const data = PopOver_RenameTopic.element.data;
                     data.name = Input_TopicNameRename.value.trim();
                     PopOver_RenameTopic.element.find("name").innerText = data.name;
+                    PopOver_RenameTopic.element.classList.remove("active");
+
+                    if (Topics.IsOpened())
+                        PopOver_RenameTopic.element.click();
 
                     Button_CancelRename.disabled = false;
                     Button_DoneRename.disabled = false;

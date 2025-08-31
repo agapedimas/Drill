@@ -28,6 +28,10 @@
             border-radius: 100%;
             overflow: hidden;
         }
+        #Settings_Account .avatar.loading
+        {
+            pointer-events: none;
+        }
             #Settings_Account .avatar::before
             {
                 content: "\edfc";
@@ -46,7 +50,7 @@
                 transform: translateY(100%);
                 z-index: 1;
             }
-            #Settings_Account .avatar:hover::before
+            #Settings_Account .avatar:not(.loading):hover::before
             {
                 transform: translateY(0);
             }
@@ -64,6 +68,24 @@
             #Settings_Account .avatar:active img
             {
                 filter: var(--filter-accent-plain-active);
+            }
+            #Settings_Account .avatar.loading img
+            {
+                filter: brightness(0.3);
+            }
+            #Settings_Account .avatar .progressring
+            {
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                width: 30px;
+                transform: translate(-50%, -50%);
+                display: none;
+                z-index: 1;
+            }
+            #Settings_Account .avatar.loading .progressring
+            {
+                display: block;
             }
         #Settings_Account .details
         {
@@ -176,6 +198,7 @@
 <div class="content">
     <div id="Settings_Account">
         <div class="avatar" id="Grid_Avatar" ad-tooltip="<$ accounts avatar_change />">
+            <div class="progressring"></div>
             <img id="Image_Avatar" src="/avatar/<#? activeuser.id ?#>?v=<#? activeuser.avatarversion ?#>"/>
         </div>
         <div class="details">
@@ -473,6 +496,8 @@
             const form = new FormData();
             form.append("file", files[0]);
 
+            Image_Avatar.parentNode.classList.add("loading");
+
             $.ajax({
                 type: "post",
                 url: "/accounts/setavatar",
@@ -481,13 +506,26 @@
                 processData: false,
                 success: async function()
                 {
-                    Image_Avatar.src = "/avatar/<#? activeuser.id ?#>?cache=false";
-                    Components.Notification.Remove({ Id: "avatar_failed" });
-                    Components.Notification.Send({ Id: "avatar_success", Title: "<$ accounts avatar_upload_success_title />", Message: "<$ accounts avatar_upload_success_message />", Icon: "\uf873"});
+                    const url = "/avatar/<#? activeuser.id ?#>?cache=false&time=" + Date.now();
+
+                    const avatars = document.querySelectorAll("img[src^='/avatar/agapedimas']");
+                    for (const avatar of avatars)
+                    {
+                        avatar.src = url;
+                        avatar.onload = function()
+                        {
+                            Components.Notification.Remove({ Id: "avatar_failed" });
+                            Components.Notification.Send({ Id: "avatar_success", Title: "<$ accounts avatar_upload_success_title />", Message: "<$ accounts avatar_upload_success_message />", Icon: "\uf873"});
+                            
+                            if (avatar == Image_Avatar)
+                                Image_Avatar.parentNode.classList.remove("loading");   
+                        };
+                    }
                 },
                 error: function(error)
-                {                   
+                {               
                     Components.Notification.Send({ Id: "avatar_failed", Title: "<$ accounts avatar_upload_error_title />", Message: error.responseText || "<$ settings error_generic />", Icon: "\ufe64", Buttons: [{Text: "<$ generic dismiss />"}] });
+                    Image_Avatar.parentNode.classList.remove("loading");    
                 }
             });
         }
