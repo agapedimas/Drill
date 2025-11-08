@@ -364,7 +364,7 @@
                     }
 
                     > *,
-                    > *:not(mjx-container) *
+                    > *:not(mjx-container) > *
                     {
                         margin: 0;
                     }

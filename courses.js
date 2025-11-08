@@ -440,9 +440,11 @@ const Courses =
              *      status: "available" | "generating" | "error",
              *      problems: Array<{
              *          question: string,
-             *          choices: Array<string>,
-             *          answer: number,
-             *          reason: string
+             *          choices: Array<{
+             *              text: string,
+             *              explaination: string,
+             *              correct: boolean
+             *          }>,
              *      }>
              * }>} 
              */

@@ -17,6 +17,14 @@ const Quiz =
         Quiz.Active.Problem = Quiz.Problems[number].question;
         Quiz.Active.Choices = Quiz.Problems[number].choices;
 
+        for (let i = 0; i < Grid_ProblemNavigation.children.length; i++)
+        {
+            if (i == number)
+                Grid_ProblemNavigation.children[i].classList.add("active");
+            else
+                Grid_ProblemNavigation.children[i].classList.remove("active");
+        }
+
         Text_Question.innerHTML = await Problems.ParseMarkdownLatex(Quiz.Active.Problem);
         Grid_Choices.innerHTML = null;
 
@@ -26,30 +34,16 @@ const Quiz =
             Button_Prev.disabled = false;
 
         if (number == Quiz.Problems.length - 1)
-        {
-            if (Quiz.Done)
-                Button_Done.classList.remove("hidden");
-            else
-                Button_Submit.classList.remove("hidden");
-
-            Button_Next.classList.add("hidden");
-        }
+            Button_Next.disabled = true;
         else
-        {
-            if (Quiz.Done)
-                Button_Done.classList.add("hidden");
-            else
-                Button_Submit.classList.add("hidden");
-
-            Button_Next.classList.remove("hidden");
-        }
+            Button_Next.disabled = false;
 
         for (let i = 0; i < Quiz.Active.Choices.length; i++)
         {   
             const choice = Quiz.Active.Choices[i];
+            
             const text = document.createElement("div");
             text.classList.add("text");
-            text.innerHTML = await Problems.ParseMarkdownLatex(choice);
             
             const box = document.createElement("div");
             box.classList.add("choice");
@@ -58,24 +52,34 @@ const Quiz =
 
             if (Quiz.Done)
             {
+                text.innerHTML = await Problems.ParseMarkdownLatex(choice.text);
+                const reason = document.createElement("div");
+                reason.classList.add("reason");
+
                 if (Quiz.Problems[number].chosen == i)
                 {
                     if (Quiz.Problems[number].isCorrect == false)
                         box.classList.add("wrong");
-                }
+                    else
+                        box.classList.add("correct");
 
-                if (Quiz.Problems[number].answer == i)
-                {
-                    box.classList.add("correct");
-
-                    const reason = document.createElement("div");
-                    reason.classList.add("reason");
-                    reason.innerHTML = await Problems.ParseMarkdownLatex(Quiz.Problems[number].reason);
+                    box.classList.add("chosen");
                     box.appendChild(reason);
+                    reason.innerHTML = await Problems.ParseMarkdownLatex(choice.explaination.replaceAll("\\\$", "$"));
+                }
+                else
+                {
+                    if (Quiz.Problems[number].isCorrect == false && choice.correct) 
+                    {
+                        box.classList.add("correct");
+                        reason.innerHTML = await Problems.ParseMarkdownLatex(choice.explaination.replaceAll("\\\$", "$"));
+                        box.appendChild(reason);
+                    }
                 }
             }
             else
             {
+                text.innerHTML = await Problems.ParseMarkdownLatex(choice);
                 box.onclick = function()
                 {
                     if (box.classList.contains("active"))
@@ -98,9 +102,32 @@ const Quiz =
                     Grid_Choices.children[i].classList.add("active");
                 else
                     Grid_Choices.children[i].classList.remove("active");
+
+            if (index != 0 && !index || index <= -1)
+                Grid_ProblemNavigation.children[number].classList.remove("chosen");
+            else
+                Grid_ProblemNavigation.children[number].classList.add("chosen");
         }
 
         Content_Quiz.parentNode.scrollTop = 0;
+    },
+    Back: function(origin = "")
+    {
+        if (document.referrer)
+        {
+            const urlPrev = new URL(document.referrer);
+            const urlNow = new URL(location.href);
+
+            if (urlPrev.origin == urlNow.origin && window.history.length > 2)
+            {
+                if (urlPrev.pathname.startsWith(origin + "/courses") || urlPrev.pathname.startsWith(origin + "/mentor/"))
+                {
+                    return window.history.back();
+                }
+            }
+        }
+
+        window.location.href = origin + "/courses/";
     }
 }
 

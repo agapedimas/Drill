@@ -10,73 +10,69 @@
     }
 </style>
 
-<section>
-    <div class="header cascaded"></div>
-
-    <div class="content" id="Content_Ready">
-        <div class="about">
-            <div class="name">
+<div class="activity" id="Activity_QuizPanel">
+    <div class="header cascaded">
+        <div class="buttons">
+            <button class="back" onclick="Quiz.Back()"><$ generic back /></button>
+        </div>
+    </div>
+    <div class="content" id="Content_Panel">
+        <div class="cards">
+            <div class="detail">
+                <span><$ generic topic /></span>
                 <span><#? topic.name ?#></span>
+                <button class="plain" id="Button_ChangeTopic"><$ topics change_title /></button>
+            </div>
+            <div class="detail">
+                <span><$ generic course /></span>
                 <span><#? course.name ?#></span>
             </div>
-            <button class="plain" id="Button_ChangeTopic"><$ topics change_title/></button>
-        </div>
-        <div class="metadata hidden" id="Grid_Metadata">
-            <div>
-                <span class="icon">&#xefb9;</span>
+            <div class="detail hidden">
+                <span><$ mentor metadata_updated /></span>
                 <span id="Text_MetadataUpdated"></span>
             </div>
-            <div>
-                <span class="icon">&#xef13;</span>
-                <span id="Text_MetadataProblems"></span>
-            </div>
-            <div>
-                <span class="icon">&#xfb41;</span>
-                <span><$ mentor metadata_aigenerated /></span>
-            </div>
-            <div class="hidden">
-                <span class="icon">&#xef11;</span>
+            <div class="detail hidden">
+                <span><$ mentor metadata_score /></span>
                 <span id="Text_MetadataScore"></span>
             </div>
         </div>
-        <span></span>
-        <div id="Grid_Status" class="status">
-            <span id="Text_Status"></span>
-            <div class="progressbar"></div>
-        </div>
-        <div id="Grid_Buttons" class="hidden">
-            <button id="Button_Start" class="accent"><$ generic start /></button>
-            <button id="Button_Review" class="accent hidden"><$ mentor results_view /></button>
-
+        <div class="cards">
+            <div class="detail hidden">
+                <span><$ generic problem /></span>
+                <div id="Grid_ProblemNavigation"></div>
+            </div>
         </div>
     </div>
-</section>
+    <script>Activity_Main.parentNode.prepend(Activity_QuizPanel);</script>
+</div>
 
 <section>
     <div class="header cascaded">
         <div class="title"><#? topic.name ?#></div>
+        <div class="buttons">
+            <button class="icon" id="Button_QuizPanel">&#xfaef;</button>
+        </div>
     </div>
 
     <div class="content" id="Content_Quiz">
+        <div id="Grid_Status" class="status">
+            <div class="progressring"></div>
+            <span id="Text_Status"></span>
+        </div>
         <div id="Grid_QuizContainer">
             <div id="Text_Question" class="markdown"></div>
             <div id="Grid_Choices"></div>
         </div>
-        <div id="Grid_Navigation">
-            <button id="Button_Prev" class="plain accent">
+        <div id="Grid_QuizNavigation" class="hidden">
+            <button id="Button_Prev" ad-tooltip="<$ generic prev />">
                 <span class="icon">&#xef38;</span>
-                <span><$ generic prev/></span>
             </button>
-            <div></div>
-            <button id="Button_Next" class="plain accent">
-                <span><$ generic next/></span>
+            <button id="Button_Next" ad-tooltip="<$ generic next />">
                 <span class="icon">&#xef4a;</span>
             </button>
-            <button id="Button_Submit" class="accent">
+            <div></div>
+            <button id="Button_Submit" class="hidden">
                 <span><$ generic submit/></span>
-            </button>
-            <button id="Button_Done" class="plain accent hidden">
-                <span><$ generic done/></span>
             </button>
         </div>
     </div>
@@ -148,13 +144,7 @@
         Button_Continue.onclick = o => PopOver_Introduction.close();
         localStorage.setItem("assistant_introduction", "true");
     }
-
-    Button_Start.onclick = function()
-    {
-        Quiz.Open(0);
-        Activity_Main.navigateTo(1);
-    }
-    Button_Review.onclick = Button_Start.onclick;
+    
     Button_ChangeTopic.onclick = function()
     {
         PopOver_SelectTopics.open();
@@ -162,73 +152,85 @@
 
     function Status_Check()
     {
-        $.ajax(
+        return new Promise(function(resolve) 
         {
-            type: "get",
-            url: "/topics/quiz/get/<#? topic.id ?#>",
-            success: function(data)
+            $.ajax(
             {
-                Quiz.Status = data.status;
-                Quiz.Problems = data.problems;
-                Quiz.Created = data.created;
-
-                if (data.status == "available")
+                type: "get",
+                url: "/topics/quiz/get/<#? topic.id ?#>",
+                success: function(data)
                 {
-                    const t1 = parseInt(Quiz.Created);
-                    const t2 = new Date(Date.now() - Quiz.Created);
-                    const time = t1 == 0 ? 0 : t2 > 1000 * 3600 * 24 * 6 ? moment(t1).format("ll") : moment(t1).fromNow();
-                
-                    Text_MetadataUpdated.innerText = "<$ mentor metadata_updated />".format(time);
-                    Text_MetadataProblems.innerText = "<$ mentor metadata_problems />".format(Quiz.Problems.length);
-
-                    Grid_Buttons.classList.remove("hidden"); 
-                    Grid_Metadata.classList.remove("hidden");
-                    Grid_Status.classList.add("hidden"); 
-                    
-                    const lastSession = Data.Get("<#? topic.id ?#>");
-                    if (lastSession?.value?.created == data.created && lastSession?.value?.result)
+                    Quiz.Status = data.status;
+                    Quiz.Problems = data.problems;
+                    Quiz.Created = data.created;
+    
+                    if (data.status == "available")
                     {
-                        Button_Start.classList.add("hidden");
-                        Button_Review.classList.remove("hidden");
-                        Button_Submit.classList.add("hidden");
-                        Button_Done.classList.remove("hidden");
-
-                        const correct = lastSession.value.result.filter(o => o.isCorrect == true).length;
-                        const total = lastSession.value.result.length;
-                        Text_MetadataScore.innerText = "<$ mentor metadata_score />".format(Math.round(correct / total * 100));
-                        Text_MetadataScore.parentNode.classList.remove("hidden");
-                        Quiz.Done = true;
-
-                        for (let i = 0; i < Quiz.Problems.length; i++)
-                        {
-                            const problem = Quiz.Problems[i];
-                            problem.chosen = lastSession.value.result[i].chosen * 1;
-                            problem.answer = lastSession.value.result[i].answer * 1;
-                            problem.isCorrect = lastSession.value.result[i].isCorrect;
-                            problem.reason = lastSession.value.result[i].reason;
+                        const t1 = parseInt(Quiz.Created);
+                        const t2 = new Date(Date.now() - Quiz.Created);
+                        const time = t1 == 0 ? 0 : t2 > 1000 * 3600 * 24 * 6 ? moment(t1).format("ll") : moment(t1).fromNow();
+                    
+                        Grid_ProblemNavigation.innerHTML = null;
+                        for (let i = 1; i <= Quiz.Problems.length; i++) {
+                            const box = document.createElement("div");
+                            box.classList.add("number");
+                            box.append(i);
+                            box.onclick = function() {
+                                Quiz.Open(i - 1);
+                            }
+                            
+                            Grid_ProblemNavigation.append(box);
                         }
+    
+                        Grid_ProblemNavigation.parentNode.classList.remove("hidden");
+                        Text_MetadataUpdated.innerText = time;
+                        Text_MetadataUpdated.parentNode.classList.remove("hidden");
+                        Grid_Status.classList.add("hidden"); 
+                        Grid_QuizNavigation.classList.remove("hidden");
+                        
+                        const lastSession = Data.Get("<#? topic.id ?#>");
+                        if (lastSession?.value?.created == data.created && lastSession?.value?.result)
+                        {
+                            Button_Submit.classList.add("hidden");
+                            const correct = lastSession.value.result.filter(o => o.isCorrect == true).length;
+                            const total = lastSession.value.result.length;
+                            Text_MetadataScore.innerText = Math.round(correct / total * 100);
+                            Text_MetadataScore.parentNode.classList.remove("hidden");
+                            Quiz.Problems = lastSession.value.result;
+                            Quiz.Done = true;
+    
+                            for (let i = 0; i < Quiz.Problems.length; i++) {
+                                if (Quiz.Problems[i].chosen && Quiz.Problems[i].chosen > -1)
+                                    Grid_ProblemNavigation.children[i].classList.add("chosen");
+                            }
+                        }
+                        else
+                        {
+                            Button_Submit.classList.remove("hidden");
+                            Data.Set("<#? topic.id ?#>", 
+                            { 
+                                created: Quiz.Created,
+                                result: null
+                            });
+                        }
+                    
+                        Quiz.Open(0);
                     }
-                    else
+                    else if (data.status == "generating")
                     {
                         Data.Set("<#? topic.id ?#>", 
                         { 
                             created: Quiz.Created,
                             result: null
                         });
+    
+                        Text_Status.innerText = "<$ mentor generating_message />";
+                        setTimeout(Status_Check, 10000);
                     }
-                }
-                else if (data.status == "generating")
-                {
-                    Data.Set("<#? topic.id ?#>", 
-                    { 
-                        created: Quiz.Created,
-                        result: null
-                    });
-
-                    Text_Status.innerText = "<$ mentor generating_message />";
-                    setTimeout(Status_Check, 15000);
-                }
-            }
+                    resolve();
+                },
+                error: resolve
+            })
         });
     }
     Status_Check();
@@ -243,18 +245,48 @@
     }
     Button_Submit.onclick = async function()
     {
-        const result = await $.post("/topics/quiz/submit/<#? topic.id ?#>", { answers: Quiz.Problems.map(o => o.chosen) });
-        Data.Set("<#? topic.id ?#>", 
-        { 
-            created: Quiz.Created,
-            result: result
-        });
+        Components.ActionSheet.Open(
+        {
+            Title: "<$ mentor answer_submit_title />",
+            Description: "<$ mentor answer_submit_message />",
+            Actions: [
+                { 
+                    Title: "<$ generic submit />", Type: "Options.Accent", 
+                    Action: async function()
+                    {
+                        const result = await $.post("/topics/quiz/submit/<#? topic.id ?#>", { answers: Quiz.Problems.map(o => o.chosen) });
+                        Data.Set("<#? topic.id ?#>", 
+                        { 
+                            created: Quiz.Created,
+                            result: result
+                        });
 
-        Status_Check();
-        Activity_Main.navigateTo(0);
+                        await Status_Check();
+                    }
+                },
+                { 
+                    Title: "<$ generic cancel />", Type: "Footer"
+                }
+            ]
+        });
     }
-    Button_Done.onclick = function()
+    Button_QuizPanel.onclick = function() 
     {
-        Activity_Main.navigateTo(0);
+        const main = Activity_Main.parentNode;
+        if (main.classList.contains("opened")) 
+        {
+            main.classList.remove("opened");
+        }
+        else 
+        {
+            main.classList.add("opened");
+            setTimeout(function(){
+                Activity_Main.onclick = function()
+                {
+                    Activity_Main.onclick = null;
+                    main.classList.remove("opened");
+                }
+            }, 500);
+        }
     }
 </script>

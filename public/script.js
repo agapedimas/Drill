@@ -381,7 +381,6 @@ const Topics =
 
         const title = document.createElement("div");
         title.classList.add("title");
-        title.setAttribute("id", "Text_TopicName");
 
         const header = document.createElement("div");
         header.classList.add("header");   
@@ -422,7 +421,7 @@ const Topics =
                 $(".root > .main").append(activity);
             }
 
-            Text_TopicName.innerHTML = topic.name;
+            Activity_Topic.name = topic.name;
             Grid_CourseProblems.innerHTML = "";
             Grid_CourseProblems.append(progressring);
         }, 500);
@@ -629,7 +628,16 @@ const Problems =
     ParseMarkdownLatex: async function(string)
     {
         const result = document.createElement("template");
-        result.innerHTML = marked.parse(string);
+        result.innerHTML = marked.parse(string.replaceAll("\n", "\n\n"));
+
+        const lists = result.content.querySelectorAll("li");
+        for (const list of lists) {
+            for (const child of list.childNodes) {
+                if (child.nodeName == "P") {
+                    list.innerHTML = child.innerHTML;
+                }
+            }
+        }
 
         const latexes = result.content.querySelectorAll("math-latex");
         
@@ -832,51 +840,6 @@ const mathBlockExtension =
     renderer(token) 
     {
         return `<math-latex block>${token.text}</math-latex>`;
-    }
-};
-
-const letterListExtension = 
-{
-    name: "letterlist",
-    level: "block",
-    start(src) 
-    {
-        return src.match(/^[a-zA-Z]\. /m)?.index;
-    },
-    tokenizer(src, tokens) 
-    {
-        if (/^\$\$/.test(src)) return;
-
-        const regex = /^([a-zA-Z])\. .*(\n[a-zA-Z]\. .*)*/;
-        const match = src.match(regex);
-        if (!match) return;
-
-        const raw = match[0];
-        const lines = raw.split('\n');
-
-        const isValid = lines.every(line => /^[a-zA-Z]\. /.test(line));
-        if (!isValid) return;
-
-        const items = lines.map(line => 
-        {
-            const content = line.replace(/^[a-zA-Z]\. /, '').trim();
-            return this.lexer.blockTokens(content);
-        });
-
-        return {
-            type: "letterlist",
-            raw,
-            items
-        };
-    },
-    renderer(token) 
-    {
-        const rendered = token.items.map(itemTokens => 
-        {
-            const html = marked.parser(itemTokens);
-            return `<li>${html}</li>`;
-        }).join("");
-        return `<ol type="a">${rendered}</ol>`;
     }
 };
 

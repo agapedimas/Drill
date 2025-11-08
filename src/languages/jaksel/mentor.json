@@ -16,10 +16,11 @@
 
     "generating_message": "Lagi generate soal nih...\\nBisa makan waktu 5-7 menit yaa.",
     
-    "metadata_updated": "Last Update {0}",
-    "metadata_problems": "{0} soal pilihan ganda",
-    "metadata_aigenerated": "Dibuat oleh AI",
-    "metadata_score": "Skor lu {0} nih",
+    "metadata_updated": "Terakhir Diupdate",
+    "metadata_aigenerated": "Dibikin sama AI",
+    "metadata_score": "Nilai lu",
 
-    "results_view": "Lihat Hasilnya"
+    "answer_chosen": "Jawaban lu nih",
+    "answer_submit_title": "Seriusan mau kumpul?",
+    "answer_submit_message": "Abis ini lu gabisa ganti jawaban sampe latihan batch berikutnya muncul."
 }

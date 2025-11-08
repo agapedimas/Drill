@@ -2,6 +2,33 @@
 {
     background: inherit;
 }
+.root .main:has(> .activity)
+{
+    grid-auto-flow: column;
+    grid-auto-columns: 320px calc(100% - 320px);
+}
+    .root .main > .activity
+    {
+        position: relative
+    }
+    .root .main > .activity:nth-child(1)
+    {
+        background: var(--gray-7);
+        box-shadow: inset -10px 0 5px -10px var(--border-sidebar);
+    }
+        .root .main > #Activity_Topic > .header > .buttons > .back
+        {
+            visibility: hidden;
+        }
+.root > nav
+{
+    z-index: 1;
+}
+#Button_QuizPanel 
+{
+    display: none;
+}
+
 #Activity_Main
 {
     position: relative;
@@ -10,11 +37,74 @@
     #Activity_Main > section
     {
         grid-auto-rows: max-content auto;
+        margin-bottom: 5px;
     }
+        #Activity_Main > section > .header
+        {
+            opacity: 0;
+            pointer-events: none;
+        }
     #Activity_Main > .content
     {
         display: grid;
     }
+
+
+@media screen and (max-width: 800px) 
+{
+    .root 
+    {
+        grid-auto-rows: auto 0;
+    }
+}
+@media screen and 
+    (
+        ((min-width: 800px) and (max-width: 1025px)) 
+        or
+        ((max-width: 735px)) 
+    )
+{
+    .root .main:has(> .activity)
+    {
+        width: calc(100% + 320px);
+        transform: translateX(-320px);
+        transition: 0.5s var(--key-animation) transform;
+        z-index: 0;
+    }
+    .root .main.opened:has(> .activity)
+    {
+        transform: translateX(0);
+    }
+        .root .main > #Activity_Main
+        {
+            transition: 0.25s opacity;
+        }
+        .root .main.opened > #Activity_Main
+        {
+            opacity: 0.5;
+        }
+            .root .main.opened > #Activity_Main::before
+            {
+                content: "";
+                display: block;
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: transparent;
+                z-index: 5;
+            }  
+            #Activity_Main > section > .header
+            {
+                opacity: 1;
+                pointer-events: all;
+            } 
+    #Button_QuizPanel 
+    {
+        display: block;
+    }
+}
 
 #PopOver_Introduction .content
 {
@@ -154,94 +244,84 @@
         color: var(--foreground-description);
     }
 
-#Content_Ready
+#Activity_QuizPanel
 {
-    display: grid;
-    grid-auto-rows: max-content max-content auto 100px;
-    justify-items: center;
-    align-content: space-evenly;
-    align-items: end;        
-    gap: 1.5em;
+    grid-auto-rows: max-content auto;
+    padding-bottom: env(safe-area-inset-bottom);
 }
-    #Content_Ready .about
+    #Content_Panel
     {
         display: grid;
-        justify-items: center;
-        gap: 1em;
+        grid-auto-rows: auto max-content;
+        align-items: start;
     }
-        #Content_Ready .about .name
+        #Content_Panel .cards 
         {
             display: grid;
-            font-size: 3em;
-            font-family: var(--font-bold);
-            text-align: center;
-            line-height: 1;
+            grid-auto-flow: row;
+            font-size: 0.9em;
+            margin-top: 0.5em;
+            gap: 1.8em;
+            letter-spacing: 0.05em;
+            font-family: var(--font-semibold);
+            justify-content: space-between;
+            max-width: 400px;
         }
-            #Content_Ready .about .name span:last-child
+            #Content_Panel .cards > div
             {
-                opacity: 0.5;
+                display: grid;
+                justify-items: start;
+                grid-auto-flow: row;
+                gap: 0.25em;
             }
-        #Content_Ready .about button
-        {
-            padding: 0;
-        }
-    #Content_Ready .metadata
-    {
-        display: grid;
-        gap: 1em;
-        font-size: 1.15em;
-        margin-top: var(--padding);
-    }
-        #Content_Ready .metadata > div
-        {
-            display: grid;
-            grid-auto-flow: column;
-            grid-auto-columns: max-content auto;
-            gap: 1em;
-        }
-    #Content_Ready #Grid_Status
-    {
-        display: grid;
-        grid-auto-rows: max-content;
-        gap: 1em;
-        align-self: end;
-        justify-items: center;
-        text-align: center;
-    }
-        #Content_Ready #Grid_Status .progressbar
-        {
-            width: 200px;
-            height: 5px;
-        }
-    #Content_Ready #Grid_Buttons
-    {
-        display: grid;
-    }
-        #Content_Ready #Grid_Buttons button
-        {
-            min-width: 200px;
-            font-size: 1.25em;
-            padding: 10px;
-        }
-
-@media screen and (max-width: 425px) 
-{
-    #Content_Ready
-    {
-        align-content: stretch;
-        justify-items: stretch;
-        margin-top: -55px;
-        padding: 30px;
-    }    
-        #Content_Ready .about
-        {
-            justify-items: left; 
-        }
-            #Content_Ready .about .name
+                #Content_Panel .cards #Button_ChangeTopic 
+                {
+                    padding: 0;
+                }
+                #Content_Panel .cards > div span:nth-child(1) 
+                {
+                    font-size: 0.9em;
+                    opacity: 0.5;
+                    text-transform: uppercase;
+                }
+            #Content_Panel .cards #Grid_ProblemNavigation 
             {
-                text-align: left; 
+                display: flex;
+                flex-flow: wrap;
+                gap: 7px;
             }
-}
+                #Content_Panel .cards #Grid_ProblemNavigation .number
+                {
+                    display: grid;
+                    width: 25px;
+                    height: 25px;
+                    align-items: center;
+                    justify-content: center;
+                    border-radius: 100%;    
+                    position: relative;    
+                }
+                #Content_Panel .cards #Grid_ProblemNavigation .number:hover
+                {
+                    background: var(--background-input-hover)
+                }
+                #Content_Panel .cards #Grid_ProblemNavigation .number.active
+                {
+                    background: var(--accent-light);
+                    color: white;
+                }
+                    #Content_Panel .cards #Grid_ProblemNavigation .number.chosen:not(.active)::after
+                    {
+                        content: "";
+                        position: absolute;
+                        bottom: 0;
+                        left: 50%;
+                        transform: translateX(-50%);
+                        display: block;
+                        background: var(--accent);
+                        width: 3px;
+                        height: 3px;
+                        border-radius: 100%;
+                    }
 
 #Content_Quiz
 {
@@ -249,12 +329,31 @@
     grid-auto-rows: max-content auto max-content;
 }
 
+#Grid_Status
+{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0.7);
+    display: grid;
+    justify-content: center;
+    justify-items: center;
+    gap: 30px;
+    width: 100%;
+}
+    #Grid_Status #Text_Status
+    {
+        text-align: center;
+        font-size: 1.5em;
+    }
+
 #Grid_QuizContainer
 {
     display: grid;
     grid-auto-rows: max-content;
     gap: 1.5em;
-    padding-bottom: 1em;
+    padding-bottom: var(--padding);
+    width: 100%;
     max-width: 800px;
     margin: 0 auto;
 }
@@ -265,10 +364,6 @@
     line-height: 1.5em;
     align-items: baseline;
 }
-    #Text_Question *
-    {
-        user-select: none;
-    }
 
 #Grid_Choices
 {
@@ -291,6 +386,14 @@
         padding: 13px 15px;
         gap: 15px;
         transition: 0.1s background, 0.1s background-image;
+        --background-choice-correct: #115c00;
+        --background-choice-wrong: #930000;
+    }
+    [theme=dark]
+    #Grid_Choices .choice
+    {
+        --background-choice-correct: #082900;
+        --background-choice-wrong: #440000;
     }
     #Grid_Choices .choice:has(.reason)
     {
@@ -314,7 +417,7 @@
         }
     #Grid_Choices .choice.active
     {
-        background: var(--accent);
+        background: var(--accent-light);
         color: white;
     }
         #Grid_Choices .choice.active::before
@@ -329,7 +432,7 @@
             font-family: var(--font-icon);
             font-size: 0.6em;
             font-weight: bold;
-            color: #cc0000;
+            color: var(--background-choice-wrong);
         }
         #Grid_Choices .choice.correct::before
         {
@@ -338,23 +441,23 @@
             font-family: var(--font-icon);
             font-size: 0.6em;
             font-weight: bold;
-            color: #008800;
+            color: var(--background-choice-correct);
         }
     #Grid_Choices .choice.correct
     {
-        background: #008800;
+        background: var(--background-choice-correct);
         color: white;
     }
     #Grid_Choices .choice.wrong
     {
-        background: #cc0000;
+        background: var(--background-choice-wrong);
         color: white;
     }
-    #Grid_Choices .choice:hover
+    #Grid_Choices:not(:has(.reason)) .choice:hover
     {
         background-image: linear-gradient(var(--background-list-hover));
     }
-    #Grid_Choices .choice:active
+    #Grid_Choices:not(:has(.reason)) .choice:active
     {
         background-image: linear-gradient(var(--background-list-active));
     }
@@ -367,41 +470,86 @@
             gap: 0.5em;
             justify-content: start;
             align-items: baseline;
-            
-        }
-        #Grid_Choices .choice *,
-        #Grid_Choices .reason *
-        {
-            user-select: none;
         }
         #Grid_Choices .choice .reason
         {
+            line-height: 1.5em;   
+        }
+        #Grid_Choices .choice.chosen
+        {
+            align-items: normal;
+        }
+            #Grid_Choices .choice.chosen .text::before
+            {
+                content: "<$ mentor answer_chosen />";
+                display: block;
+                width: max-content;
+                font-size: 0.6em;
+                text-transform: uppercase;
+                margin-bottom: -0.9em;
+                letter-spacing: 0.2em;
+                opacity: 0.7;
+            }
+        #Grid_Choices .choice .reason
+        {
             grid-area: reason;
-            background: rgba(0, 0, 0, 0.2);
-            border-top: 1px solid var(--border-context);
-            margin: 0 -100px -50px;
-            padding: 20px 100px 70px;
+            margin: 0 -100px -20px;
+            padding: 0 100px 20px;
             overflow: hidden;
             overflow-x: auto;
         }
 
-#Grid_Navigation
+#Grid_QuizNavigation
 {
     display: grid;
     grid-auto-flow: column;
-    grid-auto-columns: max-content minmax(auto, 550px) max-content;
+    grid-auto-columns: max-content max-content auto;
     grid-auto-rows: max-content;
-    padding: 0.5em 0 var(--padding);
+    padding: 0.5em 0 max(env(safe-area-inset-bottom), var(--padding));
+    margin: 0 auto;
     margin-bottom: calc(var(--padding) * -1);
-    gap: 15px;
-    align-self: end;
+    gap: 7px;
     position: sticky;
     bottom: 0;
     background: var(--background-page);
-    justify-content: center;
+    align-self: end;
+    width: 100%;
+    max-width: 800px;
 }
-    #Grid_Navigation button
+    #Grid_QuizNavigation button
     {
+        display: grid;
         font-size: 1em;
-        padding: 8px 25px;
+        font-weight: bold;
+        color: var(--foreground-description);
+        width: 40px;
+        height: 40px;
+        padding: 0;
+        border-radius: 20px;
     }
+    #Grid_QuizNavigation button:disabled 
+    {
+        opacity: 0.5;
+    }
+    #Grid_QuizNavigation button#Button_Submit
+    {
+        position: relative;
+        color: var(--accent);
+        font-weight: 500;
+        width: auto;
+        padding: 0 20px;
+        overflow: hidden;
+    }
+        #Grid_QuizNavigation button#Button_Submit::before
+        {
+            content: "";
+            display: block;
+            background: var(--accent);
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            z-index: -1;
+            opacity: 0.1;
+        }

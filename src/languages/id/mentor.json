@@ -15,11 +15,12 @@
     "features_update_description": "Kamu bisa minta latihan soal baru setiap hari supaya kamu makin jago.",
 
     "generating_message": "Soal sedang dibuat...\\nBiasanya memakan waktu 5-7 menit.",
-    
-    "metadata_updated": "Di-update {0}",
-    "metadata_problems": "{0} soal pilihan ganda",
+        
+    "metadata_updated": "Terakhir Di-Update",
     "metadata_aigenerated": "Dibuat oleh AI",
-    "metadata_score": "Kamu dapat nilai {0}",
+    "metadata_score": "Nilai",
 
-    "results_view": "Lihat Hasil"
+    "answer_chosen": "Jawabanmu",
+    "answer_submit_title": "Yakin mau kumpul?",
+    "answer_submit_message": "Setelah ini kamu nggak bisa ubah jawaban sampai latihan batch berikutnya."
 }

@@ -693,10 +693,10 @@ function Route(Server)
         
         if (quiz.problems)
             quiz.problems = quiz.problems.map(function(o)
-            { 
+            {
                 return {
                     question: o.question, 
-                    choices: o.choices 
+                    choices: o.choices.map(x => x.text)
                 } 
             });
 
@@ -720,16 +720,21 @@ function Route(Server)
             quiz.problems = quiz.problems.map(function(problem)
             {
                 let isCorrect = false;
-                if (problem.answer == answers[index])
-                    isCorrect = true;
+                
+                for (let i = 0; i < problem.choices.length; i++) 
+                {
+                    if (problem.choices[i].correct == true && i == answers[index])
+                    {
+                        isCorrect = true;
+                        break;
+                    }
+                }
 
                 return {
                     question: problem.question,
-                    answer: problem.answer,
                     choices: problem.choices,
                     chosen: answers[index++],
-                    isCorrect: isCorrect,
-                    reason: problem.reason
+                    isCorrect: isCorrect
                 }
             });
 

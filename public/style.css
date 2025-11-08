@@ -96,3 +96,13 @@
 {
     display: none;
 }
+
+.root > nav #NavigationItem_Judge img 
+{
+    border-color: transparent
+}
+.root > nav #NavigationItem_Judge span.icon 
+{
+    font-size: 0.8em;
+    color: var(--foreground-description);
+}

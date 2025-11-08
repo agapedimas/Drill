@@ -16,10 +16,11 @@
 
     "generating_message": "問題を作成中です...\\nこれには5〜7分かかる場合があります。",
     
-    "metadata_updated": "{0}に更新",
-    "metadata_problems": "選択問題{0}問",
+    "metadata_updated": "最終更新",
     "metadata_aigenerated": "AIが生成",
-    "metadata_score": "スコアは{0}点",
+    "metadata_score": "スコア",
 
-    "results_view": "結果を見る"
+    "answer_chosen": "あなたの回答",
+    "answer_submit_title": "提出しますか？",
+    "answer_submit_message": "次の練習バッチまで、回答をやり直すことはできません。"
 }

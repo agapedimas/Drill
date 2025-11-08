@@ -29,19 +29,19 @@ Based on the parameters below, generate **tricky and deceptive multiple-choice q
     - Each question must have one single, best answer.
     - The incorrect answer choices (distractors) must be designed to be highly plausible. Utilize common misconceptions, subtle logical fallacies, or nearly correct interpretations of data to create effective traps.
 4. **Question Focus:** Prioritize creating scenario-based, case study, or data analysis questions (where applicable) that force students to **apply** theory, not just recall it.
-5. **Output Formatting:** Use the available Markdown and Math LaTeX (if needed) to write the questions and answer choices in a clear and structured format.
+5. **Output Formatting:** Use the available Markdown and Math LaTeX (if needed) to write the questions, answer choices, and explaination in a clear and structured format.
 
 ### **REFERENCE QUESTIONS FROM THE PROFESSOR (FOR INSPIRATION ONLY)**
 {3}
 
 ### **OUTPUT INSTRUCTION**
-- ANSWER means INDEX of CORRECT CHOICE in array
 - CHOICES SHOULD NOT includes letter list. Just write down the choice text. Each question must consists at least 5 choices.
 - Single-line LaTeX should starts and ends with $. Meanwhile multiline LaTeX should starts and ends with $$.
+- Make explaination easy to read by writing it in markdown and Math LaTeX (if needed).
 \`\`\`
 `;
 
-const prompt = `Create 5 questions.`;
+const prompt = `Create 10 questions.`;
 
 /**
  * Get quiz drills from Gemini
@@ -66,42 +66,39 @@ function Send(language, course, topic, problems, occurence = 1)
                     model: "gemini-2.5-flash",
                     config: {
                         responseMimeType: 'application/json',
-                        responseSchema: 
-                        {
+                        responseSchema: {
                             type: Type.OBJECT,
                             required: ["problems"],
-                            properties: 
-                            {
-                                problems: 
-                                {
-                                    type: Type.ARRAY,
-                                    items: 
-                                    {
+                            properties: {
+                                problems: {
+                                type: Type.ARRAY,
+                                items: {
+                                    type: Type.OBJECT,
+                                    required: ["question", "choices"],
+                                    properties: {
+                                    question: {
+                                        type: Type.STRING,
+                                    },
+                                    choices: {
+                                        type: Type.ARRAY,
+                                        items: {
                                         type: Type.OBJECT,
-                                        required: ["question", "choices", "answer", "reason"],
-                                        properties:
-                                        {
-                                            question: 
-                                            { 
-                                                type: Type.STRING,
+                                        required: ["text", "correct", "explaination"],
+                                        properties: {
+                                            text: {
+                                            type: Type.STRING,
                                             },
-                                            choices: {
-                                                type: Type.ARRAY,
-                                                items: 
-                                                {
-                                                    type: Type.STRING,
-                                                },
+                                            correct: {
+                                            type: Type.BOOLEAN,
                                             },
-                                            answer: 
-                                            {
-                                                type: Type.STRING,
-                                            },
-                                            reason: 
-                                            {
-                                                type: Type.STRING,
+                                            explaination: {
+                                            type: Type.STRING,
                                             },
                                         },
+                                        },
                                     },
+                                    },
+                                },
                                 },
                             },
                         },
