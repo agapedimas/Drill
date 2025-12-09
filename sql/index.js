@@ -1,5 +1,5 @@
 const FileIO = require("fs");
-const MySQL = require("mysql");
+const MySQL = require("mysql2");
 const Delay = (msec) => new Promise((resolve) => setTimeout(resolve, msec));
 
 const SQL = 
