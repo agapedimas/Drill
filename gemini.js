@@ -128,7 +128,7 @@ function Send(language, course, topic, problems, occurence = 1)
             }
             catch (error)
             {
-                if (error?.status == 429 || (error?.status / 100 | 0 == 5) || error?.message.includes("fetch failed"))
+                if (error?.status == 429 || (error?.status / 100 | 0) == 5 || error?.message.includes("fetch failed"))
                 {
                     if (occurence > 5)
                         throw error;

@@ -628,7 +628,7 @@ const Problems =
     ParseMarkdownLatex: async function(string)
     {
         const result = document.createElement("template");
-        result.innerHTML = marked.parse(string.replaceAll("\n", "\n\n"));
+        result.innerHTML = marked.parse(string);
 
         const lists = result.content.querySelectorAll("li");
         for (const list of lists) {

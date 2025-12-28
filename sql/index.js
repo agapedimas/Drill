@@ -13,12 +13,11 @@ const SQL =
         password: process.env.SQL_PASSWORD,
         database: process.env.SQL_DATABASE,
         charset: "utf8mb4",
-        createDatabaseTable: true,
         multipleStatements: true,
         typeCast: function(field, next)
         {
             if (field.type == "JSON") 
-                return JSON.parse(field.string());
+                return JSON.parse(field.string("utf8"));
             
             return next();
         }
