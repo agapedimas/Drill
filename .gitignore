@@ -3,6 +3,7 @@ node_modules
 package-lock.json
 .htaccess
 .env
+.DS_Store
 
 src/banners/*
 !src/banners/.gitkeep
