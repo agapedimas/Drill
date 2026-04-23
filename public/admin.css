@@ -147,6 +147,7 @@
         border: 1px solid transparent;
         padding: 1em;
         line-height: 1.35em;
+        white-space: pre-wrap;
     }
 
 #Grid_CourseProblems .group .problem:after 
